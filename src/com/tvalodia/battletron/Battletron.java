@@ -52,7 +52,7 @@ public class Battletron {
         // add to content pane
         content.add(drawArea, BorderLayout.CENTER);
 
-        frame.setSize(820, 800);
+        frame.setSize(820, 820);
         // can close frame
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         // show the swing paint result

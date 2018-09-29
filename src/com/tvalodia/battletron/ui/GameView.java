@@ -63,8 +63,8 @@ public class GameView extends JComponent implements GameStateListener {
             g2.drawString("Tick: " + tick + "; FPS: " + (TIME_PER_FRAME / (currentSystemTime - lastDrawTime)) * FPS, 0, 20);
 
 
-            for (int x = 0; x < gameState.getWidth() - 1; x++) {
-                for (int y = 0; y < gameState.getHeight() - 1; y++) {
+            for (int x = 0; x < gameState.getWidth(); x++) {
+                for (int y = 0; y < gameState.getHeight(); y++) {
                     if (gameState.getPlayingField()[x][y] == gameState.getPlayer1().getId()) {
                         g2.setPaint(Color.blue);
                         g2.fillRect(x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
