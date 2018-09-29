@@ -1,8 +1,8 @@
 package com.tvalodia.battletron.ui;
 
-import com.tvalodia.battletron.client.GameClient;
-import com.tvalodia.battletron.engine.GameState;
-import com.tvalodia.battletron.engine.LevelStatus;
+import com.tvalodia.battletron.engine.gamestate.GameStateListener;
+import com.tvalodia.battletron.engine.gamestate.GameState;
+import com.tvalodia.battletron.engine.GameStatus;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -13,7 +13,7 @@ import java.awt.RenderingHints;
 
 import javax.swing.JComponent;
 
-public class GameView extends JComponent implements GameClient {
+public class GameView extends JComponent implements GameStateListener {
 
     private static float FPS = 60;
     private static float TIME_PER_FRAME = 1000f / FPS;
@@ -54,7 +54,7 @@ public class GameView extends JComponent implements GameClient {
     }
 
     @Override
-    public void update(int tick, GameState gameState) {
+    public void onGameStateUpdate(int tick, GameState gameState) {
         currentSystemTime = System.currentTimeMillis();
         if (currentSystemTime - lastDrawTime > TIME_PER_FRAME) {
             clear();
@@ -85,12 +85,12 @@ public class GameView extends JComponent implements GameClient {
                     gameState.getPlayer2().getPositionY() * BLOCK_SIZE,
                     BLOCK_SIZE, BLOCK_SIZE);
 
-            if (gameState.getLevelStatus() == LevelStatus.WINNER) {
+            if (gameState.getGameStatus() == GameStatus.WINNER) {
                 g2.setPaint(Color.white);
                 g2.drawString("Player " + gameState.getWinner().getId() + " wins!", 100, 200);
             }
 
-            if (gameState.getLevelStatus() == LevelStatus.DRAW) {
+            if (gameState.getGameStatus() == GameStatus.DRAW) {
                 g2.setPaint(Color.white);
                 g2.drawString("It's a DRAW!", 100, 200);
             }

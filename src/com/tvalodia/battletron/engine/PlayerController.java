@@ -1,5 +1,7 @@
 package com.tvalodia.battletron.engine;
 
+import com.tvalodia.battletron.engine.gamestate.GameState;
+
 import java.util.Random;
 
 public class PlayerController {

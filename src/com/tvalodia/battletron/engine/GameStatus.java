@@ -1,5 +1,5 @@
 package com.tvalodia.battletron.engine;
 
-public enum LevelStatus {
+public enum GameStatus {
     STARTED, WINNER, DRAW, STOPPED
 }

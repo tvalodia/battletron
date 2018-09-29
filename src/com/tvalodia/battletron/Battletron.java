@@ -1,6 +1,5 @@
 package com.tvalodia.battletron;
 
-
 import com.tvalodia.battletron.engine.GameEngine;
 import com.tvalodia.battletron.engine.Player;
 import com.tvalodia.battletron.engine.PlayerController;
@@ -11,17 +10,16 @@ import java.awt.Container;
 
 import javax.swing.JFrame;
 
-public class TronBattle {
+public class Battletron {
 
-    GameView drawArea;
-    GameEngine gameEngine;
+    private GameView drawArea;
+    private GameEngine gameEngine;
 
     public static void main(String[] args) {
-        new TronBattle().play();
-
+        new Battletron().play();
     }
 
-    public TronBattle() {
+    public Battletron() {
         initialiseWindow();
         try {
             Thread.sleep(1000);
