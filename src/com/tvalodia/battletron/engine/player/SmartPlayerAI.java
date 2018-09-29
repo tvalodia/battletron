@@ -18,21 +18,47 @@ public class SmartPlayerAI implements PlayerAI {
         int xVal = player.getPositionX();
         int yVal = player.getPositionY();
 
-        int xIncrement = 1;
-        int yIncrement = 1;
+        int xLeftIncrement = 1;
+        int xRightIncrement = 1;
+        int yUpIncrement = 1;
+        int yDownIncrement = 1;
 
-        if (xVal == 0 || xVal == 99) {
-            xIncrement = 0;
+        if (xVal == 0) {
+            xLeftIncrement = 0;
         }
 
-        if (yVal == 0 || yVal == 99) {
-            yIncrement = 0;
+        if (xVal == 99) {
+            xRightIncrement = 0;
         }
 
-        int valUp = gameState.getPlayingField()[xVal][yVal + yIncrement];
-        int valDown = gameState.getPlayingField()[xVal][yVal - yIncrement];
-        int valLeft = gameState.getPlayingField()[xVal - xIncrement][yVal];
-        int valRight = gameState.getPlayingField()[xVal + xIncrement][yVal];
+        if (yVal == 0) {
+            yUpIncrement = 0;
+        }
+
+        if (yVal == 99) {
+            yDownIncrement = 0;
+        }
+
+        int valUp = gameState.getPlayingField()[xVal][yVal + yUpIncrement];
+        int valDown = gameState.getPlayingField()[xVal][yVal - yDownIncrement];
+        int valLeft = gameState.getPlayingField()[xVal - xLeftIncrement][yVal];
+        int valRight = gameState.getPlayingField()[xVal + xRightIncrement][yVal];
+
+        if (xVal == 0) {
+            valLeft = 5;
+        }
+
+        if (xVal == 99) {
+            valRight = 5;
+        }
+
+        if (yVal == 0) {
+            valUp = 5;
+        }
+
+        if (yVal == 99) {
+            valDown = 5;
+        }
 
         Direction outputVal = Direction.UP;
 

@@ -62,7 +62,7 @@ public class Battletron {
     public GameEngine createEngine() {
         Player player1 = new Player(1, 33, 50);
         Player player2 = new Player(2, 66, 50);
-        PlayerAI player1Controller = new DownLeftPlayerAI(player1);
+        PlayerAI player1Controller = new SmartPlayerAI(player1);
         PlayerAI player2Controller = new SmartPlayerAI(player2);
         GameEngine gameEngine = new GameEngine(drawArea, player1, player2, player1Controller, player2Controller);
         return gameEngine;
