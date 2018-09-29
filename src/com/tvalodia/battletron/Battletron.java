@@ -33,10 +33,10 @@ public class Battletron {
     }
 
     public void play() {
-        for (int i = 0; i < 10; i++) {
-            gameEngine = createEngine();
-            gameEngine.start();
-        }
+
+        gameEngine = createEngine();
+        gameEngine.start();
+
         System.out.println("Complete");
     }
 

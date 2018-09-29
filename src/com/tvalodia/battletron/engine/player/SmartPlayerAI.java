@@ -32,11 +32,11 @@ public class SmartPlayerAI implements PlayerAI {
         }
 
         if (yVal == 0) {
-            yUpIncrement = 0;
+            yDownIncrement = 0;
         }
 
         if (yVal == 99) {
-            yDownIncrement = 0;
+            yUpIncrement = 0;
         }
 
         int valUp = gameState.getPlayingField()[xVal][yVal + yUpIncrement];
