@@ -4,6 +4,7 @@ import com.tvalodia.battletron.engine.GameEngine;
 import com.tvalodia.battletron.engine.player.DownLeftPlayerAI;
 import com.tvalodia.battletron.engine.player.Player;
 import com.tvalodia.battletron.engine.player.PlayerAI;
+import com.tvalodia.battletron.engine.player.SmartPlayerAI;
 import com.tvalodia.battletron.ui.GameView;
 
 import java.awt.BorderLayout;
@@ -51,7 +52,7 @@ public class Battletron {
         // add to content pane
         content.add(drawArea, BorderLayout.CENTER);
 
-        frame.setSize(800, 800);
+        frame.setSize(820, 800);
         // can close frame
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         // show the swing paint result
@@ -62,7 +63,7 @@ public class Battletron {
         Player player1 = new Player(1, 33, 50);
         Player player2 = new Player(2, 66, 50);
         PlayerAI player1Controller = new DownLeftPlayerAI(player1);
-        PlayerAI player2Controller = new DownLeftPlayerAI(player2);
+        PlayerAI player2Controller = new SmartPlayerAI(player2);
         GameEngine gameEngine = new GameEngine(drawArea, player1, player2, player1Controller, player2Controller);
         return gameEngine;
     }
