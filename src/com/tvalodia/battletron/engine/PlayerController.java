@@ -12,7 +12,14 @@ public class PlayerController {
         this.player = player;
     }
 
+    /*
     public Direction getDirection(int tick, GameState gameState) {
         return Direction.values()[new Random().nextInt(Direction.values().length)];
     }
+    */
+
+    public Direction getDirection(int tick, GameState gameState) {
+        return Direction.values()[new Random().nextInt(2)];
+    }
+
 }
