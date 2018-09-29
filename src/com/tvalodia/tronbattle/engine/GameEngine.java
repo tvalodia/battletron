@@ -1,6 +1,6 @@
-package org.tvalodia.tronbattle.engine;
+package com.tvalodia.tronbattle.engine;
 
-import org.tvalodia.tronbattle.client.GameClient;
+import com.tvalodia.tronbattle.client.GameClient;
 
 public class GameEngine {
 

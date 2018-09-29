@@ -1,4 +1,4 @@
-package org.tvalodia.tronbattle.engine;
+package com.tvalodia.tronbattle.engine;
 
 public class Player {
 
