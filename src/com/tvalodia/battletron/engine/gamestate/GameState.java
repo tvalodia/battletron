@@ -2,7 +2,7 @@ package com.tvalodia.battletron.engine.gamestate;
 
 import com.tvalodia.battletron.engine.Direction;
 import com.tvalodia.battletron.engine.GameStatus;
-import com.tvalodia.battletron.engine.Player;
+import com.tvalodia.battletron.engine.player.Player;
 
 /**
  * This class depicts the state of a game.
@@ -73,29 +73,6 @@ public class GameState {
      */
     public boolean isColliding(Player player1, Player player2) {
         return player1.getPositionX() == player2.getPositionX() && player1.getPositionY() == player2.getPositionY();
-    }
-
-    /**
-     * Updates the specified players position
-     *
-     * @param player
-     * @param direction
-     */
-    public void updatePlayer(Player player, Direction direction) {
-        switch (direction) {
-            case DOWN:
-                player.setPositionY(player.getPositionY() - 1);
-                break;
-            case UP:
-                player.setPositionY(player.getPositionY() + 1);
-                break;
-            case LEFT:
-                player.setPositionX(player.getPositionX() - 1);
-                break;
-            case RIGHT:
-                player.setPositionX(player.getPositionX() + 1);
-                break;
-        }
     }
 
     /**

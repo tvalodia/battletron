@@ -1,5 +1,10 @@
-package com.tvalodia.battletron.engine;
+package com.tvalodia.battletron.engine.player;
 
+import com.tvalodia.battletron.engine.Direction;
+
+/**
+ * This class models a player.
+ */
 public class Player {
 
     private int id;
@@ -15,8 +20,6 @@ public class Player {
     public int getId() {
         return id;
     }
-
-
 
     public int getPositionX() {
         return positionX;
@@ -34,8 +37,26 @@ public class Player {
         this.positionY = positionY;
     }
 
+    /**
+     * Updates the specified players position
+     *
+     * @param direction
+     */
     public void move(Direction direction) {
-
+        switch (direction) {
+            case DOWN:
+                setPositionY(getPositionY() - 1);
+                break;
+            case UP:
+                setPositionY(getPositionY() + 1);
+                break;
+            case LEFT:
+                setPositionX(getPositionX() - 1);
+                break;
+            case RIGHT:
+                setPositionX(getPositionX() + 1);
+                break;
+        }
     }
 
 }
