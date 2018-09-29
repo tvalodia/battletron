@@ -1,8 +1,8 @@
-package com.tvalodia.tronbattle.ui;
+package com.tvalodia.battletron.ui;
 
-import com.tvalodia.tronbattle.client.GameClient;
-import com.tvalodia.tronbattle.engine.GameState;
-import com.tvalodia.tronbattle.engine.LevelStatus;
+import com.tvalodia.battletron.client.GameClient;
+import com.tvalodia.battletron.engine.GameState;
+import com.tvalodia.battletron.engine.LevelStatus;
 
 import java.awt.Color;
 import java.awt.Font;

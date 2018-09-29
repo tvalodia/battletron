@@ -1,10 +1,10 @@
-package com.tvalodia.tronbattle;
+package com.tvalodia.battletron;
 
 
-import com.tvalodia.tronbattle.engine.GameEngine;
-import com.tvalodia.tronbattle.engine.Player;
-import com.tvalodia.tronbattle.engine.PlayerController;
-import com.tvalodia.tronbattle.ui.GameView;
+import com.tvalodia.battletron.engine.GameEngine;
+import com.tvalodia.battletron.engine.Player;
+import com.tvalodia.battletron.engine.PlayerController;
+import com.tvalodia.battletron.ui.GameView;
 
 import java.awt.BorderLayout;
 import java.awt.Container;

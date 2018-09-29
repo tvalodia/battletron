@@ -1,4 +1,4 @@
-package com.tvalodia.tronbattle.engine;
+package com.tvalodia.battletron.engine;
 
 import java.util.Random;
 
