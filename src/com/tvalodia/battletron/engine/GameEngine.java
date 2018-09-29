@@ -5,16 +5,13 @@ import com.tvalodia.battletron.engine.gamestate.GameStateListener;
 
 public class GameEngine {
 
-    boolean running;
-
     private GameStateListener gameStateListener;
     private final PlayerController player1Controller;
     private final PlayerController player2Controller;
     private GameState gameState;
     private int tick;
 
-    public GameEngine(GameStateListener gameStateListener,
-                      Player player1, Player player2,
+    public GameEngine(GameStateListener gameStateListener, Player player1, Player player2,
                       PlayerController player1Controller, PlayerController player2Controller) {
         this.gameStateListener = gameStateListener;
         this.player1Controller = player1Controller;
@@ -47,11 +44,11 @@ public class GameEngine {
                 gameState.setGameStatus(GameStatus.DRAW);
             }
 
-            gameState.updateLevel();
+            gameState.updatePlayingField();
             tick++;
             gameStateListener.onGameStateUpdate(tick, gameState);
             try {
-                Thread.sleep(500);
+                Thread.sleep(100);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

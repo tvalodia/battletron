@@ -30,6 +30,7 @@ public class GameView extends JComponent implements GameStateListener {
         lastDrawTime = System.currentTimeMillis();
     }
 
+    @Override
     protected void paintComponent(Graphics g) {
         if (image == null) {
             // image to draw null ==> we create
@@ -64,11 +65,11 @@ public class GameView extends JComponent implements GameStateListener {
 
             for (int x = 0; x < gameState.getWidth() - 1; x++) {
                 for (int y = 0; y < gameState.getHeight() - 1; y++) {
-                    if (gameState.getLevel()[x][y] == gameState.getPlayer1().getId()) {
+                    if (gameState.getPlayingField()[x][y] == gameState.getPlayer1().getId()) {
                         g2.setPaint(Color.blue);
                         g2.fillRect(x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
                     }
-                    if (gameState.getLevel()[x][y] == gameState.getPlayer2().getId()) {
+                    if (gameState.getPlayingField()[x][y] == gameState.getPlayer2().getId()) {
                         g2.setPaint(Color.magenta);
                         g2.fillRect(x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
                     }
