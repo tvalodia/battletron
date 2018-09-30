@@ -51,7 +51,6 @@ public class GameView extends JComponent implements GameStateListener {
         g2.setPaint(Color.black);
         // draw white on entire draw area to clear
         g2.fillRect(0, 0, getSize().width, getSize().height);
-        repaint();
     }
 
     @Override
@@ -67,10 +66,10 @@ public class GameView extends JComponent implements GameStateListener {
             for (int x = 0; x < gameState.getWidth(); x++) {
                 for (int y = 0; y < gameState.getHeight(); y++) {
                     if (gameState.getPlayingField()[x][y] == gameState.getPlayer1().getId()) {
-                        drawBlock(getScreenX(x), getScreenY(gameState.getHeight(), gameState.getPlayer1().getPositionY()), Color.blue);
+                        drawBlock(getScreenX(x), getScreenY(gameState.getHeight(), y), Color.blue);
                     }
                     if (gameState.getPlayingField()[x][y] == gameState.getPlayer2().getId()) {
-                        drawBlock(getScreenX(x), getScreenY(gameState.getHeight(), gameState.getPlayer2().getPositionY()), Color.magenta);
+                        drawBlock(getScreenX(x), getScreenY(gameState.getHeight(), y), Color.magenta);
                     }
                 }
             }

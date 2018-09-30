@@ -80,7 +80,7 @@ public class GameEngine {
             gameStateListener.onGameStateUpdate(tick, gameState);
 
             try {
-                Thread.sleep(50);
+                Thread.sleep(10);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
