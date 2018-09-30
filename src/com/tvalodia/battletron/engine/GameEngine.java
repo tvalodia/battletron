@@ -13,6 +13,8 @@ public class GameEngine {
 
     private static final int WIDTH = 100;
     private static final int HEIGHT = 100;
+    private static final int TICK_INTERVAL_MILLIS = 50;
+    private long lastTickTime;
     private GameStateListener gameStateListener;
     private Player player1;
     private Player player2;
@@ -23,11 +25,12 @@ public class GameEngine {
 
     /**
      * Constructor. Initialises the game state.
+     *
      * @param gameStateListener The observer to update after every game tick.
-     * @param player1 Player 1
-     * @param player2 Player 2
-     * @param player1AI Player 1's controller
-     * @param player2AI Player 2's controller
+     * @param player1           Player 1
+     * @param player2           Player 2
+     * @param player1AI         Player 1's controller
+     * @param player2AI         Player 2's controller
      */
     public GameEngine(GameStateListener gameStateListener, Player player1, Player player2, PlayerAI player1AI, PlayerAI player2AI) {
         this.gameStateListener = gameStateListener;
@@ -35,7 +38,7 @@ public class GameEngine {
         this.player2 = player2;
         this.player1AI = player1AI;
         this.player2AI = player2AI;
-
+        this.lastTickTime = 0;
         gameState = new GameState(WIDTH, HEIGHT, player1, player2);
         tick = 0;
     }
@@ -51,39 +54,38 @@ public class GameEngine {
     /**
      * The game loop.
      */
-    public void run() {
+    private void run() {
         while (gameState.getGameStatus() == GameStatus.STARTED) {
-            //Gets each player's direction input
-            Direction player1Direction = player1AI.getDirection(tick, gameState);
-            Direction player2Direction = player2AI.getDirection(tick, gameState);
+            long currentTime = System.currentTimeMillis();
+            if (currentTime - lastTickTime >= TICK_INTERVAL_MILLIS) {
+                //Gets each player's direction input
+                Direction player1Direction = player1AI.getDirection(tick, gameState);
+                Direction player2Direction = player2AI.getDirection(tick, gameState);
 
-            //update the player given the AI's direction input
-            player1.move(player1Direction);
-            player2.move(player2Direction);
+                //update the player given the AI's direction input
+                player1.move(player1Direction);
+                player2.move(player2Direction);
 
-            //Check for collisions on the playing field
-            if (gameState.isColliding(gameState.getPlayer1())) {
-                gameState.setGameStatus(GameStatus.WINNER);
-                gameState.setWinner(gameState.getPlayer2());
-            } else if (gameState.isColliding(gameState.getPlayer2())) {
-                gameState.setGameStatus(GameStatus.WINNER);
-                gameState.setWinner(gameState.getPlayer1());
-            } else if (gameState.isColliding(gameState.getPlayer1(), gameState.getPlayer2())) {
-                gameState.setGameStatus(GameStatus.DRAW);
+                //Check for collisions on the playing field
+                if (gameState.isColliding(gameState.getPlayer1())) {
+                    gameState.setGameStatus(GameStatus.WINNER);
+                    gameState.setWinner(gameState.getPlayer2());
+                } else if (gameState.isColliding(gameState.getPlayer2())) {
+                    gameState.setGameStatus(GameStatus.WINNER);
+                    gameState.setWinner(gameState.getPlayer1());
+                } else if (gameState.isColliding(gameState.getPlayer1(), gameState.getPlayer2())) {
+                    gameState.setGameStatus(GameStatus.DRAW);
+                }
+
+                //update the playing field
+                gameState.updatePlayingField();
+                tick++;
+
+                //send an update to the observer
+                gameStateListener.onGameStateUpdate(tick, gameState);
+                lastTickTime = currentTime;//+ currentTime - lastTickTime - TICK_INTERVAL_MILLIS;
             }
 
-            //update the playing field
-            gameState.updatePlayingField();
-            tick++;
-
-            //send an update to the observer
-            gameStateListener.onGameStateUpdate(tick, gameState);
-
-            try {
-                Thread.sleep(10);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
         }
     }
 

@@ -15,8 +15,8 @@ import javax.swing.JComponent;
 
 public class GameView extends JComponent implements GameStateListener {
 
-    private static float FPS = 60;
-    private static float TIME_PER_FRAME = 1000f / FPS;
+    private static float FPS_LIMIT = 60;
+    private static float TIME_PER_FRAME = 1000f / FPS_LIMIT;
     private long currentSystemTime = 0;
     private long lastDrawTime;
     private static final int BLOCK_SIZE = 8;
@@ -60,7 +60,7 @@ public class GameView extends JComponent implements GameStateListener {
             clear();
 
             g2.setPaint(Color.white);
-            g2.drawString("Tick: " + tick + "; FPS: " + (TIME_PER_FRAME / (currentSystemTime - lastDrawTime)) * FPS, 0, 20);
+            g2.drawString("Tick: " + tick + "; FPS: " + (TIME_PER_FRAME / (currentSystemTime - lastDrawTime)) * FPS_LIMIT, 0, 20);
 
             //Draw the players' trails
             for (int x = 0; x < gameState.getWidth(); x++) {
