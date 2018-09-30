@@ -63,28 +63,22 @@ public class GameView extends JComponent implements GameStateListener {
             g2.setPaint(Color.white);
             g2.drawString("Tick: " + tick + "; FPS: " + (TIME_PER_FRAME / (currentSystemTime - lastDrawTime)) * FPS, 0, 20);
 
+            //Draw the players' trails
             for (int x = 0; x < gameState.getWidth(); x++) {
                 for (int y = 0; y < gameState.getHeight(); y++) {
                     if (gameState.getPlayingField()[x][y] == gameState.getPlayer1().getId()) {
-                        g2.setPaint(Color.blue);
-                        g2.fillRect(x * BLOCK_SIZE, ((gameState.getHeight() - 1) * BLOCK_SIZE) - (y * BLOCK_SIZE), BLOCK_SIZE, BLOCK_SIZE);
+                        drawBlock(getScreenX(x), getScreenY(gameState.getHeight(), gameState.getPlayer1().getPositionY()), Color.blue);
                     }
                     if (gameState.getPlayingField()[x][y] == gameState.getPlayer2().getId()) {
-                        g2.setPaint(Color.magenta);
-                        g2.fillRect(x * BLOCK_SIZE, ((gameState.getHeight() - 1) * BLOCK_SIZE) - (y * BLOCK_SIZE), BLOCK_SIZE, BLOCK_SIZE);
+                        drawBlock(getScreenX(x), getScreenY(gameState.getHeight(), gameState.getPlayer2().getPositionY()), Color.magenta);
                     }
                 }
             }
 
-            g2.setPaint(Color.cyan);
-            g2.fillRect(gameState.getPlayer1().getPositionX() * BLOCK_SIZE,
-                    ((gameState.getHeight() - 1) * BLOCK_SIZE) - (gameState.getPlayer1().getPositionY() * BLOCK_SIZE),
-                    BLOCK_SIZE, BLOCK_SIZE);
-
-            g2.setPaint(Color.pink);
-            g2.fillRect(gameState.getPlayer2().getPositionX() * BLOCK_SIZE,
-                    ((gameState.getHeight() - 1) * BLOCK_SIZE) - (gameState.getPlayer2().getPositionY() * BLOCK_SIZE),
-                    BLOCK_SIZE, BLOCK_SIZE);
+            //player 1's head
+            drawBlock(getScreenX(gameState.getPlayer1().getPositionX()), getScreenY(gameState.getHeight(), gameState.getPlayer1().getPositionY()), Color.cyan);
+            //player 2's head
+            drawBlock(getScreenX(gameState.getPlayer2().getPositionX()), getScreenY(gameState.getHeight(), gameState.getPlayer2().getPositionY()), Color.pink);
 
             if (gameState.getGameStatus() == GameStatus.WINNER) {
                 g2.setPaint(Color.white);
@@ -99,5 +93,18 @@ public class GameView extends JComponent implements GameStateListener {
             repaint();
             lastDrawTime = currentSystemTime;
         }
+    }
+
+    private int getScreenY(int playingFieldHeight, int gameYCoordinate) {
+        return ((playingFieldHeight - 1) * BLOCK_SIZE) - (gameYCoordinate * BLOCK_SIZE);
+    }
+
+    private int getScreenX(int gameX) {
+        return gameX * BLOCK_SIZE;
+    }
+
+    private void drawBlock(int x, int y, Color color) {
+        g2.setPaint(color);
+        g2.fillRect(x, y, BLOCK_SIZE, BLOCK_SIZE);
     }
 }
