@@ -59,9 +59,6 @@ public class GameView extends JComponent implements GameStateListener {
         currentSystemTime = System.currentTimeMillis();
         if (currentSystemTime - lastDrawTime > TIME_PER_FRAME) {
             clear();
-            g2.setPaint(Color.yellow);
-            g2.fillRect(0 * BLOCK_SIZE, 0 * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
-
 
             g2.setPaint(Color.white);
             g2.drawString("Tick: " + tick + "; FPS: " + (TIME_PER_FRAME / (currentSystemTime - lastDrawTime)) * FPS, 0, 20);
@@ -70,23 +67,23 @@ public class GameView extends JComponent implements GameStateListener {
                 for (int y = 0; y < gameState.getHeight(); y++) {
                     if (gameState.getPlayingField()[x][y] == gameState.getPlayer1().getId()) {
                         g2.setPaint(Color.blue);
-                        g2.fillRect(x * BLOCK_SIZE, (gameState.getHeight()*BLOCK_SIZE) - (y * BLOCK_SIZE), BLOCK_SIZE, BLOCK_SIZE);
+                        g2.fillRect(x * BLOCK_SIZE, ((gameState.getHeight() - 1) * BLOCK_SIZE) - (y * BLOCK_SIZE), BLOCK_SIZE, BLOCK_SIZE);
                     }
                     if (gameState.getPlayingField()[x][y] == gameState.getPlayer2().getId()) {
                         g2.setPaint(Color.magenta);
-                        g2.fillRect(x * BLOCK_SIZE, (gameState.getHeight()*BLOCK_SIZE) - (y * BLOCK_SIZE), BLOCK_SIZE, BLOCK_SIZE);
+                        g2.fillRect(x * BLOCK_SIZE, ((gameState.getHeight() - 1) * BLOCK_SIZE) - (y * BLOCK_SIZE), BLOCK_SIZE, BLOCK_SIZE);
                     }
                 }
             }
 
             g2.setPaint(Color.cyan);
             g2.fillRect(gameState.getPlayer1().getPositionX() * BLOCK_SIZE,
-                    (gameState.getHeight()*BLOCK_SIZE) - (gameState.getPlayer1().getPositionY() * BLOCK_SIZE),
+                    ((gameState.getHeight() - 1) * BLOCK_SIZE) - (gameState.getPlayer1().getPositionY() * BLOCK_SIZE),
                     BLOCK_SIZE, BLOCK_SIZE);
 
             g2.setPaint(Color.pink);
             g2.fillRect(gameState.getPlayer2().getPositionX() * BLOCK_SIZE,
-                    (gameState.getHeight()*BLOCK_SIZE) - (gameState.getPlayer2().getPositionY() * BLOCK_SIZE),
+                    ((gameState.getHeight() - 1) * BLOCK_SIZE) - (gameState.getPlayer2().getPositionY() * BLOCK_SIZE),
                     BLOCK_SIZE, BLOCK_SIZE);
 
             if (gameState.getGameStatus() == GameStatus.WINNER) {

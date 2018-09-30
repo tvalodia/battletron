@@ -42,7 +42,7 @@ public class Battletron {
 
     public void initialiseWindow() {
         // create main frame
-        JFrame frame = new JFrame("Swing Paint");
+        JFrame frame = new JFrame("Battletron");
         Container content = frame.getContentPane();
         // set layout on content pane
         content.setLayout(new BorderLayout());
@@ -52,7 +52,7 @@ public class Battletron {
         // add to content pane
         content.add(drawArea, BorderLayout.CENTER);
 
-        frame.setSize(816, 816);
+        frame.setSize(816, 840);
         // can close frame
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         // show the swing paint result
@@ -60,8 +60,8 @@ public class Battletron {
     }
 
     public GameEngine createEngine() {
-        Player player1 = new Player(1, 33, 50);
-        Player player2 = new Player(2, 66, 50);
+        Player player1 = new Player(1, 0, 0);
+        Player player2 = new Player(2, 99, 99);
         PlayerAI player1Controller = new SmartPlayerAI(player1);
         PlayerAI player2Controller = new SmartPlayerAI(player2);
         GameEngine gameEngine = new GameEngine(drawArea, player1, player2, player1Controller, player2Controller);
