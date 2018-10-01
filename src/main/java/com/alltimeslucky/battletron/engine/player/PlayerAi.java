@@ -5,6 +5,6 @@ import com.alltimeslucky.battletron.engine.gamestate.GameState;
 
 public interface PlayerAi {
 
-    Direction getDirection(int tick, GameState gameState);
+    Direction getDirection(GameState gameState);
 
 }

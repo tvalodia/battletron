@@ -13,7 +13,7 @@ public class DownLeftPlayerAi implements PlayerAi {
         this.player = player;
     }
 
-    public Direction getDirection(int tick, GameState gameState) {
+    public Direction getDirection(GameState gameState) {
         return Direction.values()[new Random().nextInt(2)];
     }
 

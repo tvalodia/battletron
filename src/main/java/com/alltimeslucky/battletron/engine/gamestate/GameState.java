@@ -1,5 +1,6 @@
 package com.alltimeslucky.battletron.engine.gamestate;
 
+import com.alltimeslucky.battletron.engine.Direction;
 import com.alltimeslucky.battletron.engine.GameStatus;
 import com.alltimeslucky.battletron.engine.player.Player;
 
@@ -14,7 +15,7 @@ public class GameState {
     private int height;
     //The current phase in the lifecycle of the game
     private GameStatus gameStatus;
-
+    private int tickCount;
     private final Player player1;
     private final Player player2;
 
@@ -36,12 +37,13 @@ public class GameState {
     public GameState(int width, int height, Player player1, Player player2) {
         this.width = width;
         this.height = height;
+        this.tickCount = 0;
         this.player1 = player1;
         this.player2 = player2;
-        playingField = new int[width][height];
-        playingField[player1.getPositionX()][player1.getPositionY()] = player1.getId();
-        playingField[player2.getPositionX()][player2.getPositionY()] = player2.getId();
-        winner = null;
+        this.playingField = new int[width][height];
+        this.playingField[player1.getPositionX()][player1.getPositionY()] = player1.getId();
+        this.playingField[player2.getPositionX()][player2.getPositionY()] = player2.getId();
+        this.winner = null;
     }
 
     /**
@@ -76,8 +78,24 @@ public class GameState {
 
     /**
      * Updates the playing field with players' trails.
+     * @param player1Direction The direction that player 1 wants to move.
+     * @param player2Direction The direction that player 2 wants to move.
      */
-    public void updatePlayingField() {
+    public void update(Direction player1Direction, Direction player2Direction) {
+        //update the player given the AI's direction input
+        player1.move(player1Direction);
+        player2.move(player2Direction);
+
+        //Check for collisions on the playing field
+        if (isColliding(player1)) {
+            setGameStatus(GameStatus.WINNER);
+            setWinner(player2);
+        } else if (isColliding(player2)) {
+            setGameStatus(GameStatus.WINNER);
+            setWinner(player1);
+        } else if (isColliding(player1, player2)) {
+            setGameStatus(GameStatus.DRAW);
+        }
 
         if (player1.getPositionX() >= 0 && player1.getPositionX() < width
                 && player1.getPositionY() >= 0 && player1.getPositionY() < height) {
@@ -88,6 +106,8 @@ public class GameState {
                 && player2.getPositionY() >= 0 && player2.getPositionY() < height) {
             playingField[player2.getPositionX()][player2.getPositionY()] = player2.getId();
         }
+
+        tickCount++;
     }
 
     public int getWidth() {
@@ -124,5 +144,9 @@ public class GameState {
 
     public void setGameStatus(GameStatus gameStatus) {
         this.gameStatus = gameStatus;
+    }
+
+    public int getTickCount() {
+        return tickCount;
     }
 }

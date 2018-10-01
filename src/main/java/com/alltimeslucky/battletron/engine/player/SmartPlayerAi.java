@@ -15,12 +15,11 @@ public class SmartPlayerAi implements PlayerAi {
 
     /**
      * Graham testing javadoc comments.
-     * @param tick I don't know what this is.
      * @param gameState Big variable containing all the info about where the game is at homie.
      * @return Returns a DIRECTION to update player position.
      */
 
-    public Direction getDirection(int tick, GameState gameState) {
+    public Direction getDirection(GameState gameState) {
 
         int xval = player.getPositionX();
         int yval = player.getPositionY();

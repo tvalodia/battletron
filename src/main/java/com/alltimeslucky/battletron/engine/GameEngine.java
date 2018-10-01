@@ -23,7 +23,6 @@ public class GameEngine {
     private final PlayerAi player1Ai;
     private final PlayerAi player2Ai;
     private GameState gameState;
-    private int tick;
 
     /**
      * Constructor. Initialises the game state.
@@ -42,7 +41,6 @@ public class GameEngine {
         this.player2Ai = player2Ai;
         this.lastTickTime = 0;
         gameState = new GameState(WIDTH, HEIGHT, player1, player2);
-        tick = 0;
     }
 
     /**
@@ -61,30 +59,14 @@ public class GameEngine {
             long currentTime = System.currentTimeMillis();
             if (currentTime - lastTickTime >= TICK_INTERVAL_MILLIS) {
                 //Gets each player's direction input
-                Direction player1Direction = player1Ai.getDirection(tick, gameState);
-                Direction player2Direction = player2Ai.getDirection(tick, gameState);
-
-                //update the player given the AI's direction input
-                player1.move(player1Direction);
-                player2.move(player2Direction);
-
-                //Check for collisions on the playing field
-                if (gameState.isColliding(gameState.getPlayer1())) {
-                    gameState.setGameStatus(GameStatus.WINNER);
-                    gameState.setWinner(gameState.getPlayer2());
-                } else if (gameState.isColliding(gameState.getPlayer2())) {
-                    gameState.setGameStatus(GameStatus.WINNER);
-                    gameState.setWinner(gameState.getPlayer1());
-                } else if (gameState.isColliding(gameState.getPlayer1(), gameState.getPlayer2())) {
-                    gameState.setGameStatus(GameStatus.DRAW);
-                }
+                Direction player1Direction = player1Ai.getDirection(gameState);
+                Direction player2Direction = player2Ai.getDirection(gameState);
 
                 //update the playing field
-                gameState.updatePlayingField();
-                tick++;
+                gameState.update(player1Direction, player2Direction);
 
                 //send an update to the observers
-                gameStateListeners.forEach(gameStateListener -> gameStateListener.onGameStateUpdate(tick, gameState));
+                gameStateListeners.forEach(gameStateListener -> gameStateListener.onGameStateUpdate(gameState));
                 lastTickTime = currentTime;//+ currentTime - lastTickTime - TICK_INTERVAL_MILLIS;
             }
 

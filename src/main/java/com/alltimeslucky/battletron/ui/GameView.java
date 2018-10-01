@@ -56,13 +56,13 @@ public class GameView extends JComponent implements GameStateListener {
     }
 
     @Override
-    public void onGameStateUpdate(int tick, GameState gameState) {
+    public void onGameStateUpdate(GameState gameState) {
         currentSystemTime = System.currentTimeMillis();
         if (currentSystemTime - lastDrawTime > TIME_PER_FRAME) {
             clear();
 
             g2.setPaint(Color.white);
-            g2.drawString("Tick: " + tick + "; FPS: " + (TIME_PER_FRAME / (currentSystemTime - lastDrawTime)) * FPS_LIMIT, 0, 20);
+            g2.drawString("Tick: " + gameState.getTickCount() + "; FPS: " + (TIME_PER_FRAME / (currentSystemTime - lastDrawTime)) * FPS_LIMIT, 0, 20);
 
             //Draw the players' trails
             for (int x = 0; x < gameState.getWidth(); x++) {

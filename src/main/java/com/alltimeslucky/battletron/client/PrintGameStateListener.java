@@ -16,7 +16,7 @@ public class PrintGameStateListener implements GameStateListener {
     }
 
     @Override
-    public void onGameStateUpdate(int tick, GameState gameState) {
+    public void onGameStateUpdate(GameState gameState) {
         System.out.println(gson.toJson(gameState));
     }
 }
