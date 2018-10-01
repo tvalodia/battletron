@@ -13,50 +13,57 @@ public class SmartPlayerAi implements PlayerAi {
         this.player = player;
     }
 
+    /**
+     * Graham testing javadoc comments.
+     * @param tick I don't know what this is.
+     * @param gameState Big variable containing all the info about where the game is at homie.
+     * @return Returns a DIRECTION to update player position.
+     */
+
     public Direction getDirection(int tick, GameState gameState) {
 
-        int xVal = player.getPositionX();
-        int yVal = player.getPositionY();
+        int xval = player.getPositionX();
+        int yval = player.getPositionY();
 
-        int xLeftIncrement = 1;
-        int xRightIncrement = 1;
-        int yUpIncrement = 1;
-        int yDownIncrement = 1;
+        int leftIncrement = 1;
+        int rightIncrement = 1;
+        int upIncrement = 1;
+        int downIncrement = 1;
 
-        if (xVal == 0) {
-            xLeftIncrement = 0;
+        if (xval == 0) {
+            leftIncrement = 0;
         }
 
-        if (xVal == 99) {
-            xRightIncrement = 0;
+        if (xval == 99) {
+            rightIncrement = 0;
         }
 
-        if (yVal == 0) {
-            yDownIncrement = 0;
+        if (yval == 0) {
+            downIncrement = 0;
         }
 
-        if (yVal == 99) {
-            yUpIncrement = 0;
+        if (yval == 99) {
+            upIncrement = 0;
         }
 
-        int valUp = gameState.getPlayingField()[xVal][yVal + yUpIncrement];
-        int valDown = gameState.getPlayingField()[xVal][yVal - yDownIncrement];
-        int valLeft = gameState.getPlayingField()[xVal - xLeftIncrement][yVal];
-        int valRight = gameState.getPlayingField()[xVal + xRightIncrement][yVal];
+        int valUp = gameState.getPlayingField()[xval][yval + upIncrement];
+        int valDown = gameState.getPlayingField()[xval][yval - downIncrement];
+        int valLeft = gameState.getPlayingField()[xval - leftIncrement][yval];
+        int valRight = gameState.getPlayingField()[xval + rightIncrement][yval];
 
-        if (xVal == 0) {
+        if (xval == 0) {
             valLeft = 5;
         }
 
-        if (xVal == 99) {
+        if (xval == 99) {
             valRight = 5;
         }
 
-        if (yVal == 0) {
+        if (yval == 0) {
             valDown = 5;
         }
 
-        if (yVal == 99) {
+        if (yval == 99) {
             valUp = 5;
         }
 
