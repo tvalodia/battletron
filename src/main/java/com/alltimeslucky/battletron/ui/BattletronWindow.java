@@ -1,6 +1,6 @@
-package com.tvalodia.battletron.ui;
+package com.alltimeslucky.battletron.ui;
 
-import com.tvalodia.battletron.engine.gamestate.GameStateListener;
+import com.alltimeslucky.battletron.engine.gamestate.GameStateListener;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
@@ -11,6 +11,9 @@ public class BattletronWindow {
 
     private GameView drawArea;
 
+    /**
+     * Initialises the main window and displays it.
+     */
     public void initialise() {
 
         // create main frame

@@ -1,9 +1,9 @@
-package com.tvalodia.battletron.engine;
+package com.alltimeslucky.battletron.engine;
 
-import com.tvalodia.battletron.engine.gamestate.GameState;
-import com.tvalodia.battletron.engine.gamestate.GameStateListener;
-import com.tvalodia.battletron.engine.player.Player;
-import com.tvalodia.battletron.engine.player.PlayerAI;
+import com.alltimeslucky.battletron.engine.gamestate.GameState;
+import com.alltimeslucky.battletron.engine.gamestate.GameStateListener;
+import com.alltimeslucky.battletron.engine.player.Player;
+import com.alltimeslucky.battletron.engine.player.PlayerAi;
 
 /**
  * This class manages and executes the game loop; controls the flow of the game and notifies observers at every game tick.
@@ -18,8 +18,8 @@ public class GameEngine {
     private GameStateListener gameStateListener;
     private Player player1;
     private Player player2;
-    private final PlayerAI player1AI;
-    private final PlayerAI player2AI;
+    private final PlayerAi player1Ai;
+    private final PlayerAi player2Ai;
     private GameState gameState;
     private int tick;
 
@@ -29,15 +29,15 @@ public class GameEngine {
      * @param gameStateListener The observer to update after every game tick.
      * @param player1           Player 1
      * @param player2           Player 2
-     * @param player1AI         Player 1's controller
-     * @param player2AI         Player 2's controller
+     * @param player1Ai         Player 1's controller
+     * @param player2Ai         Player 2's controller
      */
-    public GameEngine(GameStateListener gameStateListener, Player player1, Player player2, PlayerAI player1AI, PlayerAI player2AI) {
+    public GameEngine(GameStateListener gameStateListener, Player player1, Player player2, PlayerAi player1Ai, PlayerAi player2Ai) {
         this.gameStateListener = gameStateListener;
         this.player1 = player1;
         this.player2 = player2;
-        this.player1AI = player1AI;
-        this.player2AI = player2AI;
+        this.player1Ai = player1Ai;
+        this.player2Ai = player2Ai;
         this.lastTickTime = 0;
         gameState = new GameState(WIDTH, HEIGHT, player1, player2);
         tick = 0;
@@ -52,15 +52,15 @@ public class GameEngine {
     }
 
     /**
-     * The game loop.
+     * The game loop. Gets moves from AIs, updates the playing field and checks for win conditions.
      */
     private void run() {
         while (gameState.getGameStatus() == GameStatus.STARTED) {
             long currentTime = System.currentTimeMillis();
             if (currentTime - lastTickTime >= TICK_INTERVAL_MILLIS) {
                 //Gets each player's direction input
-                Direction player1Direction = player1AI.getDirection(tick, gameState);
-                Direction player2Direction = player2AI.getDirection(tick, gameState);
+                Direction player1Direction = player1Ai.getDirection(tick, gameState);
+                Direction player2Direction = player2Ai.getDirection(tick, gameState);
 
                 //update the player given the AI's direction input
                 player1.move(player1Direction);

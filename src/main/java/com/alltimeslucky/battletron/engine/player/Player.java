@@ -1,6 +1,6 @@
-package com.tvalodia.battletron.engine.player;
+package com.alltimeslucky.battletron.engine.player;
 
-import com.tvalodia.battletron.engine.Direction;
+import com.alltimeslucky.battletron.engine.Direction;
 
 /**
  * This class models a player.
@@ -38,9 +38,9 @@ public class Player {
     }
 
     /**
-     * Updates the specified players position
+     * Moves the player in the specified direction.
      *
-     * @param direction
+     * @param direction The direction in which to move the player
      */
     public void move(Direction direction) {
         switch (direction) {
@@ -55,6 +55,8 @@ public class Player {
                 break;
             case RIGHT:
                 setPositionX(getPositionX() + 1);
+                break;
+            default:
                 break;
         }
     }

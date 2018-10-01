@@ -1,4 +1,4 @@
-package com.tvalodia.battletron.engine;
+package com.alltimeslucky.battletron.engine;
 
 /**
  * The possible directions on the playing field that each player can take.

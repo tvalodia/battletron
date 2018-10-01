@@ -1,8 +1,8 @@
-package com.tvalodia.battletron.ui;
+package com.alltimeslucky.battletron.ui;
 
-import com.tvalodia.battletron.engine.gamestate.GameStateListener;
-import com.tvalodia.battletron.engine.gamestate.GameState;
-import com.tvalodia.battletron.engine.GameStatus;
+import com.alltimeslucky.battletron.engine.GameStatus;
+import com.alltimeslucky.battletron.engine.gamestate.GameState;
+import com.alltimeslucky.battletron.engine.gamestate.GameStateListener;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -46,7 +46,9 @@ public class GameView extends JComponent implements GameStateListener {
         g.drawImage(image, 0, 0, null);
     }
 
-    // now we create exposed methods
+    /**
+     * Clears the simulation view by drawing a filled rectangle in black over the drawing space.
+     */
     public void clear() {
         g2.setPaint(Color.black);
         // draw white on entire draw area to clear
@@ -75,9 +77,13 @@ public class GameView extends JComponent implements GameStateListener {
             }
 
             //player 1's head
-            drawBlock(getScreenX(gameState.getPlayer1().getPositionX()), getScreenY(gameState.getHeight(), gameState.getPlayer1().getPositionY()), Color.cyan);
+            drawBlock(getScreenX(gameState.getPlayer1().getPositionX()),
+                      getScreenY(gameState.getHeight(), gameState.getPlayer1().getPositionY()),
+                      Color.cyan);
             //player 2's head
-            drawBlock(getScreenX(gameState.getPlayer2().getPositionX()), getScreenY(gameState.getHeight(), gameState.getPlayer2().getPositionY()), Color.pink);
+            drawBlock(getScreenX(gameState.getPlayer2().getPositionX()),
+                      getScreenY(gameState.getHeight(), gameState.getPlayer2().getPositionY()),
+                      Color.pink);
 
             if (gameState.getGameStatus() == GameStatus.WINNER) {
                 g2.setPaint(Color.white);

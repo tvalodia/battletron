@@ -1,4 +1,4 @@
-package com.tvalodia.battletron.engine.gamestate;
+package com.alltimeslucky.battletron.engine.gamestate;
 
 /**
  * This interface describes how listening clients will receive game state updates.

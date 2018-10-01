@@ -1,8 +1,7 @@
-package com.tvalodia.battletron.engine.gamestate;
+package com.alltimeslucky.battletron.engine.gamestate;
 
-import com.tvalodia.battletron.engine.Direction;
-import com.tvalodia.battletron.engine.GameStatus;
-import com.tvalodia.battletron.engine.player.Player;
+import com.alltimeslucky.battletron.engine.GameStatus;
+import com.alltimeslucky.battletron.engine.player.Player;
 
 /**
  * This class depicts the state of a game.

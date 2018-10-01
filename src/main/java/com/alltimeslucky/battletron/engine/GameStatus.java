@@ -1,4 +1,4 @@
-package com.tvalodia.battletron.engine;
+package com.alltimeslucky.battletron.engine;
 
 public enum GameStatus {
     STARTED, WINNER, DRAW, STOPPED

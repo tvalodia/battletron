@@ -1,15 +1,15 @@
-package com.tvalodia.battletron.engine.player;
+package com.alltimeslucky.battletron.engine.player;
 
-import com.tvalodia.battletron.engine.Direction;
-import com.tvalodia.battletron.engine.gamestate.GameState;
+import com.alltimeslucky.battletron.engine.Direction;
+import com.alltimeslucky.battletron.engine.gamestate.GameState;
 
 import java.util.Random;
 
-public class SmartPlayerAI implements PlayerAI {
+public class SmartPlayerAi implements PlayerAi {
 
     private Player player;
 
-    public SmartPlayerAI(Player player) {
+    public SmartPlayerAi(Player player) {
         this.player = player;
     }
 
