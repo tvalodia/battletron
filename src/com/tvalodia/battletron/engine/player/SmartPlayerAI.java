@@ -53,29 +53,40 @@ public class SmartPlayerAI implements PlayerAI {
         }
 
         if (yVal == 0) {
-            valUp = 5;
-        }
-
-        if (yVal == 99) {
             valDown = 5;
         }
 
-        Direction outputVal = Direction.UP;
-
-        if (valUp == 0) {
-            outputVal = Direction.UP;
+        if (yVal == 99) {
+            valUp = 5;
         }
 
-        if (valDown == 0) {
-            outputVal = Direction.DOWN;
-        }
+        boolean validOutput = false;
+        Direction outputVal = Direction.values()[new Random().nextInt(Direction.values().length)];
 
-        if (valLeft == 0) {
-            outputVal = Direction.LEFT;
-        }
+        while (!validOutput) {
 
-        if (valRight == 0) {
-            outputVal = Direction.RIGHT;
+            outputVal = Direction.values()[new Random().nextInt(Direction.values().length)];
+
+            if (outputVal == Direction.UP && valUp == 0) {
+                validOutput = true;
+            }
+
+            if (outputVal == Direction.DOWN && valDown == 0) {
+                validOutput = true;
+            }
+
+            if (outputVal == Direction.LEFT && valLeft == 0) {
+                validOutput = true;
+            }
+
+            if (outputVal == Direction.RIGHT && valRight == 0) {
+                validOutput = true;
+            }
+
+            if (valUp != 0 && valDown != 0 && valLeft != 0 && valRight != 0) {
+                validOutput = true;
+            }
+
         }
 
         return outputVal;
