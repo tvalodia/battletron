@@ -37,7 +37,6 @@ public class PlayerTest {
 
         assertEquals(X, player.getPositionX());
         assertEquals(Y - 1, player.getPositionY());
-
     }
 
     @Test
@@ -46,7 +45,6 @@ public class PlayerTest {
 
         assertEquals(X - 1, player.getPositionX());
         assertEquals(Y, player.getPositionY());
-
     }
 
     @Test

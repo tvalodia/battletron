@@ -7,11 +7,11 @@ import com.google.gson.Gson;
 /**
  * This class just prints a json formatted version of the gamestate at each tick.
  */
-public class PrintListener implements GameStateListener {
+public class PrintGameStateListener implements GameStateListener {
 
     private Gson gson;
 
-    public PrintListener() {
+    public PrintGameStateListener() {
         gson = new Gson();
     }
 

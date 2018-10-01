@@ -84,7 +84,7 @@ public class GameEngine {
                 tick++;
 
                 //send an update to the observers
-                gameStateListeners.forEach(gameStateListener -> {gameStateListener.onGameStateUpdate(tick, gameState); });
+                gameStateListeners.forEach(gameStateListener -> gameStateListener.onGameStateUpdate(tick, gameState));
                 lastTickTime = currentTime;//+ currentTime - lastTickTime - TICK_INTERVAL_MILLIS;
             }
 

@@ -11,6 +11,12 @@ public class Player {
     private int positionX;
     private int positionY;
 
+    /**
+     * Constructor.
+     * @param id The ID of the player.
+     * @param positionX The starting X coordinate in the playing field.
+     * @param positionY The starting Y coordinate in the playing field.
+     */
     public Player(int id, int positionX, int positionY) {
         this.id = id;
         this.positionX = positionX;

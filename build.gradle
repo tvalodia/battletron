@@ -18,8 +18,6 @@ dependencies {
 }
 
 checkstyle {
-    // Go to the Google Checks link above and paste its
-    // contents into checkstyle.xml
     config = rootProject.resources.text.fromFile('config/checkstyle/checkstyle.xml')
     toolVersion '8.11'
 }
