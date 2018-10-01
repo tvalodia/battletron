@@ -5,6 +5,8 @@ import com.alltimeslucky.battletron.engine.gamestate.GameStateListener;
 import com.alltimeslucky.battletron.engine.player.Player;
 import com.alltimeslucky.battletron.engine.player.PlayerAi;
 
+import java.util.List;
+
 /**
  * This class manages and executes the game loop; controls the flow of the game and notifies observers at every game tick.
  * With each tick, the engine will ask players for a direction input and update the game state accordingly.
@@ -15,7 +17,7 @@ public class GameEngine {
     private static final int HEIGHT = 100;
     private static final int TICK_INTERVAL_MILLIS = 50;
     private long lastTickTime;
-    private GameStateListener gameStateListener;
+    private List<GameStateListener> gameStateListeners;
     private Player player1;
     private Player player2;
     private final PlayerAi player1Ai;
@@ -26,14 +28,14 @@ public class GameEngine {
     /**
      * Constructor. Initialises the game state.
      *
-     * @param gameStateListener The observer to update after every game tick.
+     * @param gameStateListeners The observers to update after every game tick.
      * @param player1           Player 1
      * @param player2           Player 2
      * @param player1Ai         Player 1's controller
      * @param player2Ai         Player 2's controller
      */
-    public GameEngine(GameStateListener gameStateListener, Player player1, Player player2, PlayerAi player1Ai, PlayerAi player2Ai) {
-        this.gameStateListener = gameStateListener;
+    public GameEngine(List<GameStateListener> gameStateListeners, Player player1, Player player2, PlayerAi player1Ai, PlayerAi player2Ai) {
+        this.gameStateListeners = gameStateListeners;
         this.player1 = player1;
         this.player2 = player2;
         this.player1Ai = player1Ai;
@@ -81,8 +83,8 @@ public class GameEngine {
                 gameState.updatePlayingField();
                 tick++;
 
-                //send an update to the observer
-                gameStateListener.onGameStateUpdate(tick, gameState);
+                //send an update to the observers
+                gameStateListeners.forEach(gameStateListener -> {gameStateListener.onGameStateUpdate(tick, gameState); });
                 lastTickTime = currentTime;//+ currentTime - lastTickTime - TICK_INTERVAL_MILLIS;
             }
 
