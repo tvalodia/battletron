@@ -29,10 +29,10 @@ public class GameEngine {
      * Constructor. Initialises the game state.
      *
      * @param gameStateListeners The observers to update after every game tick.
-     * @param player1           Player 1
-     * @param player2           Player 2
-     * @param player1Ai         Player 1's controller
-     * @param player2Ai         Player 2's controller
+     * @param player1            Player 1
+     * @param player2            Player 2
+     * @param player1Ai          Player 1's controller
+     * @param player2Ai          Player 2's controller
      */
     public GameEngine(List<GameStateListener> gameStateListeners, Player player1, Player player2, PlayerAi player1Ai, PlayerAi player2Ai) {
         this.gameStateListeners = gameStateListeners;
@@ -84,7 +84,9 @@ public class GameEngine {
                 tick++;
 
                 //send an update to the observers
-                gameStateListeners.forEach(gameStateListener -> {gameStateListener.onGameStateUpdate(tick, gameState); });
+                gameStateListeners.forEach(gameStateListener -> {
+                    gameStateListener.onGameStateUpdate(tick, gameState);
+                });
                 lastTickTime = currentTime;//+ currentTime - lastTickTime - TICK_INTERVAL_MILLIS;
             }
 

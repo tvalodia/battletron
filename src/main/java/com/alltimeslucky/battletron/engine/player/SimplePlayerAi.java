@@ -5,11 +5,11 @@ import com.alltimeslucky.battletron.engine.gamestate.GameState;
 
 import java.util.Random;
 
-public class SmartPlayerAi implements PlayerAi {
+public class SimplePlayerAi implements PlayerAi {
 
     private Player player;
 
-    public SmartPlayerAi(Player player) {
+    public SimplePlayerAi(Player player) {
         this.player = player;
     }
 
