@@ -3,9 +3,10 @@ package com.alltimeslucky.battletron;
 import com.alltimeslucky.battletron.client.PrintGameStateListener;
 import com.alltimeslucky.battletron.engine.GameEngine;
 import com.alltimeslucky.battletron.engine.gamestate.GameStateListener;
+import com.alltimeslucky.battletron.engine.player.DownLeftPlayerController;
+import com.alltimeslucky.battletron.engine.player.ExperimentPlayerAi;
 import com.alltimeslucky.battletron.engine.player.Player;
 import com.alltimeslucky.battletron.engine.player.PlayerController;
-import com.alltimeslucky.battletron.engine.player.SmartPlayerController;
 import com.alltimeslucky.battletron.ui.BattletronWindow;
 
 import java.util.Arrays;
@@ -57,8 +58,8 @@ public class Battletron {
     private GameEngine createEngine() {
         Player player1 = new Player(1, 0, 0);
         Player player2 = new Player(2, 99, 99);
-        PlayerController player1Controller = new SmartPlayerController(player1);
-        PlayerController player2Controller = new SmartPlayerController(player2);
+        PlayerController player1Controller = new ExperimentPlayerAi(player1);
+        PlayerController player2Controller = new DownLeftPlayerController(player2);
         List<GameStateListener> gameStateListeners = Arrays.asList(window.getGameStateListener(), new PrintGameStateListener());
         GameEngine gameEngine = new GameEngine(gameStateListeners, player1, player2, player1Controller, player2Controller);
         return gameEngine;
