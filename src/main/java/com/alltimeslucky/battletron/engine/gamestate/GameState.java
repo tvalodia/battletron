@@ -88,13 +88,13 @@ public class GameState {
 
         //Check for collisions on the playing field
         if (isColliding(player1)) {
-            setGameStatus(GameStatus.WINNER);
+            setGameStatus(GameStatus.COMPLETED_WINNER);
             setWinner(player2);
         } else if (isColliding(player2)) {
-            setGameStatus(GameStatus.WINNER);
+            setGameStatus(GameStatus.COMPLETED_WINNER);
             setWinner(player1);
         } else if (isColliding(player1, player2)) {
-            setGameStatus(GameStatus.DRAW);
+            setGameStatus(GameStatus.COMPLETED_DRAW);
         }
 
         if (player1.getPositionX() >= 0 && player1.getPositionX() < width

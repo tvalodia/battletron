@@ -62,7 +62,8 @@ public class GameView extends JComponent implements GameStateListener {
             clear();
 
             g2.setPaint(Color.white);
-            g2.drawString("Tick: " + gameState.getTickCount() + "; FPS: " + (TIME_PER_FRAME / (currentSystemTime - lastDrawTime)) * FPS_LIMIT, 0, 20);
+            g2.drawString("Tick: " + gameState.getTickCount()
+                    + "; FPS: " + (TIME_PER_FRAME / (currentSystemTime - lastDrawTime)) * FPS_LIMIT, 0, 20);
 
             //Draw the players' trails
             for (int x = 0; x < gameState.getWidth(); x++) {
@@ -85,12 +86,12 @@ public class GameView extends JComponent implements GameStateListener {
                       getScreenY(gameState.getHeight(), gameState.getPlayer2().getPositionY()),
                       Color.pink);
 
-            if (gameState.getGameStatus() == GameStatus.WINNER) {
+            if (gameState.getGameStatus() == GameStatus.COMPLETED_WINNER) {
                 g2.setPaint(Color.white);
                 g2.drawString("Player " + gameState.getWinner().getId() + " wins!", 100, 200);
             }
 
-            if (gameState.getGameStatus() == GameStatus.DRAW) {
+            if (gameState.getGameStatus() == GameStatus.COMPLETED_DRAW) {
                 g2.setPaint(Color.white);
                 g2.drawString("It's a DRAW!", 100, 200);
             }

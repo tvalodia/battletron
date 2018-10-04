@@ -1,5 +1,5 @@
 package com.alltimeslucky.battletron.engine;
 
 public enum GameStatus {
-    STARTED, WINNER, DRAW, STOPPED
+    STARTED, COMPLETED_WINNER, COMPLETED_DRAW
 }

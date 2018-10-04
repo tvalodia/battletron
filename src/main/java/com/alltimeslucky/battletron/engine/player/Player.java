@@ -12,7 +12,12 @@ public class Player {
     private int positionY;
 
     /**
-     * Constructor.
+     * Default Constructor.
+     */
+    public Player() {}
+
+    /**
+     * Parameterised Constructor.
      * @param id The ID of the player.
      * @param positionX The starting X coordinate in the playing field.
      * @param positionY The starting Y coordinate in the playing field.
@@ -25,6 +30,10 @@ public class Player {
 
     public int getId() {
         return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public int getPositionX() {
