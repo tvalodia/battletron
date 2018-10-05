@@ -12,4 +12,10 @@ public class GameDto {
         this.id = id;
     }
 
+    @Override
+    public String toString() {
+        return "GameDto{" +
+                "id=" + id +
+                '}';
+    }
 }

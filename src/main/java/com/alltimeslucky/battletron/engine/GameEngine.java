@@ -16,14 +16,13 @@ public class GameEngine extends Thread {
 
     private static final int WIDTH = 100;
     private static final int HEIGHT = 100;
-    private static final int TICK_INTERVAL_MILLIS = 100;
+    private static final int TICK_INTERVAL_MILLIS = 1000;
     private long id;
     private long lastTickTime;
     private List<GameStateListener> gameStateListeners;
     private final PlayerController player1Controller;
     private final PlayerController player2Controller;
     private GameState gameState;
-    private volatile boolean kill;
     private volatile boolean pauseThreadFlag;
 
     /**
@@ -52,7 +51,6 @@ public class GameEngine extends Thread {
     public void run() {
         System.out.println("Game Engine started.");
         gameState.setGameStatus(GameStatus.STARTED);
-        kill = false;
         while (gameState.getGameStatus() == GameStatus.STARTED) {
             if (interrupted()) {
                 System.out.println("Game Engine killed.");
@@ -110,7 +108,6 @@ public class GameEngine extends Thread {
             synchronized (this) {
                 notify();
                 pauseThreadFlag = false;
-
             }
         }
 

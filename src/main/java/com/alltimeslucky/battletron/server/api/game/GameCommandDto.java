@@ -11,4 +11,11 @@ public class GameCommandDto {
     public void setCommandString(String commandString) {
         this.commandString = commandString;
     }
+
+    @Override
+    public String toString() {
+        return "GameCommandDto{" +
+                "commandString='" + commandString + '\'' +
+                '}';
+    }
 }

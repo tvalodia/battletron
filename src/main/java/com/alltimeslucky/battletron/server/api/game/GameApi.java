@@ -3,6 +3,9 @@ package com.alltimeslucky.battletron.server.api.game;
 import com.alltimeslucky.battletron.engine.GameEngine;
 import com.alltimeslucky.battletron.engine.GameEngineFactory;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.util.LinkedList;
 import java.util.List;
 
@@ -19,19 +22,22 @@ import javax.ws.rs.core.MediaType;
 @Path("/game")
 public class GameApi {
 
+    protected static final Logger LOG = LogManager.getLogger();
+
     /**
      * Fetches a list of all games.
      * @return The complete list of games.
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<GameDto> getGames() {
+    public List<GameDto> getAllGames() {
         List<GameDto> dtos = new LinkedList<>();
         for (GameEngine gameEngine : GameRepository.getInstance().getAllGameEngines()) {
             GameDto gameDto = new GameDto();
             gameDto.setId(gameEngine.getId());
             dtos.add(gameDto);
         }
+        LOG.debug("Response: " +  dtos);
         return dtos;
     }
 
@@ -41,13 +47,14 @@ public class GameApi {
      */
     @POST
     @Produces(MediaType.APPLICATION_JSON)
-    public GameDto newGame() {
+    public GameDto startGame() {
         GameEngine gameEngine = startEngine();
         long gameEngineId = gameEngine.getId();
         GameRepository.getInstance().addGameEngine(gameEngineId, gameEngine);
         GameDto gameDto = new GameDto();
         gameDto.setId(gameEngineId);
 
+        LOG.debug("Response: " +  gameDto);
         return gameDto;
     }
 
@@ -67,6 +74,7 @@ public class GameApi {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public void updateGameStatus(@PathParam("id") long gameEngineId, GameCommandDto command) {
+        LOG.debug("Request: id = " + gameEngineId + " " + command);
         if (command == null || command.getCommandString() == null || command.getCommandString().isEmpty()) {
             throw new WebApplicationException("Invalid command");
         }

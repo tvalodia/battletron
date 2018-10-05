@@ -2,15 +2,25 @@ package com.alltimeslucky.battletron.server;
 
 import com.alltimeslucky.battletron.server.api.game.GameApi;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
+
+import java.net.URI;
+import java.net.URL;
+
+//import org.apache.logging.log4j.L;
 
 /**
  * A Jetty-based application to run simulations on a headless server.
  */
 public class BattletronServer {
 
+    protected static final Logger LOG = LogManager.getLogger();
+    private static final int PORT = 8080;
     /**
      * Server entry point.
      *
@@ -18,19 +28,37 @@ public class BattletronServer {
      * @throws Exception Thrown when an error has occurred.
      */
     public static void main(String[] args) throws Exception {
+        LOG.info("Starting web server on port " + PORT);
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
-        context.setContextPath("/api");
+        context.setContextPath("/");
 
-        Server jettyServer = new Server(8080);
+        Server jettyServer = new Server(PORT);
         jettyServer.setHandler(context);
 
         ServletHolder jerseyServlet = context.addServlet(
-                org.glassfish.jersey.servlet.ServletContainer.class, "/*");
+                org.glassfish.jersey.servlet.ServletContainer.class, "/api/*");
         jerseyServlet.setInitOrder(0);
 
-        jerseyServlet.setInitParameter(
-                "jersey.config.server.provider.classnames",
-                GameApi.class.getCanonicalName());
+        jerseyServlet.setInitParameter("jersey.config.server.provider.classnames", GameApi.class.getCanonicalName());
+
+        // Figure out what path to serve content from
+        ClassLoader cl = BattletronServer.class.getClassLoader();
+        // We look for a file, as ClassLoader.getResource() is not
+        // designed to look for directories (we resolve the directory later)
+        URL f = cl.getResource("webapp/index.html");
+        if (f == null) {
+            throw new RuntimeException("Unable to find resource directory");
+        }
+
+        // Resolve file to directory
+        URI webRootUri = f.toURI().resolve("./").normalize();
+        LOG.info("WebRoot is " + webRootUri);
+
+        DefaultServlet defaultServlet = new DefaultServlet();
+        ServletHolder holderPwd = new ServletHolder("default", defaultServlet);
+        holderPwd.setInitParameter("resourceBase", webRootUri.toString());
+
+        context.addServlet(holderPwd, "/*");
 
         try {
             jettyServer.start();
