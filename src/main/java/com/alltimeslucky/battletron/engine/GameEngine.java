@@ -17,7 +17,6 @@ public class GameEngine extends Thread {
     private static final int WIDTH = 100;
     private static final int HEIGHT = 100;
     private static final int TICK_INTERVAL_MILLIS = 1000;
-    private long id;
     private long lastTickTime;
     private List<GameStateListener> gameStateListeners;
     private final PlayerController player1Controller;
@@ -39,9 +38,8 @@ public class GameEngine extends Thread {
         this.gameStateListeners = gameStateListeners;
         this.player1Controller = player1Controller;
         this.player2Controller = player2Controller;
-        this.id = GregorianCalendar.getInstance().getTimeInMillis();
         this.lastTickTime = 0;
-        gameState = new GameState(WIDTH, HEIGHT, player1, player2);
+        gameState = new GameState(GregorianCalendar.getInstance().getTimeInMillis(), WIDTH, HEIGHT, player1, player2);
     }
 
     /**
@@ -133,11 +131,12 @@ public class GameEngine extends Thread {
         }
     }
 
-    /**
-     * Returns the id of the game.
-     * @return
-     */
+    @Override
     public long getId() {
-        return id;
+        return gameState.getId();
+    }
+
+    public GameState getGameState() {
+        return gameState;
     }
 }

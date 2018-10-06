@@ -2,6 +2,7 @@ package com.alltimeslucky.battletron.server.api.game;
 
 import com.alltimeslucky.battletron.engine.GameEngine;
 import com.alltimeslucky.battletron.engine.GameEngineFactory;
+import com.alltimeslucky.battletron.engine.gamestate.GameState;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -33,12 +34,26 @@ public class GameApi {
     public List<GameDto> getAllGames() {
         List<GameDto> dtos = new LinkedList<>();
         for (GameEngine gameEngine : GameRepository.getInstance().getAllGameEngines()) {
-            GameDto gameDto = new GameDto();
-            gameDto.setId(gameEngine.getId());
+            GameDto gameDto = newGameDto(gameEngine.getGameState());
+            gameDto.setPlayingField(null);
             dtos.add(gameDto);
         }
         LOG.debug("Response: " +  dtos);
         return dtos;
+    }
+
+    /**
+     * Fetches a list of all games.
+     * @return The complete list of games.
+     */
+    @GET
+    @Path("{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public GameDto getGame(@PathParam("id") long id) {
+        GameState gameState = GameRepository.getInstance().getGameEngine(id).getGameState();
+        GameDto gameDto = newGameDto(gameState);
+        LOG.debug("Response: " +  gameDto);
+        return gameDto;
     }
 
     /**
@@ -51,9 +66,8 @@ public class GameApi {
         GameEngine gameEngine = startEngine();
         long gameEngineId = gameEngine.getId();
         GameRepository.getInstance().addGameEngine(gameEngineId, gameEngine);
-        GameDto gameDto = new GameDto();
-        gameDto.setId(gameEngineId);
-
+        GameDto gameDto = newGameDto(gameEngine.getGameState());
+        gameDto.setPlayingField(null);
         LOG.debug("Response: " +  gameDto);
         return gameDto;
     }
@@ -101,6 +115,19 @@ public class GameApi {
                 throw new WebApplicationException("Invalid game ID");
             }
         }
+    }
+
+    private GameDto newGameDto(GameState gameState) {
+        GameDto gameDto = new GameDto();
+        gameDto.setId(gameState.getId());
+        gameDto.setWidth(gameState.getWidth());
+        gameDto.setHeight(gameState.getHeight());
+        gameDto.setPlayer1(gameState.getPlayer1());
+        gameDto.setPlayer2(gameState.getPlayer2());
+        gameDto.setTickCount(gameState.getTickCount());
+        gameDto.setPlayingField(gameState.getPlayingField());
+        gameDto.setGameStatus(gameState.getGameStatus());
+        return gameDto;
     }
 
 }

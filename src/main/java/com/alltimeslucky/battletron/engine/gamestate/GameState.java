@@ -4,11 +4,15 @@ import com.alltimeslucky.battletron.engine.Direction;
 import com.alltimeslucky.battletron.engine.GameStatus;
 import com.alltimeslucky.battletron.engine.player.Player;
 
+import java.util.Arrays;
+
 /**
  * This class depicts the state of a game.
  */
 public class GameState {
 
+    //The unique identifier of this instance of a gamestate
+    private long id;
     // The width of the playing field.
     private int width;
     // The height of the playing field.
@@ -29,12 +33,14 @@ public class GameState {
      * Constructor.
      * Initialises the playingField.
      *
+     * @param id
      * @param width   The width of the playing field
      * @param height  The height of the playing field
      * @param player1 The first player of the game
      * @param player2 The second player of the game
      */
-    public GameState(int width, int height, Player player1, Player player2) {
+    public GameState(long id, int width, int height, Player player1, Player player2) {
+        this.id = id;
         this.width = width;
         this.height = height;
         this.tickCount = 0;
@@ -110,6 +116,10 @@ public class GameState {
         tickCount++;
     }
 
+    public long getId() {
+        return id;
+    }
+
     public int getWidth() {
         return width;
     }
@@ -148,5 +158,20 @@ public class GameState {
 
     public int getTickCount() {
         return tickCount;
+    }
+
+    @Override
+    public String toString() {
+        return "GameState{" +
+                "id=" + id +
+                ", width=" + width +
+                ", height=" + height +
+                ", gameStatus=" + gameStatus +
+                ", tickCount=" + tickCount +
+                ", player1=" + player1 +
+                ", player2=" + player2 +
+                ", playingField=" + Arrays.toString(playingField) +
+                ", winner=" + winner +
+                '}';
     }
 }

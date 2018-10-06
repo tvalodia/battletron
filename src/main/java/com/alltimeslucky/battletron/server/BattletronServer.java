@@ -1,6 +1,7 @@
 package com.alltimeslucky.battletron.server;
 
 import com.alltimeslucky.battletron.server.api.game.GameApi;
+import com.alltimeslucky.battletron.server.websocket.EventServlet;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -8,6 +9,8 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
+import org.glassfish.jersey.server.ResourceConfig;
+import org.glassfish.jersey.servlet.ServletContainer;
 
 import java.net.URI;
 import java.net.URL;
@@ -35,12 +38,14 @@ public class BattletronServer {
         Server jettyServer = new Server(PORT);
         jettyServer.setHandler(context);
 
+        //Set up the API servlet
         ServletHolder jerseyServlet = context.addServlet(
                 org.glassfish.jersey.servlet.ServletContainer.class, "/api/*");
         jerseyServlet.setInitOrder(0);
 
         jerseyServlet.setInitParameter("jersey.config.server.provider.classnames", GameApi.class.getCanonicalName());
 
+        //Set up the Resource (static file hosting) servlet
         // Figure out what path to serve content from
         ClassLoader cl = BattletronServer.class.getClassLoader();
         // We look for a file, as ClassLoader.getResource() is not
@@ -60,12 +65,22 @@ public class BattletronServer {
 
         context.addServlet(holderPwd, "/*");
 
+        // Add a websocket to a specific path spec
+        //ServletHolder holderEvents = new ServletHolder("ws-events", EventServlet.class);
+        ServletHolder holderEvents = new ServletHolder(new EventServlet("main argument"));
+        context.addServlet(holderEvents, "/events/*");
+
         try {
             jettyServer.start();
             jettyServer.join();
         } finally {
             jettyServer.destroy();
         }
+    }
+
+    private static ResourceConfig resourceConfig() {
+        // manually injecting dependencies (clock) to Jersey resource classes
+        return new ResourceConfig().register(new EventServlet("main argument"));
     }
 }
 
