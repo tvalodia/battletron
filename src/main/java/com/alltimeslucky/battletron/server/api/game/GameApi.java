@@ -4,9 +4,6 @@ import com.alltimeslucky.battletron.engine.GameEngine;
 import com.alltimeslucky.battletron.engine.GameEngineFactory;
 import com.alltimeslucky.battletron.engine.gamestate.GameState;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import java.util.LinkedList;
 import java.util.List;
 
@@ -19,6 +16,9 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 @Path("/game")
 public class GameApi {
@@ -127,6 +127,7 @@ public class GameApi {
         gameDto.setTickCount(gameState.getTickCount());
         gameDto.setPlayingField(gameState.getPlayingField());
         gameDto.setGameStatus(gameState.getGameStatus());
+        gameDto.setWinner(gameDto.getWinner());
         return gameDto;
     }
 

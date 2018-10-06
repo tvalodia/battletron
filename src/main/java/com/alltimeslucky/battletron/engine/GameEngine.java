@@ -108,12 +108,9 @@ public class GameEngine extends Thread {
                 pauseThreadFlag = false;
             }
         }
-
         synchronized (this) {
             interrupt();
         }
-
-
     }
 
     /**

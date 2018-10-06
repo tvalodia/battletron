@@ -3,6 +3,9 @@ package com.alltimeslucky.battletron.server;
 import com.alltimeslucky.battletron.server.api.game.GameApi;
 import com.alltimeslucky.battletron.server.websocket.EventServlet;
 
+import java.net.URI;
+import java.net.URL;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.eclipse.jetty.server.Server;
@@ -10,10 +13,8 @@ import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.glassfish.jersey.server.ResourceConfig;
-import org.glassfish.jersey.servlet.ServletContainer;
 
-import java.net.URI;
-import java.net.URL;
+
 
 //import org.apache.logging.log4j.L;
 
@@ -24,6 +25,7 @@ public class BattletronServer {
 
     protected static final Logger LOG = LogManager.getLogger();
     private static final int PORT = 8080;
+
     /**
      * Server entry point.
      *

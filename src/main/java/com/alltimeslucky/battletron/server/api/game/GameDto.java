@@ -97,16 +97,16 @@ public class GameDto {
 
     @Override
     public String toString() {
-        return "GameDto{" +
-                "id=" + id +
-                ", width=" + width +
-                ", height=" + height +
-                ", gameStatus=" + gameStatus +
-                ", tickCount=" + tickCount +
-                ", player1=" + player1 +
-                ", player2=" + player2 +
-                ", playingField=" + Arrays.toString(playingField) +
-                ", winner=" + winner +
-                '}';
+        return "GameDto{"
+                + "id=" + id
+                + ", width=" + width
+                + ", height=" + height
+                + ", gameStatus=" + gameStatus
+                + ", tickCount=" + tickCount
+                + ", player1=" + player1
+                + ", player2=" + player2
+                + ", playingField=" + Arrays.toString(playingField)
+                + ", winner=" + winner
+                + '}';
     }
 }

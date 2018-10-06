@@ -33,7 +33,7 @@ public class GameState {
      * Constructor.
      * Initialises the playingField.
      *
-     * @param id
+     * @param id      The unique identifier of the game state
      * @param width   The width of the playing field
      * @param height  The height of the playing field
      * @param player1 The first player of the game
@@ -160,18 +160,4 @@ public class GameState {
         return tickCount;
     }
 
-    @Override
-    public String toString() {
-        return "GameState{" +
-                "id=" + id +
-                ", width=" + width +
-                ", height=" + height +
-                ", gameStatus=" + gameStatus +
-                ", tickCount=" + tickCount +
-                ", player1=" + player1 +
-                ", player2=" + player2 +
-                ", playingField=" + Arrays.toString(playingField) +
-                ", winner=" + winner +
-                '}';
-    }
 }

@@ -14,8 +14,8 @@ public class GameCommandDto {
 
     @Override
     public String toString() {
-        return "GameCommandDto{" +
-                "commandString='" + commandString + '\'' +
-                '}';
+        return "GameCommandDto{"
+                + "commandString='" + commandString + '\''
+                + '}';
     }
 }
