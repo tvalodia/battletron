@@ -9,7 +9,7 @@ import com.alltimeslucky.battletron.engine.player.PlayerController;
  */
 public class GameEngine extends Thread {
 
-    private static final int TICK_INTERVAL_MILLIS = 1000;
+    private static final int TICK_INTERVAL_MILLIS = 100;
     private long lastTickTime;
     private final PlayerController player1Controller;
     private final PlayerController player2Controller;

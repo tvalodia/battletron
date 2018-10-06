@@ -11,15 +11,13 @@ import org.eclipse.jetty.websocket.servlet.WebSocketServletFactory;
 @SuppressWarnings("serial")
 public class EventServlet extends WebSocketServlet
 {
-    protected static final Logger LOG = LogManager.getLogger();
+    private static final Logger LOG = LogManager.getLogger();
+    private WebSocketGameStateListener listener;
 
-    private String constructorArgument;
+//    public EventServlet(WebSocketGameStateListener listener) {
+//        this.listener = listener;
+//    }
 
-    public EventServlet(String constructorArgument) {
-        this.constructorArgument = constructorArgument;
-        LOG.debug("EventServlet - " + constructorArgument);
-
-    }
     @Override
     public void configure(WebSocketServletFactory webSocketServletFactory)
     {
@@ -34,8 +32,8 @@ public class EventServlet extends WebSocketServlet
             public Object createWebSocket(ServletUpgradeRequest servletUpgradeRequest, ServletUpgradeResponse servletUpgradeResponse) {
                 EventSocket webSocket = (EventSocket) creator.createWebSocket(servletUpgradeRequest, servletUpgradeResponse);
 
-                // Use the object created by the default creator and inject your members
-                webSocket.setArgumentProperty(constructorArgument);
+//                // Set depdendencies on the socket
+//                webSocket.setListener(listener);
 
                 return webSocket;
             }

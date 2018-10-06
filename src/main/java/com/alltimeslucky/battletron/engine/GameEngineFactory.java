@@ -7,6 +7,7 @@ import com.alltimeslucky.battletron.engine.gamestate.GameStateListener;
 import com.alltimeslucky.battletron.engine.player.Player;
 import com.alltimeslucky.battletron.engine.player.PlayerController;
 import com.alltimeslucky.battletron.engine.player.SimplePlayerAi;
+import com.alltimeslucky.battletron.server.websocket.WebSocketGameStateListenerFactory;
 
 import java.util.Arrays;
 import java.util.GregorianCalendar;
@@ -28,7 +29,8 @@ public class GameEngineFactory {
     public static GameEngine getGameEngine() {
         Player player1 = new Player(1, 0, 0);
         Player player2 = new Player(2, 99, 99);
-        List<GameStateListener> gameStateListeners = Arrays.asList(new PrintGameStateListener());
+        List<GameStateListener> gameStateListeners = Arrays.asList(
+                new PrintGameStateListener(), WebSocketGameStateListenerFactory.getWebSocketGameStateListener());
         GameState gameState = GameStateFactory.getGameState(WIDTH, HEIGHT, player1, player2, gameStateListeners);
         PlayerController player1Ai = new SimplePlayerAi(player1);
         PlayerController player2Ai = new SimplePlayerAi(player2);
@@ -37,9 +39,9 @@ public class GameEngineFactory {
     }
 
     /**
-     * Instantiates a GameEngine with default values.
+     * Instantiates a GameEngine with the specified values.
      *
-     * @return A GameEngine with default values
+     * @return An instance of GameEngine
      */
     public static GameEngine getGameEngine(PlayerController player1Controller, PlayerController player2Controller,
                                            List<GameStateListener> gameStateListeners) {

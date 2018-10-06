@@ -7,40 +7,43 @@ import org.eclipse.jetty.websocket.api.WebSocketAdapter;
 
 public class EventSocket extends WebSocketAdapter {
 
-    protected static final Logger LOG = LogManager.getLogger();
+    private static final Logger LOG = LogManager.getLogger();
 
-    private String argumentProperty;
+    private WebSocketGameStateListener listener;
+
+    public EventSocket() {
+        listener = WebSocketGameStateListenerFactory.getWebSocketGameStateListener();
+    }
 
     @Override
     public void onWebSocketConnect(Session sess) {
         super.onWebSocketConnect(sess);
-        System.out.println("Socket Connected: " + sess);
+        LOG.debug("New WebSocket connection: " + getSession());
     }
 
     @Override
     public void onWebSocketText(String message) {
         super.onWebSocketText(message);
-        System.out.println("Received TEXT message: " + message + " - " + argumentProperty );
+        LOG.debug("Game " + message + " update stream requested from " + getSession());
+        listener.registerSession(getSession(), Long.valueOf(message));
     }
 
     @Override
     public void onWebSocketClose(int statusCode, String reason) {
         super.onWebSocketClose(statusCode, reason);
         System.out.println("Socket Closed: [" + statusCode + "] " + reason);
+        listener.unregisterSession(getSession());
     }
 
     @Override
     public void onWebSocketError(Throwable cause) {
         super.onWebSocketError(cause);
+        listener.unregisterSession(getSession());
         cause.printStackTrace(System.err);
+
     }
 
-    public String getArgumentProperty() {
-        return argumentProperty;
-    }
-
-    public void setArgumentProperty(String argumentProperty) {
-        LOG.debug(argumentProperty);
-        this.argumentProperty = argumentProperty;
+    public void setListener(WebSocketGameStateListener listener) {
+        this.listener = listener;
     }
 }

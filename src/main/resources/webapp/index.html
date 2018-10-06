@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script>
+        var ws = new WebSocket("ws://localhost:8080/events");
+        ws.onopen = function (event) {
+            ws.send("1234567");
+        };
+        ws.onmessage = function(event) {
+       //     $('#playing_field').text(JSON.stringify(event.data));
+            let game = $.parseJSON(event.data);
+            let x;
+            let y;
+            $('#playing_field').empty();
+            for (x = 0; x < 100; x++) {
+                for (y = 99; y >= 0; y--) {
+                    if (game.playingField[x][y] === 0) {
+                        $('#playing_field').append(" ")
+                    } else if (game.playingField[x][y] === 1) {
+                        $('#playing_field').append("#")
+                    } else if (game.playingField[x][y] === 2) {
+                        $('#playing_field').append("$")
+                    }
+                }
+                $('#playing_field').append("\n");
+            }
+        };
+
+        $(document).ready(function(){
+            $("#fetch_games").click(function(){
+                $.get("api/game",
+                    function(response){
+           //             response = $.parseJSON(response);
+                        $(function() {
+                            $("#records_table").empty();
+                            $.each(response, function(i, game) {
+                                var $tr = $('<tr>').append(
+                                    $('<td>').text(game.id),
+                                    $('<td>').text(game.tickCount),
+                                    $('<td>').append($('<button>').click(function() {
+                                        ws.send(game.id);
+                                    }).text("View"))
+                                ).appendTo('#records_table');
+                            });
+                        });
+                    });
+            });
+
+            $("#start_game").click(function(){
+                $.post("api/game",
+                    function(response){
+                        $(function() {
+                            ws.send(response.id);
+                        });
+                    });
+            });
+        });
+
+    </script>
+    <style>
+        .monospace {
+            font-family: "Courier New", Courier, monospace;
+            font-size: 8px;
+            line-height: 8px;
+        }
+    </style>
+</head>
+<body>
+    <pre id="playing_field" class="monospace"></pre>
+    <p></p>
+    <button type="button" id="start_game">Start Game</button>
+    <button type="button" id="fetch_games">Fetch Games</button>
+    <table id="records_table"></table>
+</body>
+</html>

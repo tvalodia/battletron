@@ -4,6 +4,7 @@ import com.alltimeslucky.battletron.engine.GameEngine;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Store all instances of started games.
@@ -11,11 +12,11 @@ import java.util.HashMap;
 public class GameRepository {
 
     private static GameRepository instance;
-    private HashMap<Long, GameEngine> data;
+    private ConcurrentHashMap<Long, GameEngine> data;
 
 
     private GameRepository() {
-        data = new HashMap<>();
+        data = new ConcurrentHashMap<>();
     }
 
     /**

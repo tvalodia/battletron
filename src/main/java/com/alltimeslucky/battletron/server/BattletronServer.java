@@ -2,6 +2,7 @@ package com.alltimeslucky.battletron.server;
 
 import com.alltimeslucky.battletron.server.api.game.GameApi;
 import com.alltimeslucky.battletron.server.websocket.EventServlet;
+import com.alltimeslucky.battletron.server.websocket.WebSocketGameStateListener;
 
 import java.net.URI;
 import java.net.URL;
@@ -68,8 +69,10 @@ public class BattletronServer {
         context.addServlet(holderPwd, "/*");
 
         // Add a websocket to a specific path spec
-        //ServletHolder holderEvents = new ServletHolder("ws-events", EventServlet.class);
-        ServletHolder holderEvents = new ServletHolder(new EventServlet("main argument"));
+        //Use this when not injecting a dependency
+        ServletHolder holderEvents = new ServletHolder("ws-events", EventServlet.class);
+        //Use the below when injecting a depedency
+        //ServletHolder holderEvents = new ServletHolder(new EventServlet(new WebSocketGameStateListener()));
         context.addServlet(holderEvents, "/events/*");
 
         try {
@@ -78,11 +81,6 @@ public class BattletronServer {
         } finally {
             jettyServer.destroy();
         }
-    }
-
-    private static ResourceConfig resourceConfig() {
-        // manually injecting dependencies (clock) to Jersey resource classes
-        return new ResourceConfig().register(new EventServlet("main argument"));
     }
 }
 
