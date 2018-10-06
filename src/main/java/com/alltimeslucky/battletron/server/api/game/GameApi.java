@@ -23,10 +23,11 @@ import org.apache.logging.log4j.Logger;
 @Path("/game")
 public class GameApi {
 
-    protected static final Logger LOG = LogManager.getLogger();
+    private static final Logger LOG = LogManager.getLogger();
 
     /**
      * Fetches a list of all games.
+     *
      * @return The complete list of games.
      */
     @GET
@@ -34,16 +35,17 @@ public class GameApi {
     public List<GameDto> getAllGames() {
         List<GameDto> dtos = new LinkedList<>();
         for (GameEngine gameEngine : GameRepository.getInstance().getAllGameEngines()) {
-            GameDto gameDto = newGameDto(gameEngine.getGameState());
+            GameDto gameDto = new GameDto(gameEngine.getGameState());
             gameDto.setPlayingField(null);
             dtos.add(gameDto);
         }
-        LOG.debug("Response: " +  dtos);
+        LOG.debug("Response: " + dtos);
         return dtos;
     }
 
     /**
      * Fetches a list of all games.
+     *
      * @return The complete list of games.
      */
     @GET
@@ -51,13 +53,14 @@ public class GameApi {
     @Produces(MediaType.APPLICATION_JSON)
     public GameDto getGame(@PathParam("id") long id) {
         GameState gameState = GameRepository.getInstance().getGameEngine(id).getGameState();
-        GameDto gameDto = newGameDto(gameState);
-        LOG.debug("Response: " +  gameDto);
+        GameDto gameDto = new GameDto(gameState);
+        LOG.debug("Response: " + gameDto);
         return gameDto;
     }
 
     /**
      * Starts a new game.
+     *
      * @return A GameDto object.
      */
     @POST
@@ -66,9 +69,9 @@ public class GameApi {
         GameEngine gameEngine = startEngine();
         long gameEngineId = gameEngine.getId();
         GameRepository.getInstance().addGameEngine(gameEngineId, gameEngine);
-        GameDto gameDto = newGameDto(gameEngine.getGameState());
+        GameDto gameDto = new GameDto(gameEngine.getGameState());
         gameDto.setPlayingField(null);
-        LOG.debug("Response: " +  gameDto);
+        LOG.debug("Response: " + gameDto);
         return gameDto;
     }
 
@@ -80,8 +83,9 @@ public class GameApi {
 
     /**
      * Controls the running-state of a game.
+     *
      * @param gameEngineId The id of the game.
-     * @param command The command issued to the game.
+     * @param command      The command issued to the game.
      */
     @PUT
     @Path("{id}/command")
@@ -115,20 +119,6 @@ public class GameApi {
                 throw new WebApplicationException("Invalid game ID");
             }
         }
-    }
-
-    private GameDto newGameDto(GameState gameState) {
-        GameDto gameDto = new GameDto();
-        gameDto.setId(gameState.getId());
-        gameDto.setWidth(gameState.getWidth());
-        gameDto.setHeight(gameState.getHeight());
-        gameDto.setPlayer1(gameState.getPlayer1());
-        gameDto.setPlayer2(gameState.getPlayer2());
-        gameDto.setTickCount(gameState.getTickCount());
-        gameDto.setPlayingField(gameState.getPlayingField());
-        gameDto.setGameStatus(gameState.getGameStatus());
-        gameDto.setWinner(gameDto.getWinner());
-        return gameDto;
     }
 
 }

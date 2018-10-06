@@ -1,6 +1,7 @@
 package com.alltimeslucky.battletron.server.api.game;
 
 import com.alltimeslucky.battletron.engine.GameStatus;
+import com.alltimeslucky.battletron.engine.gamestate.GameState;
 import com.alltimeslucky.battletron.engine.player.Player;
 
 import java.util.Arrays;
@@ -22,6 +23,27 @@ public class GameDto {
     private int[][] playingField;
     //The winner of the current game is there is one.
     private Player winner;
+
+    /**
+     * Non-parameterised constructor for serialisation.
+     */
+    public GameDto() {}
+
+    /**
+     * Constructor used to create this Data Transfer Object based on a GameState.
+     * @param gameState The GameState used to build this DTO.
+     */
+    public GameDto(GameState gameState) {
+        setId(gameState.getId());
+        setWidth(gameState.getWidth());
+        setHeight(gameState.getHeight());
+        setPlayer1(gameState.getPlayer1());
+        setPlayer2(gameState.getPlayer2());
+        setTickCount(gameState.getTickCount());
+        setPlayingField(gameState.getPlayingField());
+        setGameStatus(gameState.getGameStatus());
+        setWinner(gameState.getWinner());
+    }
 
     public int getWidth() {
         return width;

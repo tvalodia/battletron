@@ -5,6 +5,7 @@ import com.alltimeslucky.battletron.engine.GameStatus;
 import com.alltimeslucky.battletron.engine.player.Player;
 
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * This class depicts the state of a game.
@@ -29,6 +30,8 @@ public class GameState {
     //The winner of the current game is there is one.
     private Player winner;
 
+    private List<GameStateListener> gameStateListeners;
+
     /**
      * Constructor.
      * Initialises the playingField.
@@ -39,7 +42,7 @@ public class GameState {
      * @param player1 The first player of the game
      * @param player2 The second player of the game
      */
-    public GameState(long id, int width, int height, Player player1, Player player2) {
+    public GameState(long id, int width, int height, Player player1, Player player2, List<GameStateListener> gameStateListeners) {
         this.id = id;
         this.width = width;
         this.height = height;
@@ -50,6 +53,7 @@ public class GameState {
         this.playingField[player1.getPositionX()][player1.getPositionY()] = player1.getId();
         this.playingField[player2.getPositionX()][player2.getPositionY()] = player2.getId();
         this.winner = null;
+        this.gameStateListeners = gameStateListeners;
     }
 
     /**
@@ -114,6 +118,9 @@ public class GameState {
         }
 
         tickCount++;
+
+        //send an update to the observers
+        gameStateListeners.forEach(gameStateListener -> gameStateListener.onGameStateUpdate(this));
     }
 
     public long getId() {

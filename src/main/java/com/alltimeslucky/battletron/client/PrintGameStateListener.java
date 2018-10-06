@@ -2,6 +2,7 @@ package com.alltimeslucky.battletron.client;
 
 import com.alltimeslucky.battletron.engine.gamestate.GameState;
 import com.alltimeslucky.battletron.engine.gamestate.GameStateListener;
+import com.alltimeslucky.battletron.server.api.game.GameDto;
 import com.google.gson.Gson;
 
 /**
@@ -17,6 +18,6 @@ public class PrintGameStateListener implements GameStateListener {
 
     @Override
     public void onGameStateUpdate(GameState gameState) {
-        System.out.println(gson.toJson(gameState));
+        System.out.println(gson.toJson(new GameDto(gameState)));
     }
 }

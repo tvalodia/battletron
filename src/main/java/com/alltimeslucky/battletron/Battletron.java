@@ -2,6 +2,7 @@ package com.alltimeslucky.battletron;
 
 import com.alltimeslucky.battletron.client.PrintGameStateListener;
 import com.alltimeslucky.battletron.engine.GameEngine;
+import com.alltimeslucky.battletron.engine.GameEngineFactory;
 import com.alltimeslucky.battletron.engine.gamestate.GameStateListener;
 import com.alltimeslucky.battletron.engine.player.DownLeftPlayerController;
 import com.alltimeslucky.battletron.engine.player.ExperimentPlayerAi;
@@ -48,7 +49,6 @@ public class Battletron {
      */
     public void play() {
         gameEngine.start();
-        System.out.println("Complete");
     }
 
     /**
@@ -61,7 +61,7 @@ public class Battletron {
         PlayerController player1Controller = new ExperimentPlayerAi(player1);
         PlayerController player2Controller = new DownLeftPlayerController(player2);
         List<GameStateListener> gameStateListeners = Arrays.asList(window.getGameStateListener(), new PrintGameStateListener());
-        GameEngine gameEngine = new GameEngine(gameStateListeners, player1, player2, player1Controller, player2Controller);
+        GameEngine gameEngine = GameEngineFactory.getGameEngine(player1Controller, player2Controller, gameStateListeners);
         return gameEngine;
     }
 }
