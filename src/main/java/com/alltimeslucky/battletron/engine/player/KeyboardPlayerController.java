@@ -22,13 +22,13 @@ public class KeyboardPlayerController implements PlayerController, KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        if(e.getKeyCode()== KeyEvent.VK_RIGHT)
+        if(e.getKeyCode()== KeyEvent.VK_RIGHT || e.getKeyCode()== KeyEvent.VK_D)
            direction = Direction.RIGHT;
-        else if(e.getKeyCode()== KeyEvent.VK_LEFT)
+        else if(e.getKeyCode()== KeyEvent.VK_LEFT || e.getKeyCode()== KeyEvent.VK_A)
             direction = Direction.LEFT;
-        else if(e.getKeyCode()== KeyEvent.VK_DOWN)
+        else if(e.getKeyCode()== KeyEvent.VK_DOWN || e.getKeyCode()== KeyEvent.VK_S)
             direction = Direction.DOWN;
-        else if(e.getKeyCode()== KeyEvent.VK_UP)
+        else if(e.getKeyCode()== KeyEvent.VK_UP || e.getKeyCode()== KeyEvent.VK_W)
             direction = Direction.UP;
     }
 
