@@ -6,6 +6,7 @@ import com.alltimeslucky.battletron.engine.GameEngineFactory;
 import com.alltimeslucky.battletron.engine.gamestate.GameStateListener;
 import com.alltimeslucky.battletron.engine.player.DownLeftPlayerController;
 import com.alltimeslucky.battletron.engine.player.ExperimentPlayerAi;
+import com.alltimeslucky.battletron.engine.player.KeyboardPlayerController;
 import com.alltimeslucky.battletron.engine.player.Player;
 import com.alltimeslucky.battletron.engine.player.PlayerController;
 import com.alltimeslucky.battletron.ui.BattletronWindow;
@@ -20,7 +21,7 @@ public class Battletron {
 
     private GameEngine gameEngine;
     private BattletronWindow window;
-
+    private KeyboardPlayerController keyboardPlayerController;
     /**
      * Main entry point into the application.
      * @param args Program arguments
@@ -33,7 +34,8 @@ public class Battletron {
      * Constructor. Creates the core components for the simulation.
      */
     public Battletron() {
-        window = new BattletronWindow();
+        keyboardPlayerController = new KeyboardPlayerController();
+        window = new BattletronWindow(keyboardPlayerController);
         window.initialise();
         try {
             Thread.sleep(1000);
@@ -61,7 +63,7 @@ public class Battletron {
         PlayerController player1Controller = new ExperimentPlayerAi(player1);
         PlayerController player2Controller = new DownLeftPlayerController(player2);
         List<GameStateListener> gameStateListeners = Arrays.asList(window.getGameStateListener(), new PrintGameStateListener());
-        GameEngine gameEngine = GameEngineFactory.getGameEngine(player1Controller, player2Controller, gameStateListeners);
+        GameEngine gameEngine = GameEngineFactory.getGameEngine(keyboardPlayerController, player2Controller, gameStateListeners);
         return gameEngine;
     }
 }

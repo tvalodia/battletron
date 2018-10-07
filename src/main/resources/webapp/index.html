@@ -20,9 +20,22 @@
                     if (game.playingField[x][y] === 0) {
                         $('#playing_field').append(" ")
                     } else if (game.playingField[x][y] === 1) {
-                        $('#playing_field').append("#")
+                        if (game.player1.positionX === x && game.player1.positionY === y) {
+                            $('#playing_field').append("#")
+                        } else {
+                            $('#playing_field').append("+")
+                        }
                     } else if (game.playingField[x][y] === 2) {
-                        $('#playing_field').append("$")
+                        if (game.player2.positionX === x && game.player2.positionY === y) {
+                            $('#playing_field').append("@")
+                        } else {
+                            $('#playing_field').append("x")
+                        }
+                    }
+
+                    $('#status').text(game.winner);
+                    if (game.status == "COMPLETED_WINNER") {
+
                     }
                 }
                 $('#playing_field').append("\n");
@@ -64,13 +77,13 @@
         .monospace {
             font-family: "Courier New", Courier, monospace;
             font-size: 8px;
-            line-height: 8px;
+            line-height: 7px;
         }
     </style>
 </head>
 <body>
     <pre id="playing_field" class="monospace"></pre>
-    <p></p>
+    <p id="status"></p>
     <button type="button" id="start_game">Start Game</button>
     <button type="button" id="fetch_games">Fetch Games</button>
     <table id="records_table"></table>
