@@ -16,8 +16,8 @@ public class EventSocket extends WebSocketAdapter {
     }
 
     @Override
-    public void onWebSocketConnect(Session sess) {
-        super.onWebSocketConnect(sess);
+    public void onWebSocketConnect(Session session) {
+        super.onWebSocketConnect(session);
         LOG.debug("New WebSocket connection: " + getSession());
     }
 
