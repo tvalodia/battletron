@@ -9,6 +9,7 @@ import com.alltimeslucky.battletron.engine.player.ExperimentPlayerAi;
 import com.alltimeslucky.battletron.engine.player.KeyboardPlayerController;
 import com.alltimeslucky.battletron.engine.player.Player;
 import com.alltimeslucky.battletron.engine.player.PlayerController;
+import com.alltimeslucky.battletron.engine.player.SimplePlayerAi;
 import com.alltimeslucky.battletron.ui.BattletronWindow;
 
 import java.util.Arrays;
@@ -22,6 +23,7 @@ public class Battletron {
     private GameEngine gameEngine;
     private BattletronWindow window;
     private KeyboardPlayerController keyboardPlayerController;
+
     /**
      * Main entry point into the application.
      * @param args Program arguments
@@ -61,7 +63,7 @@ public class Battletron {
         Player player1 = new Player(1, 0, 0);
         Player player2 = new Player(2, 99, 99);
         PlayerController player1Controller = new ExperimentPlayerAi(player1);
-        PlayerController player2Controller = new DownLeftPlayerController(player2);
+        PlayerController player2Controller = new SimplePlayerAi(player2);
         List<GameStateListener> gameStateListeners = Arrays.asList(window.getGameStateListener(), new PrintGameStateListener());
         GameEngine gameEngine = GameEngineFactory.getGameEngine(keyboardPlayerController, player2Controller, gameStateListeners);
         return gameEngine;

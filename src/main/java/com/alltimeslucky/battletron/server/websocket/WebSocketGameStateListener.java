@@ -13,6 +13,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.eclipse.jetty.websocket.api.Session;
 
+/**
+ * This class handles GameState updates and passed them on to web socket clients.
+ */
 public class WebSocketGameStateListener implements GameStateListener {
 
     private static final Logger LOG = LogManager.getLogger();

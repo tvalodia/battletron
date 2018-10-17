@@ -15,9 +15,9 @@ public class BattletronWindow {
     private KeyboardPlayerController keyboardPlayerController;
 
     public BattletronWindow(KeyboardPlayerController keyboardPlayerController) {
-
         this.keyboardPlayerController = keyboardPlayerController;
     }
+
     /**
      * Initialises the main window and displays it.
      */
