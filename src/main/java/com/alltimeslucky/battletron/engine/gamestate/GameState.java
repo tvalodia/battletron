@@ -88,13 +88,11 @@ public class GameState {
 
     /**
      * Updates the playing field with players' trails.
-     * @param player1Direction The direction that player 1 wants to move.
-     * @param player2Direction The direction that player 2 wants to move.
      */
-    public void update(Direction player1Direction, Direction player2Direction) {
+    public void update() {
         //update the player given the AI's direction input
-        player1.move(player1Direction);
-        player2.move(player2Direction);
+        player1.move();
+        player2.move();
 
         //Check for collisions on the playing field
         if (isColliding(player1)) {

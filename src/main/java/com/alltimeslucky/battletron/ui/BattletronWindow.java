@@ -1,10 +1,10 @@
 package com.alltimeslucky.battletron.ui;
 
 import com.alltimeslucky.battletron.engine.gamestate.GameStateListener;
-import com.alltimeslucky.battletron.engine.player.KeyboardPlayerController;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
+import java.awt.event.KeyListener;
 
 import javax.swing.JFrame;
 
@@ -12,10 +12,13 @@ public class BattletronWindow {
 
     private GameView drawArea;
 
-    private KeyboardPlayerController keyboardPlayerController;
+    private KeyListener keyboardPlayer1Controller;
+    private KeyListener keyboardPlayer2Controller;
 
-    public BattletronWindow(KeyboardPlayerController keyboardPlayerController) {
-        this.keyboardPlayerController = keyboardPlayerController;
+    public BattletronWindow(KeyListener keyboardPlayer1Controller, KeyListener keyboardPlayer2Controller) {
+        this.keyboardPlayer1Controller = keyboardPlayer1Controller;
+        this.keyboardPlayer2Controller = keyboardPlayer2Controller;
+        drawArea = new GameView();
     }
 
     /**
@@ -28,8 +31,6 @@ public class BattletronWindow {
         Container content = frame.getContentPane();
         // set layout on content pane
         content.setLayout(new BorderLayout());
-        // create draw area
-        drawArea = new GameView();
 
         // add to content pane
         content.add(drawArea, BorderLayout.CENTER);
@@ -37,7 +38,8 @@ public class BattletronWindow {
         frame.setSize(816, 840);
         // can close frame
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.addKeyListener(keyboardPlayerController);
+        frame.addKeyListener(keyboardPlayer1Controller);
+        frame.addKeyListener(keyboardPlayer2Controller);
         // show the swing paint result
         frame.setVisible(true);
     }

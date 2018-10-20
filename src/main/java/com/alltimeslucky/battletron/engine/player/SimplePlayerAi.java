@@ -11,15 +11,15 @@ public class SimplePlayerAi implements PlayerController {
 
     public SimplePlayerAi(Player player) {
         this.player = player;
+        player.setReady(true);
     }
 
     /**
      * Graham testing javadoc comments.
      * @param gameState Big variable containing all the info about where the game is at homie.
-     * @return Returns a DIRECTION to update player position.
      */
 
-    public Direction getDirection(GameState gameState) {
+    public void execute(GameState gameState) {
 
         int xval = player.getPositionX();
         int yval = player.getPositionY();
@@ -95,7 +95,7 @@ public class SimplePlayerAi implements PlayerController {
 
         }
 
-        return outputVal;
+        player.setDirection(outputVal);
 
     }
 

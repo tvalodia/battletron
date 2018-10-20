@@ -8,11 +8,18 @@ import java.awt.event.KeyListener;
 
 public class KeyboardPlayerController implements PlayerController, KeyListener {
 
-    private Direction direction = Direction.RIGHT;
+    protected Player player;
+    protected Direction direction;
+
+    public KeyboardPlayerController(Player player) {
+        this.player = player;
+        this.direction = player.getDirection();
+        player.setReady(true);
+    }
 
     @Override
-    public Direction getDirection(GameState gameState) {
-        return direction;
+    public void execute(GameState gameState) {
+        player.setDirection(direction);
     }
 
     @Override
@@ -37,4 +44,5 @@ public class KeyboardPlayerController implements PlayerController, KeyListener {
     public void keyReleased(KeyEvent e) {
 
     }
+
 }

@@ -9,7 +9,7 @@ import com.alltimeslucky.battletron.engine.player.PlayerController;
  */
 public class GameEngine extends Thread {
 
-    private static final int TICK_INTERVAL_MILLIS = 50;
+    private static final int TICK_INTERVAL_MILLIS = 100;
     private long lastTickTime;
     private final PlayerController player1Controller;
     private final PlayerController player2Controller;
@@ -52,12 +52,12 @@ public class GameEngine extends Thread {
 
             long currentTime = System.currentTimeMillis();
             if (currentTime - lastTickTime >= TICK_INTERVAL_MILLIS) {
-                //Gets each player's direction input
-                Direction player1Direction = player1Controller.getDirection(gameState);
-                Direction player2Direction = player2Controller.getDirection(gameState);
+                //Have the player controllers act given the current gamestate
+                player1Controller.execute(gameState);
+                player2Controller.execute(gameState);
 
                 //update the playing field
-                gameState.update(player1Direction, player2Direction);
+                gameState.update();
 
                 lastTickTime = currentTime;//+ currentTime - lastTickTime - TICK_INTERVAL_MILLIS;
             }

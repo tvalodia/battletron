@@ -17,7 +17,7 @@ public class ExperimentPlayerAi implements PlayerController {
      * @return Returns a DIRECTION to update player position.
      */
 
-    public Direction getDirection(GameState gameState) {
+    public void execute(GameState gameState) {
 
         Direction outputVal = Direction.DOWN;
 
@@ -27,7 +27,7 @@ public class ExperimentPlayerAi implements PlayerController {
 
         }
 
-        return outputVal;
+        player.setDirection(outputVal);
 
     }
 

@@ -27,15 +27,14 @@ public class GameEngineFactory {
      * @return A GameEngine with default values
      */
     public static GameEngine getGameEngine() {
-        Player player1 = new Player(1, 0, 0);
-        Player player2 = new Player(2, 99, 99);
+        Player player1 = new Player(1, 0, 0, Direction.RIGHT);
+        Player player2 = new Player(2, 99, 99, Direction.LEFT);
         List<GameStateListener> gameStateListeners = Arrays.asList(
                 new PrintGameStateListener(), WebSocketGameStateListenerFactory.getWebSocketGameStateListener());
         GameState gameState = GameStateFactory.getGameState(WIDTH, HEIGHT, player1, player2, gameStateListeners);
         PlayerController player1Ai = new SimplePlayerAi(player1);
         PlayerController player2Ai = new SimplePlayerAi(player2);
-        GameEngine gameEngine = new GameEngine(gameState, player1Ai, player2Ai);
-        return gameEngine;
+        return new GameEngine(gameState, player1Ai, player2Ai);
     }
 
     /**
@@ -43,15 +42,13 @@ public class GameEngineFactory {
      *
      * @return An instance of GameEngine
      */
-    public static GameEngine getGameEngine(PlayerController player1Controller, PlayerController player2Controller,
+    public static GameEngine getGameEngine(Player player1, Player player2,
+                                           PlayerController player1Controller, PlayerController player2Controller,
                                            List<GameStateListener> gameStateListeners) {
-        Player player1 = new Player(1, 0, 0);
-        Player player2 = new Player(2, 99, 99);
         GameState gameState = new GameState(GregorianCalendar.getInstance().getTimeInMillis(), WIDTH, HEIGHT,
                 player1, player2, gameStateListeners);
 
-        GameEngine gameEngine = new GameEngine(gameState, player1Controller, player2Controller);
-        return gameEngine;
+        return new GameEngine(gameState, player1Controller, player2Controller);
     }
 
 }

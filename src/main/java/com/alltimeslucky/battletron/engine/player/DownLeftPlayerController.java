@@ -13,8 +13,8 @@ public class DownLeftPlayerController implements PlayerController {
         this.player = player;
     }
 
-    public Direction getDirection(GameState gameState) {
-        return Direction.values()[new Random().nextInt(2)];
+    public void execute(GameState gameState) {
+        player.setDirection(Direction.values()[new Random().nextInt(2)]);
     }
 
 }
