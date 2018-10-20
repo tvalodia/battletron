@@ -79,4 +79,14 @@ public class Battletron {
         return GameEngineFactory.getGameEngine(player1, player2,
                 keyboardPlayer1Controller, keyboardPlayer2Controller, gameStateListeners);
     }
+
+    private GameEngine createAiGame() {
+        Player player1 = new Player(1, 33, 50, Direction.RIGHT);
+        Player player2 = new Player(2, 66, 50, Direction.LEFT);
+        PlayerController player1Controller = new SimplePlayerAi(player1);
+        PlayerController player2Controller = new SimplePlayerAi(player2);
+        window = new BattletronWindow(null, null);
+        List<GameStateListener> gameStateListeners = Arrays.asList(window.getGameStateListener(), new PrintGameStateListener());
+        return GameEngineFactory.getGameEngine(player1, player2, player1Controller, player2Controller, gameStateListeners);
+    }
 }

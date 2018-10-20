@@ -11,6 +11,7 @@ public class DownLeftPlayerController implements PlayerController {
 
     public DownLeftPlayerController(Player player) {
         this.player = player;
+        this.player.setReady(true);
     }
 
     public void execute(GameState gameState) {
