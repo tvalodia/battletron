@@ -23,6 +23,7 @@ public class Player {
      * @param id The ID of the player.
      * @param positionX The starting X coordinate in the playing field.
      * @param positionY The starting Y coordinate in the playing field.
+     * @param startingDirection The direction that the player should be facing at the start of the game.
      */
     public Player(int id, int positionX, int positionY, Direction startingDirection) {
         this.id = id;
