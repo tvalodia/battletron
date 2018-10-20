@@ -14,6 +14,10 @@ public class KeyboardRightPlayerController extends KeyboardPlayerController impl
 
     @Override
     public void keyPressed(KeyEvent e) {
+        if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+            player.setReady(true);
+        }
+
         if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
             direction = Direction.RIGHT;
         } else if (e.getKeyCode() == KeyEvent.VK_LEFT) {

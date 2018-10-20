@@ -37,8 +37,8 @@ public class GameEngine extends Thread {
     @Override
     public void run() {
         System.out.println("Game Engine started.");
-        gameState.setGameStatus(GameStatus.STARTED);
-        while (gameState.getGameStatus() == GameStatus.STARTED) {
+
+        while (true) {
             if (interrupted()) {
                 System.out.println("Game Engine killed.");
                 return;
@@ -52,12 +52,17 @@ public class GameEngine extends Thread {
 
             long currentTime = System.currentTimeMillis();
             if (currentTime - lastTickTime >= TICK_INTERVAL_MILLIS) {
+
                 //Have the player controllers act given the current gamestate
                 player1Controller.execute(gameState);
                 player2Controller.execute(gameState);
 
                 //update the playing field
                 gameState.update();
+
+                if (gameState.getGameStatus() == GameStatus.COMPLETED_DRAW || gameState.getGameStatus() == GameStatus.COMPLETED_WINNER) {
+                    break;
+                }
 
                 lastTickTime = currentTime;//+ currentTime - lastTickTime - TICK_INTERVAL_MILLIS;
             }

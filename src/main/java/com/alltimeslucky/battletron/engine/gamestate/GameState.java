@@ -3,6 +3,7 @@ package com.alltimeslucky.battletron.engine.gamestate;
 import com.alltimeslucky.battletron.engine.Direction;
 import com.alltimeslucky.battletron.engine.GameStatus;
 import com.alltimeslucky.battletron.engine.player.Player;
+import com.alltimeslucky.battletron.engine.player.PlayerListener;
 
 import java.util.Arrays;
 import java.util.List;
@@ -32,6 +33,15 @@ public class GameState {
 
     private List<GameStateListener> gameStateListeners;
 
+    private PlayerListener playerListener = new PlayerListener() {
+        @Override
+        public void onPlayerReady(Player player) {
+            if (player1.isReady() && player2.isReady()) {
+                gameStatus = GameStatus.STARTED;
+            }
+        }
+    };
+
     /**
      * Constructor.
      * Initialises the playingField.
@@ -48,12 +58,15 @@ public class GameState {
         this.height = height;
         this.tickCount = 0;
         this.player1 = player1;
+        player1.setListener(playerListener);
         this.player2 = player2;
+        player2.setListener(playerListener);
         this.playingField = new int[width][height];
         this.playingField[player1.getPositionX()][player1.getPositionY()] = player1.getId();
         this.playingField[player2.getPositionX()][player2.getPositionY()] = player2.getId();
         this.winner = null;
         this.gameStateListeners = gameStateListeners;
+        this.gameStatus = GameStatus.WAITING_FOR_READY;
     }
 
     /**
@@ -90,35 +103,39 @@ public class GameState {
      * Updates the playing field with players' trails.
      */
     public void update() {
-        //update the player given the AI's direction input
-        player1.move();
-        player2.move();
 
-        //Check for collisions on the playing field
-        if (isColliding(player1)) {
-            setGameStatus(GameStatus.COMPLETED_WINNER);
-            setWinner(player2);
-        } else if (isColliding(player2)) {
-            setGameStatus(GameStatus.COMPLETED_WINNER);
-            setWinner(player1);
-        } else if (isColliding(player1, player2)) {
-            setGameStatus(GameStatus.COMPLETED_DRAW);
+        if (gameStatus == GameStatus.STARTED) {
+            //update the player given the AI's direction input
+            player1.move();
+            player2.move();
+
+            //Check for collisions on the playing field
+            if (isColliding(player1)) {
+                setGameStatus(GameStatus.COMPLETED_WINNER);
+                setWinner(player2);
+            } else if (isColliding(player2)) {
+                setGameStatus(GameStatus.COMPLETED_WINNER);
+                setWinner(player1);
+            } else if (isColliding(player1, player2)) {
+                setGameStatus(GameStatus.COMPLETED_DRAW);
+            }
+
+            if (player1.getPositionX() >= 0 && player1.getPositionX() < width
+                    && player1.getPositionY() >= 0 && player1.getPositionY() < height) {
+                playingField[player1.getPositionX()][player1.getPositionY()] = player1.getId();
+            }
+
+            if (player2.getPositionX() >= 0 && player2.getPositionX() < width
+                    && player2.getPositionY() >= 0 && player2.getPositionY() < height) {
+                playingField[player2.getPositionX()][player2.getPositionY()] = player2.getId();
+            }
+
+            tickCount++;
         }
-
-        if (player1.getPositionX() >= 0 && player1.getPositionX() < width
-                && player1.getPositionY() >= 0 && player1.getPositionY() < height) {
-            playingField[player1.getPositionX()][player1.getPositionY()] = player1.getId();
-        }
-
-        if (player2.getPositionX() >= 0 && player2.getPositionX() < width
-                && player2.getPositionY() >= 0 && player2.getPositionY() < height) {
-            playingField[player2.getPositionX()][player2.getPositionY()] = player2.getId();
-        }
-
-        tickCount++;
 
         //send an update to the observers
         gameStateListeners.forEach(gameStateListener -> gameStateListener.onGameStateUpdate(this));
+
     }
 
     public long getId() {

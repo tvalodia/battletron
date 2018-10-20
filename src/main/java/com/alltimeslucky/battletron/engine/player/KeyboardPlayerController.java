@@ -14,7 +14,7 @@ public class KeyboardPlayerController implements PlayerController, KeyListener {
     public KeyboardPlayerController(Player player) {
         this.player = player;
         this.direction = player.getDirection();
-        player.setReady(true);
+        player.setReady(false);
     }
 
     @Override
@@ -37,6 +37,10 @@ public class KeyboardPlayerController implements PlayerController, KeyListener {
             direction = Direction.DOWN;
         } else if (e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_W) {
             direction = Direction.UP;
+        }
+
+        if (e.getKeyCode() == KeyEvent.VK_R || e.getKeyCode() == KeyEvent.VK_ENTER) {
+            player.setReady(true);
         }
     }
 

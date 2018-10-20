@@ -37,7 +37,7 @@ public class Battletron {
      * Constructor. Creates the core components for the simulation.
      */
     public Battletron() {
-        gameEngine = createOnePlayerGame();
+        gameEngine = createTwoPlayerGame();
         window.initialise();
 
         try {

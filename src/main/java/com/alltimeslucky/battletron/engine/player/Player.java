@@ -12,6 +12,7 @@ public class Player {
     private int positionY;
     private boolean ready;
     private Direction direction;
+    private PlayerListener playerListener;
 
     /**
      * Default Constructor.
@@ -86,6 +87,9 @@ public class Player {
 
     public void setReady(boolean ready) {
         this.ready = ready;
+        if (ready && playerListener != null) {
+            playerListener.onPlayerReady(this);
+        }
     }
 
     public Direction getDirection() {
@@ -94,5 +98,9 @@ public class Player {
 
     public void setDirection(Direction direction) {
         this.direction = direction;
+    }
+
+    public void setListener(PlayerListener playerListener) {
+        this.playerListener = playerListener;
     }
 }
