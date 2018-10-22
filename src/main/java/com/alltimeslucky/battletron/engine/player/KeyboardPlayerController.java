@@ -6,11 +6,19 @@ import com.alltimeslucky.battletron.engine.gamestate.GameState;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
+/**
+ * This class responds to keypress events and updates the direction of the player accordingly.
+ * Both the WASD and Arrow keys can change the direction of the player.
+ */
 public class KeyboardPlayerController implements PlayerController, KeyListener {
 
     protected Player player;
     protected Direction direction;
 
+    /**
+     * Constructor. Requires the player instance to be controlled by this controller.
+     * @param player The player that this class will control.
+     */
     public KeyboardPlayerController(Player player) {
         this.player = player;
         this.direction = player.getDirection();

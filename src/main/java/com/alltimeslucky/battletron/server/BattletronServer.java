@@ -63,8 +63,6 @@ public class BattletronServer {
         // Add a websocket to a specific path spec
         //Use this when not injecting a dependency
         ServletHolder holderEvents = new ServletHolder("ws-player", BattletronWebSocketServlet.class);
-        //Use the below when injecting a dependency
-        //ServletHolder holderEvents = new ServletHolder(new BattletronWebSocketServlet(new WebSocketGameStateListener()));
         context.addServlet(holderEvents, "/player/*");
 
         try {

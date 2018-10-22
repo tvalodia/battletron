@@ -20,7 +20,8 @@ public class BattletronWebSocketServlet extends WebSocketServlet {
         webSocketServletFactory.setCreator(new WebSocketCreator() {
             @Override
             public Object createWebSocket(ServletUpgradeRequest servletUpgradeRequest, ServletUpgradeResponse servletUpgradeResponse) {
-                OnlinePlayerWebSocket webSocket = (OnlinePlayerWebSocket) creator.createWebSocket(servletUpgradeRequest, servletUpgradeResponse);
+                OnlinePlayerWebSocket webSocket = (OnlinePlayerWebSocket) creator.createWebSocket(servletUpgradeRequest,
+                        servletUpgradeResponse);
 
                 return webSocket;
             }

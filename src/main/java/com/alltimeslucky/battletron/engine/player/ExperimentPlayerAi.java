@@ -15,7 +15,6 @@ public class ExperimentPlayerAi implements PlayerController {
     /**
      * Making a separate AI class for experimentation.
      * @param gameState Used to determine the optimal direction in which the player should move.
-     * @return Returns a DIRECTION to update player position.
      */
 
     public void execute(GameState gameState) {

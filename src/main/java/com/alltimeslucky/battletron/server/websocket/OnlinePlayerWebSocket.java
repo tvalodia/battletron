@@ -5,7 +5,6 @@ import com.alltimeslucky.battletron.engine.gamestate.GameState;
 import com.alltimeslucky.battletron.engine.gamestate.GameStateListener;
 import com.alltimeslucky.battletron.engine.player.Player;
 import com.alltimeslucky.battletron.server.api.game.GameDto;
-import com.alltimeslucky.battletron.server.api.game.GameRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
@@ -49,7 +48,9 @@ public class OnlinePlayerWebSocket extends WebSocketAdapter implements GameState
         super.onWebSocketText(message);
         LOG.debug("Message from player (" + playerId + "): " + message);
 
-        if (message.equals("UP")) {
+        if (message.equals("READY")) {
+            player.setReady(true);
+        } else if (message.equals("UP")) {
             direction = Direction.UP;
         } else if (message.equals("LEFT")) {
             direction = Direction.LEFT;
@@ -58,10 +59,6 @@ public class OnlinePlayerWebSocket extends WebSocketAdapter implements GameState
         } else if (message.equals("RIGHT")) {
             direction = Direction.RIGHT;
         }
-
-       if (message.equals("READY")) {
-           player.setReady(true);
-       }
     }
 
     @Override
