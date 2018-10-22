@@ -1,7 +1,7 @@
 package com.alltimeslucky.battletron.server;
 
 import com.alltimeslucky.battletron.server.api.game.GameApi;
-import com.alltimeslucky.battletron.server.websocket.EventServlet;
+import com.alltimeslucky.battletron.server.websocket.BattletronWebSocketServlet;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -62,10 +62,10 @@ public class BattletronServer {
 
         // Add a websocket to a specific path spec
         //Use this when not injecting a dependency
-        ServletHolder holderEvents = new ServletHolder("ws-events", EventServlet.class);
+        ServletHolder holderEvents = new ServletHolder("ws-player", BattletronWebSocketServlet.class);
         //Use the below when injecting a dependency
-        //ServletHolder holderEvents = new ServletHolder(new EventServlet(new WebSocketGameStateListener()));
-        context.addServlet(holderEvents, "/events/*");
+        //ServletHolder holderEvents = new ServletHolder(new BattletronWebSocketServlet(new WebSocketGameStateListener()));
+        context.addServlet(holderEvents, "/player/*");
 
         try {
             jettyServer.start();

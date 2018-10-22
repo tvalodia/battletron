@@ -3,6 +3,7 @@ package com.alltimeslucky.battletron.server.api.game;
 import com.alltimeslucky.battletron.engine.GameStatus;
 import com.alltimeslucky.battletron.engine.gamestate.GameState;
 import com.alltimeslucky.battletron.engine.player.Player;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.util.Arrays;
 

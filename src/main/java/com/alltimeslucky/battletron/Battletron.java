@@ -5,7 +5,6 @@ import com.alltimeslucky.battletron.engine.Direction;
 import com.alltimeslucky.battletron.engine.GameEngine;
 import com.alltimeslucky.battletron.engine.GameEngineFactory;
 import com.alltimeslucky.battletron.engine.gamestate.GameStateListener;
-import com.alltimeslucky.battletron.engine.player.ExperimentPlayerAi;
 import com.alltimeslucky.battletron.engine.player.KeyboardLeftPlayerController;
 import com.alltimeslucky.battletron.engine.player.KeyboardPlayerController;
 import com.alltimeslucky.battletron.engine.player.KeyboardRightPlayerController;
@@ -37,7 +36,7 @@ public class Battletron {
      * Constructor. Creates the core components for the simulation.
      */
     public Battletron() {
-        gameEngine = createTwoPlayerGame();
+        gameEngine = createAiGame();
         window.initialise();
 
         try {
@@ -65,8 +64,10 @@ public class Battletron {
         KeyboardPlayerController keyboardPlayerController = new KeyboardLeftPlayerController(player1);
         PlayerController player2Controller = new SimplePlayerAi(player2);
         window = new BattletronWindow(keyboardPlayerController, null);
-        List<GameStateListener> gameStateListeners = Arrays.asList(window.getGameStateListener(), new PrintGameStateListener());
-        return GameEngineFactory.getGameEngine(player1, player2, keyboardPlayerController, player2Controller, gameStateListeners);
+        GameEngine gameEngine = GameEngineFactory.getGameEngine(player1, player2, keyboardPlayerController, player2Controller);
+        gameEngine.getGameState().registerListener(window.getGameStateListener());
+        gameEngine.getGameState().registerListener(new PrintGameStateListener());
+        return gameEngine;
     }
 
     private GameEngine createTwoPlayerGame() {
@@ -75,9 +76,10 @@ public class Battletron {
         KeyboardPlayerController keyboardPlayer1Controller = new KeyboardLeftPlayerController(player1);
         KeyboardPlayerController keyboardPlayer2Controller = new KeyboardRightPlayerController(player2);
         window = new BattletronWindow(keyboardPlayer1Controller, keyboardPlayer2Controller);
-        List<GameStateListener> gameStateListeners = Arrays.asList(window.getGameStateListener(), new PrintGameStateListener());
-        return GameEngineFactory.getGameEngine(player1, player2,
-                keyboardPlayer1Controller, keyboardPlayer2Controller, gameStateListeners);
+        GameEngine gameEngine = GameEngineFactory.getGameEngine(player1, player2, keyboardPlayer1Controller, keyboardPlayer2Controller);
+        gameEngine.getGameState().registerListener(window.getGameStateListener());
+        gameEngine.getGameState().registerListener(new PrintGameStateListener());
+        return gameEngine;
     }
 
     private GameEngine createAiGame() {
@@ -86,7 +88,9 @@ public class Battletron {
         PlayerController player1Controller = new SimplePlayerAi(player1);
         PlayerController player2Controller = new SimplePlayerAi(player2);
         window = new BattletronWindow(null, null);
-        List<GameStateListener> gameStateListeners = Arrays.asList(window.getGameStateListener(), new PrintGameStateListener());
-        return GameEngineFactory.getGameEngine(player1, player2, player1Controller, player2Controller, gameStateListeners);
+        GameEngine gameEngine = GameEngineFactory.getGameEngine(player1, player2, player1Controller, player2Controller);
+        gameEngine.getGameState().registerListener(window.getGameStateListener());
+        gameEngine.getGameState().registerListener(new PrintGameStateListener());
+        return gameEngine;
     }
 }

@@ -1,8 +1,17 @@
 package com.alltimeslucky.battletron.server.api.game;
 
+import com.alltimeslucky.battletron.client.PrintGameStateListener;
+import com.alltimeslucky.battletron.engine.Direction;
 import com.alltimeslucky.battletron.engine.GameEngine;
 import com.alltimeslucky.battletron.engine.GameEngineFactory;
 import com.alltimeslucky.battletron.engine.gamestate.GameState;
+import com.alltimeslucky.battletron.engine.gamestate.GameStateListener;
+import com.alltimeslucky.battletron.engine.player.OnlinePlayerController;
+import com.alltimeslucky.battletron.engine.player.Player;
+import com.alltimeslucky.battletron.engine.player.PlayerController;
+import com.alltimeslucky.battletron.engine.player.SimplePlayerAi;
+import com.alltimeslucky.battletron.server.websocket.OnlinePlayerSocketRepository;
+import com.alltimeslucky.battletron.server.websocket.OnlinePlayerWebSocket;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -64,9 +73,10 @@ public class GameApi {
      * @return A GameDto object.
      */
     @POST
+    @Path("ai")
     @Produces(MediaType.APPLICATION_JSON)
-    public GameDto startGame() {
-        GameEngine gameEngine = startEngine();
+    public GameDto startAiGame() {
+        GameEngine gameEngine = getAiGameEngine();
         long gameEngineId = gameEngine.getId();
         GameRepository.getInstance().addGameEngine(gameEngineId, gameEngine);
         GameDto gameDto = new GameDto(gameEngine.getGameState());
@@ -75,11 +85,77 @@ public class GameApi {
         return gameDto;
     }
 
-    private GameEngine startEngine() {
+    private GameEngine getAiGameEngine() {
         GameEngine gameEngine = GameEngineFactory.getGameEngine();
         gameEngine.start();
         return gameEngine;
     }
+
+    /**
+     * Starts a new game.
+     *
+     * @return A GameDto object.
+     */
+    @POST
+    @Path("singleplayer/{singlePlayerWebSocketId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public GameDto startSinglePlayerGame(@PathParam("singlePlayerWebSocketId") String singlePlayerWebSocketId) {
+        GameEngine gameEngine = createSinglePlayerGameEngine(singlePlayerWebSocketId);
+        long gameEngineId = gameEngine.getId();
+        GameRepository.getInstance().addGameEngine(gameEngineId, gameEngine);
+        GameDto gameDto = new GameDto(gameEngine.getGameState());
+        LOG.debug("Response: " + gameDto);
+        return gameDto;
+    }
+
+    private GameEngine createSinglePlayerGameEngine(String playerWebSocketId) {
+        killAnyRunningGame(playerWebSocketId);
+
+        Player player1 = new Player(1, 33, 50, Direction.RIGHT);
+        Player player2 = new Player(2, 66, 50, Direction.LEFT);
+        OnlinePlayerWebSocket onlinePlayerWebSocket = OnlinePlayerSocketRepository.getInstance().getOnlinePlayerSocket(playerWebSocketId);
+
+        OnlinePlayerWebSocket webSocketGameStateListener = OnlinePlayerSocketRepository.getInstance().getOnlinePlayerSocket(playerWebSocketId);
+        OnlinePlayerController onlinePlayerController = new OnlinePlayerController(player1, onlinePlayerWebSocket);
+        PlayerController aiPlayerController = new SimplePlayerAi(player2);
+        GameEngine gameEngine = GameEngineFactory.getGameEngine(player1, player2, onlinePlayerController, aiPlayerController);
+        gameEngine.getGameState().registerListener(webSocketGameStateListener);
+        //gameEngine.getGameState().registerListener(new PrintGameStateListener());
+        onlinePlayerWebSocket.setCurrentGameId(gameEngine.getGameState().getId());
+        onlinePlayerWebSocket.setPlayer(player1);
+        gameEngine.start();
+        return gameEngine;
+    }
+
+    private void killAnyRunningGame(String playerWebSocketId) {
+        //kill any existing game
+        OnlinePlayerWebSocket webSocketGameStateListener = OnlinePlayerSocketRepository.getInstance().getOnlinePlayerSocket(playerWebSocketId);
+        GameRepository gameRepository = GameRepository.getInstance();
+        GameEngine runningGame = gameRepository.getGameEngine(webSocketGameStateListener.getCurrentGameId());
+        if (runningGame != null) {
+            runningGame.kill();
+            gameRepository.delete(webSocketGameStateListener.getCurrentGameId());
+        }
+    }
+
+    /**
+     * Registers for spectating a game.
+     *
+     * @return A GameDto object.
+     */
+    @POST
+    @Path("{id}/spectate")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public GameDto spectateGame(@PathParam("id") long id, SpectateDto spectateDto) {
+        OnlinePlayerWebSocket onlinePlayerWebSocket = OnlinePlayerSocketRepository.getInstance().getOnlinePlayerSocket(spectateDto.getPlayerId());
+        GameEngine gameEngine = GameRepository.getInstance().getGameEngine(id);
+        gameEngine.getGameState().registerListener(onlinePlayerWebSocket);
+        GameDto gameDto = new GameDto(gameEngine.getGameState());
+        LOG.debug("Response: " + gameDto);
+        return gameDto;
+    }
+
 
     /**
      * Controls the running-state of a game.

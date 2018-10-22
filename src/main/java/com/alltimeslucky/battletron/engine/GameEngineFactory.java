@@ -11,6 +11,7 @@ import com.alltimeslucky.battletron.server.websocket.WebSocketGameStateListenerF
 
 import java.util.Arrays;
 import java.util.GregorianCalendar;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -27,11 +28,10 @@ public class GameEngineFactory {
      * @return A GameEngine with default values
      */
     public static GameEngine getGameEngine() {
-        Player player1 = new Player(1, 0, 0, Direction.RIGHT);
-        Player player2 = new Player(2, 99, 99, Direction.LEFT);
-        List<GameStateListener> gameStateListeners = Arrays.asList(
-                new PrintGameStateListener(), WebSocketGameStateListenerFactory.getWebSocketGameStateListener());
-        GameState gameState = GameStateFactory.getGameState(WIDTH, HEIGHT, player1, player2, gameStateListeners);
+        Player player1 = new Player(1, 33, 50, Direction.RIGHT);
+        Player player2 = new Player(2, 66, 50, Direction.LEFT);
+        GameState gameState = GameStateFactory.getGameState(WIDTH, HEIGHT, player1, player2);
+    //    gameState.registerListener(new PrintGameStateListener());
         PlayerController player1Ai = new SimplePlayerAi(player1);
         PlayerController player2Ai = new SimplePlayerAi(player2);
         return new GameEngine(gameState, player1Ai, player2Ai);
@@ -43,10 +43,9 @@ public class GameEngineFactory {
      * @return An instance of GameEngine
      */
     public static GameEngine getGameEngine(Player player1, Player player2,
-                                           PlayerController player1Controller, PlayerController player2Controller,
-                                           List<GameStateListener> gameStateListeners) {
+                                           PlayerController player1Controller, PlayerController player2Controller) {
         GameState gameState = new GameState(GregorianCalendar.getInstance().getTimeInMillis(), WIDTH, HEIGHT,
-                player1, player2, gameStateListeners);
+                player1, player2);
 
         return new GameEngine(gameState, player1Controller, player2Controller);
     }

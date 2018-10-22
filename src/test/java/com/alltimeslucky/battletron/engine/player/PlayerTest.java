@@ -17,7 +17,7 @@ public class PlayerTest {
 
     @Before
     public void setup() {
-        player = new Player(1, X, Y);
+        player = new Player(1, X, Y, Direction.RIGHT);
     }
 
     @Test
@@ -27,7 +27,8 @@ public class PlayerTest {
 
     @Test
     public void testMoveUp() {
-        player.move(Direction.UP);
+        player.setDirection(Direction.UP);
+        player.move();
 
         assertEquals(Y + 1, player.getPositionY());
         assertEquals(X, player.getPositionX());
@@ -35,7 +36,8 @@ public class PlayerTest {
 
     @Test
     public void testMoveDown() {
-        player.move(Direction.DOWN);
+        player.setDirection(Direction.DOWN);
+        player.move();
 
         assertEquals(X, player.getPositionX());
         assertEquals(Y - 1, player.getPositionY());
@@ -43,7 +45,8 @@ public class PlayerTest {
 
     @Test
     public void testMoveLeft() {
-        player.move(Direction.LEFT);
+        player.setDirection(Direction.LEFT);
+        player.move();
 
         assertEquals(X - 1, player.getPositionX());
         assertEquals(Y, player.getPositionY());
@@ -51,7 +54,8 @@ public class PlayerTest {
 
     @Test
     public void testMoveRight() {
-        player.move(Direction.RIGHT);
+        player.setDirection(Direction.RIGHT);
+        player.move();
 
         assertEquals(Y, player.getPositionY());
         assertEquals(X + 1, player.getPositionX());

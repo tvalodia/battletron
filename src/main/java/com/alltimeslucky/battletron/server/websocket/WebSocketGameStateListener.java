@@ -3,7 +3,8 @@ package com.alltimeslucky.battletron.server.websocket;
 import com.alltimeslucky.battletron.engine.gamestate.GameState;
 import com.alltimeslucky.battletron.engine.gamestate.GameStateListener;
 import com.alltimeslucky.battletron.server.api.game.GameDto;
-import com.google.gson.Gson;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 
 import java.io.IOException;
 import java.util.Enumeration;
@@ -20,31 +21,31 @@ public class WebSocketGameStateListener implements GameStateListener {
 
     private static final Logger LOG = LogManager.getLogger();
 
-    private ConcurrentHashMap<Session, Long> sessionGameIds;
-    private Gson gson;
+    private ConcurrentHashMap<Session, Long> sessionGameIdMap;
+    private ObjectMapper objectMapper;
 
     public WebSocketGameStateListener() {
-        sessionGameIds = new ConcurrentHashMap<>();
-        gson = new Gson();
+        sessionGameIdMap = new ConcurrentHashMap<>();
+        objectMapper = new ObjectMapper();
     }
 
     public void registerSession(Session session, long id) {
-        sessionGameIds.put(session, id);
+        sessionGameIdMap.put(session, id);
     }
 
     public void unregisterSession(Session session) {
-        sessionGameIds.remove(session);
+        sessionGameIdMap.remove(session);
     }
 
     @Override
     public void onGameStateUpdate(GameState gameState) {
         LOG.debug(gameState);
-        Enumeration<Session> sessions = sessionGameIds.keys();
+        Enumeration<Session> sessions = sessionGameIdMap.keys();
         while (sessions.hasMoreElements()) {
             Session session = sessions.nextElement();
-            if (gameState.getId() == sessionGameIds.get(session)) {
+            if (gameState.getId() == sessionGameIdMap.get(session)) {
                 try {
-                    session.getRemote().sendString(gson.toJson(new GameDto(gameState)));
+                    session.getRemote().sendString(objectMapper.writeValueAsString(new GameDto(gameState)));
                     LOG.debug("GameState update sent to " + session);
                 } catch (IOException ioe) {
                     ioe.printStackTrace();

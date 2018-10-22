@@ -2,6 +2,7 @@ package com.alltimeslucky.battletron.engine;
 
 import com.alltimeslucky.battletron.engine.gamestate.GameState;
 import com.alltimeslucky.battletron.engine.player.PlayerController;
+import com.alltimeslucky.battletron.server.api.game.GameRepository;
 
 /**
  * This class manages and executes the game loop; controls the flow of the game and notifies observers at every game tick.
@@ -9,7 +10,7 @@ import com.alltimeslucky.battletron.engine.player.PlayerController;
  */
 public class GameEngine extends Thread {
 
-    private static final int TICK_INTERVAL_MILLIS = 100;
+    private static final int TICK_INTERVAL_MILLIS = 200;
     private long lastTickTime;
     private final PlayerController player1Controller;
     private final PlayerController player2Controller;

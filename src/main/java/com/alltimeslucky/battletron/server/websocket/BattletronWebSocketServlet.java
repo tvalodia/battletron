@@ -7,11 +7,11 @@ import org.eclipse.jetty.websocket.servlet.WebSocketServlet;
 import org.eclipse.jetty.websocket.servlet.WebSocketServletFactory;
 
 @SuppressWarnings("serial")
-public class EventServlet extends WebSocketServlet {
+public class BattletronWebSocketServlet extends WebSocketServlet {
 
     @Override
     public void configure(WebSocketServletFactory webSocketServletFactory) {
-        webSocketServletFactory.register(EventSocket.class);
+        webSocketServletFactory.register(OnlinePlayerWebSocket.class);
 
         // Get the current creator (for reuse)
         final WebSocketCreator creator = webSocketServletFactory.getCreator();
@@ -20,7 +20,7 @@ public class EventServlet extends WebSocketServlet {
         webSocketServletFactory.setCreator(new WebSocketCreator() {
             @Override
             public Object createWebSocket(ServletUpgradeRequest servletUpgradeRequest, ServletUpgradeResponse servletUpgradeResponse) {
-                EventSocket webSocket = (EventSocket) creator.createWebSocket(servletUpgradeRequest, servletUpgradeResponse);
+                OnlinePlayerWebSocket webSocket = (OnlinePlayerWebSocket) creator.createWebSocket(servletUpgradeRequest, servletUpgradeResponse);
 
                 return webSocket;
             }
