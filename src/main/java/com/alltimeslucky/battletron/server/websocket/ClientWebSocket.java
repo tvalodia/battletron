@@ -2,12 +2,12 @@ package com.alltimeslucky.battletron.server.websocket;
 
 import com.alltimeslucky.battletron.engine.Direction;
 import com.alltimeslucky.battletron.engine.gamestate.GameState;
-import com.alltimeslucky.battletron.engine.gamestate.GameStateListener;
 import com.alltimeslucky.battletron.engine.player.Player;
 import com.alltimeslucky.battletron.server.api.game.GameDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
+
 import java.util.UUID;
 
 import org.apache.logging.log4j.LogManager;
@@ -15,7 +15,11 @@ import org.apache.logging.log4j.Logger;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.WebSocketAdapter;
 
-public class OnlinePlayerWebSocket extends WebSocketAdapter implements GameStateListener {
+/**
+ * This class represents a connection to the web browser. The player will send direction updates over this connection.
+ * This connection will also be used to send GameState updates to the browser.
+ */
+public class ClientWebSocket extends WebSocketAdapter {
 
     private static final Logger LOG = LogManager.getLogger();
 
@@ -25,7 +29,7 @@ public class OnlinePlayerWebSocket extends WebSocketAdapter implements GameState
     private long currentGameId;
     private Player player;
 
-    public OnlinePlayerWebSocket() {
+    public ClientWebSocket() {
         objectMapper = new ObjectMapper();
     }
 
@@ -34,7 +38,7 @@ public class OnlinePlayerWebSocket extends WebSocketAdapter implements GameState
         super.onWebSocketConnect(session);
         LOG.debug("New WebSocket connection: " + getSession());
         playerId = UUID.randomUUID().toString();
-        OnlinePlayerSocketRepository.getInstance().addOnlinePlayerSocket(playerId, this);
+        ClientWebSocketRepository.getInstance().addOnlinePlayerSocket(playerId, this);
         try {
             session.getRemote().sendString("id=" + playerId);
         } catch (IOException e) {
@@ -65,16 +69,22 @@ public class OnlinePlayerWebSocket extends WebSocketAdapter implements GameState
     public void onWebSocketClose(int statusCode, String reason) {
         super.onWebSocketClose(statusCode, reason);
         LOG.info("Socket Closed: [" + statusCode + "] " + reason);
+        ClientWebSocketRepository.getInstance().delete(playerId);
+        WebSocketGameStateRouterFactory.getWebSocketGameStateUpdateRouter().deregisterForUpdates(playerId);
     }
 
     @Override
     public void onWebSocketError(Throwable cause) {
         super.onWebSocketError(cause);
         LOG.error(cause);
+        ClientWebSocketRepository.getInstance().delete(playerId);
     }
 
-    @Override
-    public void onGameStateUpdate(GameState gameState) {
+    /**
+     * Sends the specified GameState to the client browser.
+     * @param gameState The instance GameState to send.
+     */
+    public void sendGameState(GameState gameState) {
         try {
             getSession().getRemote().sendString(objectMapper.writeValueAsString(new GameDto(gameState)));
         } catch (IOException e) {

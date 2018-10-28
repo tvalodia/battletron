@@ -6,6 +6,7 @@ import com.alltimeslucky.battletron.engine.gamestate.GameStateFactory;
 import com.alltimeslucky.battletron.engine.player.Player;
 import com.alltimeslucky.battletron.engine.player.PlayerController;
 import com.alltimeslucky.battletron.engine.player.SimplePlayerAi;
+import com.alltimeslucky.battletron.server.websocket.WebSocketGameStateRouterFactory;
 
 import java.util.GregorianCalendar;
 
@@ -22,11 +23,12 @@ public class GameEngineFactory {
      *
      * @return A GameEngine with default values
      */
-    public static GameEngine getGameEngine() {
+    public static GameEngine getOnlineGameEngine() {
         Player player1 = new Player(1, 33, 50, Direction.RIGHT);
         Player player2 = new Player(2, 66, 50, Direction.LEFT);
         GameState gameState = GameStateFactory.getGameState(WIDTH, HEIGHT, player1, player2);
         gameState.registerListener(new PrintGameStateListener());
+        gameState.registerListener(WebSocketGameStateRouterFactory.getWebSocketGameStateUpdateRouter());
         PlayerController player1Ai = new SimplePlayerAi(player1);
         PlayerController player2Ai = new SimplePlayerAi(player2);
         return new GameEngine(gameState, player1Ai, player2Ai);
@@ -37,11 +39,10 @@ public class GameEngineFactory {
      *
      * @return An instance of GameEngine
      */
-    public static GameEngine getGameEngine(Player player1, Player player2,
-                                           PlayerController player1Controller, PlayerController player2Controller) {
+    public static GameEngine getLocalGameEngine(Player player1, Player player2,
+                                                PlayerController player1Controller, PlayerController player2Controller) {
         GameState gameState = new GameState(GregorianCalendar.getInstance().getTimeInMillis(), WIDTH, HEIGHT,
                 player1, player2);
-
         return new GameEngine(gameState, player1Controller, player2Controller);
     }
 

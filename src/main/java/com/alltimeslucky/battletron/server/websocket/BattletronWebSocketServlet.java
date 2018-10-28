@@ -11,7 +11,7 @@ public class BattletronWebSocketServlet extends WebSocketServlet {
 
     @Override
     public void configure(WebSocketServletFactory webSocketServletFactory) {
-        webSocketServletFactory.register(OnlinePlayerWebSocket.class);
+        webSocketServletFactory.register(ClientWebSocket.class);
 
         // Get the current creator (for reuse)
         final WebSocketCreator creator = webSocketServletFactory.getCreator();
@@ -20,7 +20,7 @@ public class BattletronWebSocketServlet extends WebSocketServlet {
         webSocketServletFactory.setCreator(new WebSocketCreator() {
             @Override
             public Object createWebSocket(ServletUpgradeRequest servletUpgradeRequest, ServletUpgradeResponse servletUpgradeResponse) {
-                OnlinePlayerWebSocket webSocket = (OnlinePlayerWebSocket) creator.createWebSocket(servletUpgradeRequest,
+                ClientWebSocket webSocket = (ClientWebSocket) creator.createWebSocket(servletUpgradeRequest,
                         servletUpgradeResponse);
 
                 return webSocket;

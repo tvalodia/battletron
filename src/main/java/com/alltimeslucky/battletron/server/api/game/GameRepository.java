@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Store all instances of started games.
+ * Stores all instances of games.
  */
 public class GameRepository {
 
@@ -21,7 +21,7 @@ public class GameRepository {
 
     /**
      * Returns the singleton instance of the Game Repository.
-     * @return
+     * @return The singleton instance of the GameRepository.
      */
     public static GameRepository getInstance() {
         if (instance == null) {

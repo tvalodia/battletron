@@ -1,14 +1,14 @@
 package com.alltimeslucky.battletron.engine.player;
 
 import com.alltimeslucky.battletron.engine.gamestate.GameState;
-import com.alltimeslucky.battletron.server.websocket.OnlinePlayerWebSocket;
+import com.alltimeslucky.battletron.server.websocket.ClientWebSocket;
 
-public class OnlinePlayerController implements PlayerController {
+public class WebSocketPlayerController implements PlayerController {
 
     private final Player player;
-    private final OnlinePlayerWebSocket socket;
+    private final ClientWebSocket socket;
 
-    public OnlinePlayerController(Player player, OnlinePlayerWebSocket socket) {
+    public WebSocketPlayerController(Player player, ClientWebSocket socket) {
         this.player = player;
         this.socket = socket;
     }

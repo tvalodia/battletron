@@ -125,7 +125,8 @@ public class GameState {
             tickCount++;
         }
 
-        //send an update to the observers
+        //send an update to the observers. This loop is synchronised to allow for new spectators to be added to the
+        // list by another thread without modifying the list while the iterator is reading the list.
         synchronized (gameStateListeners) {
             gameStateListeners.forEach(gameStateListener -> gameStateListener.onGameStateUpdate(this));
         }
