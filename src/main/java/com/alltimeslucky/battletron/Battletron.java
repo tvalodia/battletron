@@ -32,7 +32,7 @@ public class Battletron {
      * Constructor. Creates the core components for the simulation.
      */
     public Battletron() {
-        gameEngine = createAiGame();
+        gameEngine = createTwoPlayerGame();
         window.initialise();
 
         try {
