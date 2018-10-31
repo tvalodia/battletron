@@ -55,6 +55,21 @@ processResources {
     dependsOn "buildAngular"
 }
 
+task serveAngular(type:Exec) {
+    // installAngular should be run prior to this task
+    dependsOn "buildAngular"
+    workingDir "$webappDir"
+    inputs.dir "$webappDir"
+    // Add task to the standard build group
+    group = BasePlugin.BUILD_GROUP
+    // ng doesn't exist as a file in windows -> ng.cmd
+    if (System.getProperty("os.name").toUpperCase().contains("WINDOWS")){
+        commandLine "ng.cmd", "serve --deploy-url webapp --base-href webapp -o"
+    } else {
+        commandLine "ng", "serve",  "--deploy-url webapp",  "--base-href webapp", "-o"
+    }
+}
+
 task buildAngular(type:Exec) {
     // installAngular should be run prior to this task
     dependsOn "installAngular"
