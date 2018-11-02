@@ -51,14 +51,14 @@ public class BattletronServer {
         holderPwd.setInitParameter("resourceBase", getStaticWebRootUri());
         holderPwd.setInitParameter("dirAllowed","true");
         holderPwd.setInitParameter("pathInfoOnly","true");
-        context.addServlet(holderPwd, "/*");
+        context.addServlet(holderPwd, "/html/*");
 
         DefaultServlet webappDefaultServlet = new DefaultServlet();
         ServletHolder webappServletHolder = new ServletHolder("default-webapp", webappDefaultServlet);
         webappServletHolder.setInitParameter("resourceBase", getWebappWebRootUri());
         webappServletHolder.setInitParameter("dirAllowed","true");
         webappServletHolder.setInitParameter("pathInfoOnly","true");
-        context.addServlet(webappServletHolder, "/webapp/*");
+        context.addServlet(webappServletHolder, "/*");
 
         // Add a websocket to a specific path spec
         //Use this when not injecting a dependency
