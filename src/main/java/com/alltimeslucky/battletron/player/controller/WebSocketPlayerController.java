@@ -1,6 +1,7 @@
-package com.alltimeslucky.battletron.engine.player;
+package com.alltimeslucky.battletron.player.controller;
 
-import com.alltimeslucky.battletron.engine.gamestate.GameState;
+import com.alltimeslucky.battletron.game.model.Game;
+import com.alltimeslucky.battletron.player.model.Player;
 import com.alltimeslucky.battletron.server.websocket.ClientWebSocket;
 
 public class WebSocketPlayerController implements PlayerController {
@@ -14,7 +15,7 @@ public class WebSocketPlayerController implements PlayerController {
     }
 
     @Override
-    public void execute(GameState gameState) {
+    public void execute(Game game) {
         this.player.setDirection(socket.getDirection());
     }
 }

@@ -1,9 +1,8 @@
 package com.alltimeslucky.battletron.server.api.game;
 
-import com.alltimeslucky.battletron.engine.GameStatus;
-import com.alltimeslucky.battletron.engine.gamestate.GameState;
-import com.alltimeslucky.battletron.engine.player.Player;
-import com.fasterxml.jackson.annotation.JsonFormat;
+import com.alltimeslucky.battletron.game.model.Game;
+import com.alltimeslucky.battletron.game.model.GameStatus;
+import com.alltimeslucky.battletron.player.model.Player;
 
 import java.util.Arrays;
 
@@ -31,19 +30,19 @@ public class GameDto {
     public GameDto() {}
 
     /**
-     * Constructor used to create this Data Transfer Object based on a GameState.
-     * @param gameState The GameState used to build this DTO.
+     * Constructor used to create this Data Transfer Object based on a Game.
+     * @param game The Game used to build this DTO.
      */
-    public GameDto(GameState gameState) {
-        setId(gameState.getId());
-        setWidth(gameState.getWidth());
-        setHeight(gameState.getHeight());
-        setPlayer1(gameState.getPlayer1());
-        setPlayer2(gameState.getPlayer2());
-        setTickCount(gameState.getTickCount());
-        setPlayingField(gameState.getPlayingField());
-        setGameStatus(gameState.getGameStatus());
-        setWinner(gameState.getWinner());
+    public GameDto(Game game) {
+        setId(game.getId());
+        setWidth(game.getWidth());
+        setHeight(game.getHeight());
+        setPlayer1(game.getPlayer1());
+        setPlayer2(game.getPlayer2());
+        setTickCount(game.getTickCount());
+        setPlayingField(game.getPlayingField());
+        setGameStatus(game.getGameStatus());
+        setWinner(game.getWinner());
     }
 
     public int getWidth() {

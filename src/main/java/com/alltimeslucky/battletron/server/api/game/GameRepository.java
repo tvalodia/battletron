@@ -1,9 +1,8 @@
 package com.alltimeslucky.battletron.server.api.game;
 
-import com.alltimeslucky.battletron.engine.GameEngine;
+import com.alltimeslucky.battletron.game.controller.GameController;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -12,7 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class GameRepository {
 
     private static GameRepository instance;
-    private ConcurrentHashMap<Long, GameEngine> data;
+    private ConcurrentHashMap<Long, GameController> data;
 
 
     private GameRepository() {
@@ -30,15 +29,15 @@ public class GameRepository {
         return instance;
     }
 
-    public void addGameEngine(long gameEngineId, GameEngine gameEngine) {
-        data.put(gameEngineId, gameEngine);
+    public void addGameEngine(long gameEngineId, GameController gameController) {
+        data.put(gameEngineId, gameController);
     }
 
-    public GameEngine getGameEngine(long gameEngineId) {
+    public GameController getGameEngine(long gameEngineId) {
         return data.get(gameEngineId);
     }
 
-    public Collection<GameEngine> getAllGameEngines() {
+    public Collection<GameController> getAllGameEngines() {
         return data.values();
     }
 

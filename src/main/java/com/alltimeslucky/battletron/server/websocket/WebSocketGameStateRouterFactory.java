@@ -2,19 +2,19 @@ package com.alltimeslucky.battletron.server.websocket;
 
 
 /**
- * This class provides an instance of the WebSocketGameStateRouter.
+ * This class provides an instance of the WebSocketGameUpdateRouter.
  */
 public class WebSocketGameStateRouterFactory {
 
-    private static WebSocketGameStateRouter instance;
+    private static WebSocketGameUpdateRouter instance;
 
     /**
      * Constructor.
-     * @return The instance of WebSocketGameStateRouter
+     * @return The instance of WebSocketGameUpdateRouter
      */
-    public static WebSocketGameStateRouter getWebSocketGameStateUpdateRouter() {
+    public static WebSocketGameUpdateRouter getWebSocketGameStateUpdateRouter() {
         if (instance == null) {
-            instance = new WebSocketGameStateRouter();
+            instance = new WebSocketGameUpdateRouter();
         }
         return instance;
     }

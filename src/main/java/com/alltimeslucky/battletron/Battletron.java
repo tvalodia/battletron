@@ -1,15 +1,15 @@
 package com.alltimeslucky.battletron;
 
-import com.alltimeslucky.battletron.client.PrintGameStateListener;
-import com.alltimeslucky.battletron.engine.Direction;
-import com.alltimeslucky.battletron.engine.GameEngine;
-import com.alltimeslucky.battletron.engine.GameEngineFactory;
-import com.alltimeslucky.battletron.engine.player.KeyboardLeftPlayerController;
-import com.alltimeslucky.battletron.engine.player.KeyboardPlayerController;
-import com.alltimeslucky.battletron.engine.player.KeyboardRightPlayerController;
-import com.alltimeslucky.battletron.engine.player.Player;
-import com.alltimeslucky.battletron.engine.player.PlayerController;
-import com.alltimeslucky.battletron.engine.player.SimplePlayerAi;
+import com.alltimeslucky.battletron.game.controller.GameController;
+import com.alltimeslucky.battletron.game.view.PrintGameListener;
+import com.alltimeslucky.battletron.player.model.Direction;
+import com.alltimeslucky.battletron.game.controller.GameControllerFactory;
+import com.alltimeslucky.battletron.player.controller.KeyboardLeftPlayerController;
+import com.alltimeslucky.battletron.player.controller.KeyboardPlayerController;
+import com.alltimeslucky.battletron.player.controller.KeyboardRightPlayerController;
+import com.alltimeslucky.battletron.player.model.Player;
+import com.alltimeslucky.battletron.player.controller.PlayerController;
+import com.alltimeslucky.battletron.player.controller.SimplePlayerAi;
 import com.alltimeslucky.battletron.ui.BattletronWindow;
 
 /**
@@ -17,7 +17,7 @@ import com.alltimeslucky.battletron.ui.BattletronWindow;
  */
 public class Battletron {
 
-    private GameEngine gameEngine;
+    private GameController gameController;
     private BattletronWindow window;
 
     /**
@@ -32,7 +32,7 @@ public class Battletron {
      * Constructor. Creates the core components for the simulation.
      */
     public Battletron() {
-        gameEngine = createTwoPlayerGame();
+        gameController = createTwoPlayerGame();
         window.initialise();
 
         try {
@@ -47,47 +47,47 @@ public class Battletron {
      * Starts the simulation.
      */
     public void play() {
-        gameEngine.start();
+        gameController.start();
     }
 
     /**
-     * Creates an instance of GameEngine will all its dependencies.
-     * @return a newly create GameEngine object
+     * Creates an instance of GameController will all its dependencies.
+     * @return a newly create GameController object
      */
-    private GameEngine createOnePlayerGame() {
+    private GameController createOnePlayerGame() {
         Player player1 = new Player(1, 33, 50, Direction.RIGHT);
         Player player2 = new Player(2, 66, 50, Direction.LEFT);
         KeyboardPlayerController keyboardPlayerController = new KeyboardLeftPlayerController(player1);
         PlayerController player2Controller = new SimplePlayerAi(player2);
         window = new BattletronWindow(keyboardPlayerController, null);
-        GameEngine gameEngine = GameEngineFactory.getLocalGameEngine(player1, player2, keyboardPlayerController, player2Controller);
-        gameEngine.getGameState().registerListener(window.getGameStateListener());
-        gameEngine.getGameState().registerListener(new PrintGameStateListener());
-        return gameEngine;
+        GameController gameController = GameControllerFactory.getLocalGameEngine(player1, player2, keyboardPlayerController, player2Controller);
+        gameController.getGame().registerListener(window.getGameStateListener());
+        gameController.getGame().registerListener(new PrintGameListener());
+        return gameController;
     }
 
-    private GameEngine createTwoPlayerGame() {
+    private GameController createTwoPlayerGame() {
         Player player1 = new Player(1, 33, 50, Direction.RIGHT);
         Player player2 = new Player(2, 66, 50, Direction.LEFT);
         KeyboardPlayerController keyboardPlayer1Controller = new KeyboardLeftPlayerController(player1);
         KeyboardPlayerController keyboardPlayer2Controller = new KeyboardRightPlayerController(player2);
         window = new BattletronWindow(keyboardPlayer1Controller, keyboardPlayer2Controller);
-        GameEngine gameEngine = GameEngineFactory.getLocalGameEngine(player1, player2,
+        GameController gameController = GameControllerFactory.getLocalGameEngine(player1, player2,
                 keyboardPlayer1Controller, keyboardPlayer2Controller);
-        gameEngine.getGameState().registerListener(window.getGameStateListener());
-        gameEngine.getGameState().registerListener(new PrintGameStateListener());
-        return gameEngine;
+        gameController.getGame().registerListener(window.getGameStateListener());
+        gameController.getGame().registerListener(new PrintGameListener());
+        return gameController;
     }
 
-    private GameEngine createAiGame() {
+    private GameController createAiGame() {
         Player player1 = new Player(1, 33, 50, Direction.RIGHT);
         Player player2 = new Player(2, 66, 50, Direction.LEFT);
         PlayerController player1Controller = new SimplePlayerAi(player1);
         PlayerController player2Controller = new SimplePlayerAi(player2);
         window = new BattletronWindow(null, null);
-        GameEngine gameEngine = GameEngineFactory.getLocalGameEngine(player1, player2, player1Controller, player2Controller);
-        gameEngine.getGameState().registerListener(window.getGameStateListener());
-        gameEngine.getGameState().registerListener(new PrintGameStateListener());
-        return gameEngine;
+        GameController gameController = GameControllerFactory.getLocalGameEngine(player1, player2, player1Controller, player2Controller);
+        gameController.getGame().registerListener(window.getGameStateListener());
+        gameController.getGame().registerListener(new PrintGameListener());
+        return gameController;
     }
 }

@@ -1,7 +1,7 @@
-package com.alltimeslucky.battletron.client;
+package com.alltimeslucky.battletron.game.view;
 
-import com.alltimeslucky.battletron.engine.gamestate.GameState;
-import com.alltimeslucky.battletron.engine.gamestate.GameStateListener;
+import com.alltimeslucky.battletron.game.model.Game;
+import com.alltimeslucky.battletron.game.model.GameListener;
 import com.alltimeslucky.battletron.server.api.game.GameDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -10,21 +10,21 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 /**
- * This class just prints a json formatted version of the GameState at each tick.
+ * This class just prints a json formatted version of the Game at each tick.
  */
-public class PrintGameStateListener implements GameStateListener {
+public class PrintGameListener implements GameListener {
 
     private static final Logger LOG = LogManager.getLogger();
     private ObjectMapper objectMapper;
 
-    public PrintGameStateListener() {
+    public PrintGameListener() {
         objectMapper = new ObjectMapper();
     }
 
     @Override
-    public void onGameStateUpdate(GameState gameState) {
+    public void onGameStateUpdate(Game game) {
         try {
-            LOG.trace(objectMapper.writeValueAsString(new GameDto(gameState)));
+            LOG.trace(objectMapper.writeValueAsString(new GameDto(game)));
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }

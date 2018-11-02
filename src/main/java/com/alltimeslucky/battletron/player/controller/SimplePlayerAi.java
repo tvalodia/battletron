@@ -1,7 +1,8 @@
-package com.alltimeslucky.battletron.engine.player;
+package com.alltimeslucky.battletron.player.controller;
 
-import com.alltimeslucky.battletron.engine.Direction;
-import com.alltimeslucky.battletron.engine.gamestate.GameState;
+import com.alltimeslucky.battletron.player.model.Direction;
+import com.alltimeslucky.battletron.game.model.Game;
+import com.alltimeslucky.battletron.player.model.Player;
 
 import java.util.Random;
 
@@ -16,10 +17,10 @@ public class SimplePlayerAi implements PlayerController {
 
     /**
      * Graham testing javadoc comments.
-     * @param gameState Big variable containing all the info about where the game is at homie.
+     * @param game Big variable containing all the info about where the game is at homie.
      */
 
-    public void execute(GameState gameState) {
+    public void execute(Game game) {
 
         int xval = player.getPositionX();
         int yval = player.getPositionY();
@@ -45,10 +46,10 @@ public class SimplePlayerAi implements PlayerController {
             upIncrement = 0;
         }
 
-        int valUp = gameState.getPlayingField()[xval][yval + upIncrement];
-        int valDown = gameState.getPlayingField()[xval][yval - downIncrement];
-        int valLeft = gameState.getPlayingField()[xval - leftIncrement][yval];
-        int valRight = gameState.getPlayingField()[xval + rightIncrement][yval];
+        int valUp = game.getPlayingField()[xval][yval + upIncrement];
+        int valDown = game.getPlayingField()[xval][yval - downIncrement];
+        int valLeft = game.getPlayingField()[xval - leftIncrement][yval];
+        int valRight = game.getPlayingField()[xval + rightIncrement][yval];
 
         if (xval == 0) {
             valLeft = 5;

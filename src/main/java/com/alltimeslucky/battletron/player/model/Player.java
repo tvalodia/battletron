@@ -1,6 +1,4 @@
-package com.alltimeslucky.battletron.engine.player;
-
-import com.alltimeslucky.battletron.engine.Direction;
+package com.alltimeslucky.battletron.player.model;
 
 /**
  * This class models a player.

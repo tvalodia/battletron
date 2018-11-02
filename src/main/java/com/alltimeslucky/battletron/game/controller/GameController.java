@@ -1,35 +1,35 @@
-package com.alltimeslucky.battletron.engine;
+package com.alltimeslucky.battletron.game.controller;
 
-import com.alltimeslucky.battletron.engine.gamestate.GameState;
-import com.alltimeslucky.battletron.engine.player.PlayerController;
-import com.alltimeslucky.battletron.server.api.game.GameRepository;
+import com.alltimeslucky.battletron.game.model.GameStatus;
+import com.alltimeslucky.battletron.game.model.Game;
+import com.alltimeslucky.battletron.player.controller.PlayerController;
 
 /**
  * This class manages and executes the game loop; controls the flow of the game and notifies observers at every game tick.
  * With each tick, the engine will ask players for a direction input and update the game state accordingly.
  */
-public class GameEngine extends Thread {
+public class GameController extends Thread {
 
-    private static final int TICK_INTERVAL_MILLIS = 50;
+    private static final int TICK_INTERVAL_MILLIS = 250;
     private long lastTickTime;
     private final PlayerController player1Controller;
     private final PlayerController player2Controller;
-    private GameState gameState;
+    private Game game;
     private volatile boolean pauseThreadFlag;
 
     /**
      * Constructor. Initialises the game engine.
      *
-     * @param gameState The GameState model that holds the game state data
+     * @param game The Game model that holds the game state data
      * @param player1Controller  Player 1's AI controller
      * @param player2Controller  Player 2's AI controller
      */
-    public GameEngine(GameState gameState,
-                      PlayerController player1Controller, PlayerController player2Controller) {
+    public GameController(Game game,
+                          PlayerController player1Controller, PlayerController player2Controller) {
         this.player1Controller = player1Controller;
         this.player2Controller = player2Controller;
         this.lastTickTime = 0;
-        this.gameState = gameState;
+        this.game = game;
     }
 
     /**
@@ -54,14 +54,14 @@ public class GameEngine extends Thread {
             long currentTime = System.currentTimeMillis();
             if (currentTime - lastTickTime >= TICK_INTERVAL_MILLIS) {
 
-                //Have the player controllers act given the current gamestate
-                player1Controller.execute(gameState);
-                player2Controller.execute(gameState);
+                //Have the player controllers act given the current game
+                player1Controller.execute(game);
+                player2Controller.execute(game);
 
                 //update the playing field
-                gameState.update();
+                game.update();
 
-                if (gameState.getGameStatus() == GameStatus.COMPLETED_DRAW || gameState.getGameStatus() == GameStatus.COMPLETED_WINNER) {
+                if (game.getGameStatus() == GameStatus.COMPLETED_DRAW || game.getGameStatus() == GameStatus.COMPLETED_WINNER) {
                     break;
                 }
 
@@ -123,10 +123,10 @@ public class GameEngine extends Thread {
 
     @Override
     public long getId() {
-        return gameState.getId();
+        return game.getId();
     }
 
-    public GameState getGameState() {
-        return gameState;
+    public Game getGame() {
+        return game;
     }
 }

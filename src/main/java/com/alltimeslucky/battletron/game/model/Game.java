@@ -1,7 +1,6 @@
-package com.alltimeslucky.battletron.engine.gamestate;
+package com.alltimeslucky.battletron.game.model;
 
-import com.alltimeslucky.battletron.engine.GameStatus;
-import com.alltimeslucky.battletron.engine.player.Player;
+import com.alltimeslucky.battletron.player.model.Player;
 
 import java.util.Collections;
 import java.util.LinkedList;
@@ -10,7 +9,7 @@ import java.util.List;
 /**
  * This class depicts the state of a game.
  */
-public class GameState {
+public class Game {
 
     //The unique identifier of this instance of a gamestate
     private long id;
@@ -30,7 +29,7 @@ public class GameState {
     //The winner of the current game is there is one.
     private Player winner;
 
-    private final List<GameStateListener> gameStateListeners;
+    private final List<GameListener> gameListeners;
 
     /**
      * Constructor.
@@ -42,7 +41,7 @@ public class GameState {
      * @param player1 The first player of the game
      * @param player2 The second player of the game
      */
-    public GameState(long id, int width, int height, Player player1, Player player2) {
+    public Game(long id, int width, int height, Player player1, Player player2) {
         this.id = id;
         this.width = width;
         this.height = height;
@@ -53,7 +52,7 @@ public class GameState {
         this.playingField[player1.getPositionX()][player1.getPositionY()] = player1.getId();
         this.playingField[player2.getPositionX()][player2.getPositionY()] = player2.getId();
         this.winner = null;
-        this.gameStateListeners = Collections.synchronizedList(new LinkedList<>());
+        this.gameListeners = Collections.synchronizedList(new LinkedList<>());
         this.gameStatus = GameStatus.WAITING_FOR_READY;
     }
 
@@ -127,8 +126,8 @@ public class GameState {
 
         //send an update to the observers. This loop is synchronised to allow for new spectators to be added to the
         // list by another thread without modifying the list while the iterator is reading the list.
-        synchronized (gameStateListeners) {
-            gameStateListeners.forEach(gameStateListener -> gameStateListener.onGameStateUpdate(this));
+        synchronized (gameListeners) {
+            gameListeners.forEach(gameStateListener -> gameStateListener.onGameStateUpdate(this));
         }
 
     }
@@ -181,12 +180,12 @@ public class GameState {
         return tickCount;
     }
 
-    public void registerListener(GameStateListener listener) {
-        gameStateListeners.add(listener);
+    public void registerListener(GameListener listener) {
+        gameListeners.add(listener);
     }
 
-    public void deregisterListener(GameStateListener listener) {
-        gameStateListeners.remove(listener);
+    public void deregisterListener(GameListener listener) {
+        gameListeners.remove(listener);
     }
 
 }

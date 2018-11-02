@@ -1,8 +1,8 @@
 package com.alltimeslucky.battletron.ui;
 
-import com.alltimeslucky.battletron.engine.GameStatus;
-import com.alltimeslucky.battletron.engine.gamestate.GameState;
-import com.alltimeslucky.battletron.engine.gamestate.GameStateListener;
+import com.alltimeslucky.battletron.game.model.Game;
+import com.alltimeslucky.battletron.game.model.GameListener;
+import com.alltimeslucky.battletron.game.model.GameStatus;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -13,7 +13,7 @@ import java.awt.RenderingHints;
 
 import javax.swing.JComponent;
 
-public class GameView extends JComponent implements GameStateListener {
+public class GameView extends JComponent implements GameListener {
 
     private static float FPS_LIMIT = 60;
     private static float TIME_PER_FRAME = 1000f / FPS_LIMIT;
@@ -56,42 +56,42 @@ public class GameView extends JComponent implements GameStateListener {
     }
 
     @Override
-    public void onGameStateUpdate(GameState gameState) {
+    public void onGameStateUpdate(Game game) {
         currentSystemTime = System.currentTimeMillis();
         if (currentSystemTime - lastDrawTime > TIME_PER_FRAME) {
             clear();
 
             g2.setPaint(Color.white);
-            g2.drawString("Tick: " + gameState.getTickCount()
+            g2.drawString("Tick: " + game.getTickCount()
                     + "; FPS: " + (TIME_PER_FRAME / (currentSystemTime - lastDrawTime)) * FPS_LIMIT, 0, 20);
 
             //Draw the players' trails
-            for (int x = 0; x < gameState.getWidth(); x++) {
-                for (int y = 0; y < gameState.getHeight(); y++) {
-                    if (gameState.getPlayingField()[x][y] == gameState.getPlayer1().getId()) {
-                        drawBlock(getScreenX(x), getScreenY(gameState.getHeight(), y), Color.blue);
+            for (int x = 0; x < game.getWidth(); x++) {
+                for (int y = 0; y < game.getHeight(); y++) {
+                    if (game.getPlayingField()[x][y] == game.getPlayer1().getId()) {
+                        drawBlock(getScreenX(x), getScreenY(game.getHeight(), y), Color.blue);
                     }
-                    if (gameState.getPlayingField()[x][y] == gameState.getPlayer2().getId()) {
-                        drawBlock(getScreenX(x), getScreenY(gameState.getHeight(), y), Color.magenta);
+                    if (game.getPlayingField()[x][y] == game.getPlayer2().getId()) {
+                        drawBlock(getScreenX(x), getScreenY(game.getHeight(), y), Color.magenta);
                     }
                 }
             }
 
             //player 1's head
-            drawBlock(getScreenX(gameState.getPlayer1().getPositionX()),
-                      getScreenY(gameState.getHeight(), gameState.getPlayer1().getPositionY()),
+            drawBlock(getScreenX(game.getPlayer1().getPositionX()),
+                      getScreenY(game.getHeight(), game.getPlayer1().getPositionY()),
                       Color.cyan);
             //player 2's head
-            drawBlock(getScreenX(gameState.getPlayer2().getPositionX()),
-                      getScreenY(gameState.getHeight(), gameState.getPlayer2().getPositionY()),
+            drawBlock(getScreenX(game.getPlayer2().getPositionX()),
+                      getScreenY(game.getHeight(), game.getPlayer2().getPositionY()),
                       Color.pink);
 
-            if (gameState.getGameStatus() == GameStatus.COMPLETED_WINNER) {
+            if (game.getGameStatus() == GameStatus.COMPLETED_WINNER) {
                 g2.setPaint(Color.white);
-                g2.drawString("Player " + gameState.getWinner().getId() + " wins!", 100, 200);
+                g2.drawString("Player " + game.getWinner().getId() + " wins!", 100, 200);
             }
 
-            if (gameState.getGameStatus() == GameStatus.COMPLETED_DRAW) {
+            if (game.getGameStatus() == GameStatus.COMPLETED_DRAW) {
                 g2.setPaint(Color.white);
                 g2.drawString("It's a DRAW!", 100, 200);
             }

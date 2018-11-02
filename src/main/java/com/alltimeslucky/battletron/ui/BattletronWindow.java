@@ -1,6 +1,6 @@
 package com.alltimeslucky.battletron.ui;
 
-import com.alltimeslucky.battletron.engine.gamestate.GameStateListener;
+import com.alltimeslucky.battletron.game.model.GameListener;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
@@ -49,7 +49,7 @@ public class BattletronWindow {
         frame.setVisible(true);
     }
 
-    public GameStateListener getGameStateListener() {
+    public GameListener getGameStateListener() {
         return drawArea;
     }
 }

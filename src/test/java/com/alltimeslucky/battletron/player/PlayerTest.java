@@ -1,6 +1,7 @@
-package com.alltimeslucky.battletron.engine.player;
+package com.alltimeslucky.battletron.player;
 
-import com.alltimeslucky.battletron.engine.Direction;
+import com.alltimeslucky.battletron.player.model.Direction;
+import com.alltimeslucky.battletron.player.model.Player;
 
 import org.junit.Before;
 import org.junit.Test;

@@ -1,8 +1,8 @@
 package com.alltimeslucky.battletron.server.websocket;
 
-import com.alltimeslucky.battletron.engine.Direction;
-import com.alltimeslucky.battletron.engine.gamestate.GameState;
-import com.alltimeslucky.battletron.engine.player.Player;
+import com.alltimeslucky.battletron.game.model.Game;
+import com.alltimeslucky.battletron.player.model.Direction;
+import com.alltimeslucky.battletron.player.model.Player;
 import com.alltimeslucky.battletron.server.api.game.GameDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -17,7 +17,7 @@ import org.eclipse.jetty.websocket.api.WebSocketAdapter;
 
 /**
  * This class represents a connection to the web browser. The player will send direction updates over this connection.
- * This connection will also be used to send GameState updates to the browser.
+ * This connection will also be used to send Game updates to the browser.
  */
 public class ClientWebSocket extends WebSocketAdapter {
 
@@ -81,12 +81,12 @@ public class ClientWebSocket extends WebSocketAdapter {
     }
 
     /**
-     * Sends the specified GameState to the client browser.
-     * @param gameState The instance GameState to send.
+     * Sends the specified Game to the client browser.
+     * @param game The instance Game to send.
      */
-    public void sendGameState(GameState gameState) {
+    public void sendGameState(Game game) {
         try {
-            getSession().getRemote().sendString(objectMapper.writeValueAsString(new GameDto(gameState)));
+            getSession().getRemote().sendString(objectMapper.writeValueAsString(new GameDto(game)));
         } catch (IOException e) {
             LOG.error(e.getMessage());
             getSession().close(-1, "IO Error");

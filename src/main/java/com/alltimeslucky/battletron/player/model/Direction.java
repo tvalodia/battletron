@@ -1,4 +1,4 @@
-package com.alltimeslucky.battletron.engine;
+package com.alltimeslucky.battletron.player.model;
 
 /**
  * The possible directions on the playing field that each player can take.

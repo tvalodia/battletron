@@ -1,31 +1,31 @@
 package com.alltimeslucky.battletron.server.websocket;
 
-import com.alltimeslucky.battletron.engine.gamestate.GameState;
-import com.alltimeslucky.battletron.engine.gamestate.GameStateListener;
+import com.alltimeslucky.battletron.game.model.Game;
+import com.alltimeslucky.battletron.game.model.GameListener;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * This class listens for GameState updates and routes them to the
+ * This class listens for Game updates and routes them to the
  * mapped sockets.
  */
-public class WebSocketGameStateRouter implements GameStateListener {
+public class WebSocketGameUpdateRouter implements GameListener {
 
     private Map<String, Long> playerGameMap;
     private ClientWebSocketRepository clientWebSocketRepository;
 
-    public WebSocketGameStateRouter() {
+    public WebSocketGameUpdateRouter() {
         playerGameMap = new ConcurrentHashMap<>();
         clientWebSocketRepository = ClientWebSocketRepository.getInstance();
     }
 
 
     @Override
-    public void onGameStateUpdate(GameState gameState) {
+    public void onGameStateUpdate(Game game) {
         playerGameMap.forEach((playerId, gameId) -> {
-            if (gameState.getId() == gameId) {
-                clientWebSocketRepository.getClientWebSocket(playerId).sendGameState(gameState);
+            if (game.getId() == gameId) {
+                clientWebSocketRepository.getClientWebSocket(playerId).sendGameState(game);
             }
         }
         );

@@ -1,7 +1,8 @@
-package com.alltimeslucky.battletron.engine.player;
+package com.alltimeslucky.battletron.player.controller;
 
-import com.alltimeslucky.battletron.engine.Direction;
-import com.alltimeslucky.battletron.engine.gamestate.GameState;
+import com.alltimeslucky.battletron.player.model.Direction;
+import com.alltimeslucky.battletron.game.model.Game;
+import com.alltimeslucky.battletron.player.model.Player;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -26,7 +27,7 @@ public class KeyboardPlayerController implements PlayerController, KeyListener {
     }
 
     @Override
-    public void execute(GameState gameState) {
+    public void execute(Game game) {
         player.setDirection(direction);
     }
 
