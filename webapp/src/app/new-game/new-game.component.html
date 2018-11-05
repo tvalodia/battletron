@@ -1,0 +1,31 @@
+<div class="container">
+  <mat-card>
+    <mat-card-title>New Game</mat-card-title>
+
+    <mat-form-field>
+      <mat-select placeholder="Player 1" [(value)]="player1Type" panelClass="mat-select-panel">
+        <mat-option *ngFor="let playerType of playerTypes" [value]="playerType.value">
+          {{playerType.viewValue}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    VS
+    <mat-form-field>
+      <mat-select placeholder="Player 2" [(value)]="player2Type" panelClass="mat-select-panel">
+        <mat-option *ngFor="let playerType of playerTypes" [value]="playerType.value">
+          {{playerType.viewValue}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <button mat-button color="primary">Start</button>
+
+    <mat-card-footer>
+      <button mat-button routerLink="/" color="warn">Main Menu</button>
+    </mat-card-footer>
+  </mat-card>
+</div>
+
+<mat-card>
+  <p>Player 1: {{player1Type}}</p>
+  <p>Player 2: {{player2Type}}</p>
+</mat-card>

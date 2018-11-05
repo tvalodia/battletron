@@ -1,0 +1,23 @@
+/* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.container {
+  margin: 0 auto;
+  height: 100%;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  vertical-align: middle;
+  display: flex;
+}
+
+mat-card {
+  min-width: 500px;
+  height: 500px;
+}
+
+mat-card-title {
+  text-align: center;
+}
