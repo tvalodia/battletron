@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import {GameViewService} from '../game-view/game-view.service';
+import {WebsocketService} from "../game-view/websocket.service";
 
 export interface PlayerType {
   value: string;
@@ -8,7 +10,8 @@ export interface PlayerType {
 @Component({
   selector: 'app-new-game',
   templateUrl: './new-game.component.html',
-  styleUrls: ['./new-game.component.css']
+  styleUrls: ['./new-game.component.css'],
+  providers: [ WebsocketService, GameViewService ]
 })
 export class NewGameComponent implements OnInit {
 
@@ -21,7 +24,10 @@ export class NewGameComponent implements OnInit {
   player1Type: String = '';
   player2Type: String = '';
 
-  constructor() {
+  constructor(private gameViewService: GameViewService) {
+    gameViewService.games.subscribe(msg => {
+      console.log("Response from websocket: " + msg);
+    });
   }
 
   ngOnInit() {
