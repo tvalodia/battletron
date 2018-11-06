@@ -18,8 +18,9 @@
       </mat-select>
     </mat-form-field>
     <button mat-button color="primary">Start</button>
-    <app-game-view></app-game-view>
-
+    <mat-card-content>
+      <app-game-view></app-game-view>
+    </mat-card-content>
     <mat-card-footer>
       <button mat-button routerLink="/" color="warn">Main Menu</button>
     </mat-card-footer>
@@ -27,6 +28,7 @@
 </div>
 
 <mat-card>
+  <p>Player id: {{playerId}}</p>
   <p>Player 1: {{player1Type}}</p>
   <p>Player 2: {{player2Type}}</p>
 </mat-card>
