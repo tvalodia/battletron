@@ -8,6 +8,7 @@ import { MainMenuComponent } from './main-menu/main-menu.component';
 import { BattletronMaterialModule } from './material';
 import { NewGameComponent } from './new-game/new-game.component';
 import { GameViewComponent } from './game-view/game-view.component';
+import { HttpClientModule } from  '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { GameViewComponent } from './game-view/game-view.component';
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    BattletronMaterialModule
+    BattletronMaterialModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

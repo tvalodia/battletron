@@ -1,4 +1,13 @@
-import {Component, ElementRef, NgZone, OnInit, ViewChild} from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  NgZone,
+  OnInit,
+  Output,
+  ViewChild
+} from '@angular/core';
+import {GameViewService} from "./game-view.service";
 
 @Component({
   selector: 'app-game-view',
@@ -7,10 +16,21 @@ import {Component, ElementRef, NgZone, OnInit, ViewChild} from '@angular/core';
 })
 export class GameViewComponent implements OnInit {
 
+
   @ViewChild('gameViewCanvas') canvasRef: ElementRef;
+  playerId: string = '';
+  @Output() newPlayerId = new EventEmitter<string>();
   private running: boolean;
 
-  constructor(private ngZone: NgZone) {}
+  constructor(private ngZone: NgZone, private gameViewService: GameViewService) {
+    gameViewService.subject.subscribe(msg => {
+      console.log("GameViewComponent - Response from websocket: " + msg.data);
+      if (msg.data.startsWith("id=")) {
+        this.playerId = msg.data.substr(3);
+        this.newPlayerId.emit(msg.data.substr(3));
+      }
+    });
+  }
 
   ngOnInit() {
     this.running = true;
@@ -72,6 +92,11 @@ export class GameViewComponent implements OnInit {
 
     // Schedule next
     requestAnimationFrame(() => this.paint());
+  }
+
+  sendMsg(direction: string) {
+    console.log('new message from client to websocket: ', {data: direction});
+    this.gameViewService.subject.next({data: direction});
   }
 
 }

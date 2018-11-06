@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import {AfterViewInit, Component, NgZone, OnInit, ViewChild} from '@angular/core';
 import {GameViewService} from '../game-view/game-view.service';
 import {WebsocketService} from "../game-view/websocket.service";
+import {GameViewComponent} from "../game-view/game-view.component";
+import {GameService} from "../api/game.service";
 
 export interface PlayerType {
   value: string;
@@ -11,7 +13,7 @@ export interface PlayerType {
   selector: 'app-new-game',
   templateUrl: './new-game.component.html',
   styleUrls: ['./new-game.component.css'],
-  providers: [ WebsocketService, GameViewService ]
+  providers: [WebsocketService, GameViewService]
 })
 export class NewGameComponent implements OnInit {
 
@@ -25,19 +27,20 @@ export class NewGameComponent implements OnInit {
   player1Type: string = '';
   player2Type: string = '';
 
-  constructor(private gameViewService: GameViewService) {
-    gameViewService.subject.subscribe(msg => {
-      console.log("Response from websocket: " + msg.data);
-      if (msg.data.startsWith("id=")) {
-        this.playerId = msg.data.substr(3);
-      }
-    });
+  constructor(private gameService: GameService) {
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.getGames();
+  }
 
-  sendMsg(direction: string) {
-    console.log('new message from client to websocket: ', {data: direction});
-    this.gameViewService.subject.next({data: direction});
+  onNewPlayerId(playerId: string) {
+    this.playerId = playerId;
+  }
+
+  public getGames() {
+    this.gameService.getGames().subscribe((data: Array<object>) => {
+      console.log(data);
+    });
   }
 }

@@ -19,7 +19,7 @@
     </mat-form-field>
     <button mat-button color="primary">Start</button>
     <mat-card-content>
-      <app-game-view></app-game-view>
+      <app-game-view (newPlayerId)="onNewPlayerId($event)"></app-game-view>
     </mat-card-content>
     <mat-card-footer>
       <button mat-button routerLink="/" color="warn">Main Menu</button>
