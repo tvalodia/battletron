@@ -18,9 +18,10 @@ export interface PlayerType {
 export class NewGameComponent implements OnInit {
 
   playerTypes: PlayerType[] = [
-    {value: 'human', viewValue: 'Human'},
-    {value: 'simpleAi', viewValue: 'Simple AI'},
-    {value: 'downLeftAi', viewValue: 'Down Left AI'}
+    {value: 'w-a-s-d', viewValue: 'Human - WASD keys'},
+    {value: 'arrowKeys', viewValue: 'Human - Arrow keys'},
+    {value: 'simpleAi', viewValue: 'AI - Simple'},
+    {value: 'downLeftAi', viewValue: 'AI - Down Left'}
   ];
 
   playerId: string = '';
@@ -42,5 +43,14 @@ export class NewGameComponent implements OnInit {
     this.gameService.getGames().subscribe((data: Array<object>) => {
       console.log(data);
     });
+  }
+
+  public start() {
+    console.log("start()");
+    this.gameService.createGame(this.playerId, this.player1Type, this.player2Type)
+      .subscribe((data: Array<object>) => {
+        console.log(data);
+      });
+
   }
 }

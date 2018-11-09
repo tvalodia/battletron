@@ -1,10 +1,17 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 
+
+export interface NewGame {
+  playerId: string,
+  player1Type: string,
+  player2Type: string
+}
+
+
 @Injectable({
   providedIn: 'root'
 })
-
 export class GameService {
 
   API_URL: string  =  'http://localhost:8080/api/game';
@@ -16,7 +23,7 @@ export class GameService {
     return  this.httpClient.get(this.API_URL);
   }
 
-  createGame(playerId){
-    return  this.httpClient.post(`${this.API_URL}/singleplayer/" + playerId/`, null);
+  createGame(playerId: string,player1Type: string, player2Type: string){
+    return this.httpClient.post(this.API_URL, { playerId: playerId, player1Type: player1Type, player2Type: player2Type});
   }
 }

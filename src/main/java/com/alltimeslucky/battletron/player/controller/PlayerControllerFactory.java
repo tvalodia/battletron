@@ -14,7 +14,7 @@ public class PlayerControllerFactory {
      */
     public static PlayerController getPlayerController(String playerType, String playerId, Player player) {
         switch (playerType) {
-            case "W-A-S-D": return new WebSocketLeftKeysPlayerController(player, ClientWebSocketRepository.getInstance().get(playerId));
+            case "w-a-s-d": return new WebSocketLeftKeysPlayerController(player, ClientWebSocketRepository.getInstance().get(playerId));
             case "arrowKeys": return new WebSocketRightKeysPlayerController(player, ClientWebSocketRepository.getInstance().get(playerId));
             case "keyboard": return new WebSocketPlayerController(player, ClientWebSocketRepository.getInstance().get(playerId));
             case "simpleAi": return new SimplePlayerAi(player);
