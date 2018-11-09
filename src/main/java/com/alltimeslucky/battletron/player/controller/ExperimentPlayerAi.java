@@ -10,7 +10,6 @@ public class ExperimentPlayerAi implements PlayerController {
 
     public ExperimentPlayerAi(Player player) {
         this.player = player;
-        player.setReady(true);
     }
 
     /**

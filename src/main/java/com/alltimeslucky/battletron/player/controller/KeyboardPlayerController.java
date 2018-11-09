@@ -1,7 +1,7 @@
 package com.alltimeslucky.battletron.player.controller;
 
-import com.alltimeslucky.battletron.player.model.Direction;
 import com.alltimeslucky.battletron.game.model.Game;
+import com.alltimeslucky.battletron.player.model.Direction;
 import com.alltimeslucky.battletron.player.model.Player;
 
 import java.awt.event.KeyEvent;
@@ -23,7 +23,6 @@ public class KeyboardPlayerController implements PlayerController, KeyListener {
     public KeyboardPlayerController(Player player) {
         this.player = player;
         this.direction = player.getDirection();
-        player.setReady(false);
     }
 
     @Override
@@ -48,9 +47,6 @@ public class KeyboardPlayerController implements PlayerController, KeyListener {
             direction = Direction.UP;
         }
 
-        if (e.getKeyCode() == KeyEvent.VK_R || e.getKeyCode() == KeyEvent.VK_ENTER) {
-            player.setReady(true);
-        }
     }
 
     @Override

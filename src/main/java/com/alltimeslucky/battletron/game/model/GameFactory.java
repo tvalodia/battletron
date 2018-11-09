@@ -6,7 +6,10 @@ import java.util.GregorianCalendar;
 
 public class GameFactory {
 
-    public static Game getGameState(int width, int height, Player player1, Player player2) {
-        return new Game(GregorianCalendar.getInstance().getTimeInMillis(), width, height, player1, player2);
+    private static final int WIDTH = 100;
+    private static final int HEIGHT = 100;
+
+    public static Game getGame(Player player1, Player player2) {
+        return new Game(GregorianCalendar.getInstance().getTimeInMillis(), WIDTH, HEIGHT, player1, player2);
     }
 }

@@ -8,32 +8,32 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * Stores all instances of games.
  */
-public class GameRepository {
+public class GameControllerRepository {
 
-    private static GameRepository instance;
+    private static GameControllerRepository instance;
     private ConcurrentHashMap<Long, GameController> data;
 
 
-    private GameRepository() {
+    private GameControllerRepository() {
         data = new ConcurrentHashMap<>();
     }
 
     /**
      * Returns the singleton instance of the Game Repository.
-     * @return The singleton instance of the GameRepository.
+     * @return The singleton instance of the GameControllerRepository.
      */
-    public static GameRepository getInstance() {
+    public static GameControllerRepository getInstance() {
         if (instance == null) {
-            instance = new GameRepository();
+            instance = new GameControllerRepository();
         }
         return instance;
     }
 
-    public void addGameEngine(long gameEngineId, GameController gameController) {
+    public void add(long gameEngineId, GameController gameController) {
         data.put(gameEngineId, gameController);
     }
 
-    public GameController getGameEngine(long gameEngineId) {
+    public GameController get(long gameEngineId) {
         return data.get(gameEngineId);
     }
 

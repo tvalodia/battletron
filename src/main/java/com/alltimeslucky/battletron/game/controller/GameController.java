@@ -1,7 +1,7 @@
 package com.alltimeslucky.battletron.game.controller;
 
-import com.alltimeslucky.battletron.game.model.GameStatus;
 import com.alltimeslucky.battletron.game.model.Game;
+import com.alltimeslucky.battletron.game.model.GameStatus;
 import com.alltimeslucky.battletron.player.controller.PlayerController;
 
 /**
@@ -121,8 +121,7 @@ public class GameController extends Thread {
         }
     }
 
-    @Override
-    public long getId() {
+    public long getGameId() {
         return game.getId();
     }
 

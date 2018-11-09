@@ -51,33 +51,60 @@
             });
 
             $("#start_ai_game").click(function () {
-                $.post("api/game/ai",
-                    function (response) {
+                let newGameDto = {
+                    "playerId": playerId,
+                    "player1Type": "simpleAi",
+                    "player2Type": "downLeftAi"
+                };
 
-                        let spectatorDto = {"playerId": playerId};
-                        // $.post("/api/game/" + response.id + "/spectate/", JSON.stringify(spectatorDto),
-                        //     function (spectateResponse) {
-                        //         console.log(spectateResponse);
-                        //     });
-
-                        $.ajax({
-                            url: "/api/game/" + response.id + "/spectate/",
-                            type: "POST",
-                            data: JSON.stringify(spectatorDto),
-                            contentType: "application/json; charset=utf-8",
-                            dataType: "json",
-                            success: function (spectateResponse) {
-                                //console.log(spectateResponse);
-                            }
-                        })
+                $.ajax({
+                    url: "/api/game/",
+                    type: "POST",
+                    data: JSON.stringify(newGameDto),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (response) {
+                        console.log(response);
                     }
-                );
+                })
             });
 
             $("#play_single_player_game").click(function () {
-                $.post("api/game/singleplayer/" + playerId,
-                    function (response) {
-                    });
+                let newGameDto = {
+                    "playerId": playerId,
+                    "player1Type": "W-A-S-D",
+                    "player2Type": "simpleAi"
+                };
+
+                $.ajax({
+                    url: "/api/game/",
+                    type: "POST",
+                    data: JSON.stringify(newGameDto),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (response) {
+                        console.log(response);
+                    }
+                })
+            });
+
+            $("#play_two_player_game").click(function () {
+                let newGameDto = {
+                    "playerId": playerId,
+                    "player1Type": "W-A-S-D",
+                    "player2Type": "arrowKeys"
+                };
+
+                $.ajax({
+                    url: "/api/game/",
+                    type: "POST",
+                    data: JSON.stringify(newGameDto),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (response) {
+                        console.log(response);
+                    }
+                })
             });
         });
 
@@ -113,19 +140,27 @@
             }
         }
 
-        $(document).keypress(function (e) {
-                if (e.key === "w") {
+        $(document).on("keydown", (function (e) {
+                let key = e.which;
+
+                if (key === 87) {
+                    ws.send("W");
+                } else if (key === 83) {
+                    ws.send("S");
+                } else if (key === 65) {
+                    ws.send("A");
+                } else if (key === 68) {
+                    ws.send("D");
+                } else if (key === 38) {
                     ws.send("UP");
-                } else if (e.key === "s") {
+                } else if (key === 40) {
                     ws.send("DOWN");
-                } else if (e.key === "a") {
+                } else if (key === 37) {
                     ws.send("LEFT");
-                } else if (e.key === "d") {
+                } else if (key === 39) {
                     ws.send("RIGHT");
-                } else if (e.key === "r") {
-                    ws.send("READY");
                 }
-            }
+            })
         );
 
     </script>
@@ -141,6 +176,7 @@
 <pre id="playing_field" class="playing_field"></pre>
 <p id="status"></p>
 <button type="button" id="play_single_player_game">Single Player Game</button>
+<button type="button" id="play_two_player_game">Two Player Game</button>
 <button type="button" id="start_ai_game">Start AI Battle</button>
 <button type="button" id="fetch_games">Fetch Games</button>
 <table id="records_table"></table>

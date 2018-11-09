@@ -1,17 +1,15 @@
 package com.alltimeslucky.battletron.server.api.game;
 
 import com.alltimeslucky.battletron.game.controller.GameController;
-import com.alltimeslucky.battletron.player.model.Direction;
-import com.alltimeslucky.battletron.game.controller.GameControllerFactory;
 import com.alltimeslucky.battletron.game.model.Game;
-import com.alltimeslucky.battletron.player.model.Player;
+import com.alltimeslucky.battletron.game.model.GameFactory;
 import com.alltimeslucky.battletron.player.controller.PlayerController;
-import com.alltimeslucky.battletron.player.controller.SimplePlayerAi;
-import com.alltimeslucky.battletron.player.controller.WebSocketPlayerController;
+import com.alltimeslucky.battletron.player.controller.PlayerControllerFactory;
+import com.alltimeslucky.battletron.player.model.Player;
 import com.alltimeslucky.battletron.server.websocket.ClientWebSocket;
 import com.alltimeslucky.battletron.server.websocket.ClientWebSocketRepository;
-import com.alltimeslucky.battletron.server.websocket.WebSocketGameUpdateRouter;
 import com.alltimeslucky.battletron.server.websocket.WebSocketGameStateRouterFactory;
+import com.alltimeslucky.battletron.server.websocket.WebSocketGameUpdateRouter;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -34,7 +32,7 @@ public class GameApi {
 
     private static final Logger LOG = LogManager.getLogger();
 
-    private final GameRepository gameRepository;
+    private final GameControllerRepository gameControllerRepository;
     private final ClientWebSocketRepository clientWebSocketRepository;
     private WebSocketGameUpdateRouter webSocketGameStateRouter;
 
@@ -42,7 +40,7 @@ public class GameApi {
      * Constructor.
      */
     public GameApi() {
-        gameRepository = GameRepository.getInstance();
+        gameControllerRepository = GameControllerRepository.getInstance();
         clientWebSocketRepository = ClientWebSocketRepository.getInstance();
         webSocketGameStateRouter = WebSocketGameStateRouterFactory.getWebSocketGameStateUpdateRouter();
     }
@@ -56,7 +54,7 @@ public class GameApi {
     @Produces(MediaType.APPLICATION_JSON)
     public List<GameDto> getAllGames() {
         List<GameDto> dtos = new LinkedList<>();
-        for (GameController gameController : gameRepository.getAllGameEngines()) {
+        for (GameController gameController : gameControllerRepository.getAllGameEngines()) {
             GameDto gameDto = new GameDto(gameController.getGame());
             gameDto.setPlayingField(null);
             dtos.add(gameDto);
@@ -74,7 +72,7 @@ public class GameApi {
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public GameDto getGame(@PathParam("id") long id) {
-        Game game = gameRepository.getGameEngine(id).getGame();
+        Game game = gameControllerRepository.get(id).getGame();
         GameDto gameDto = new GameDto(game);
         LOG.debug("Response: " + gameDto);
         return gameDto;
@@ -86,70 +84,39 @@ public class GameApi {
      * @return A GameDto object.
      */
     @POST
-    @Path("ai")
     @Produces(MediaType.APPLICATION_JSON)
-    public GameDto startAiGame() {
-        GameController gameController = createAiGameEngine();
-        long gameEngineId = gameController.getId();
-        gameRepository.addGameEngine(gameEngineId, gameController);
+    public GameDto createGame(NewGameDto dto) {
+        killAnyRunningGame(dto.getPlayerId());
+        Player player1 = new Player(1, 33, 50);
+        Player player2 = new Player(2, 66, 50);
+        Game game = GameFactory.getGame(player1, player2);
+
+        PlayerController player1Controller = PlayerControllerFactory.getPlayerController(dto.getPlayer1Type(), dto.getPlayerId(), player1);
+        PlayerController player2Controller = PlayerControllerFactory.getPlayerController(dto.getPlayer2Type(), dto.getPlayerId(), player2);
+        GameController gameController = new GameController(game, player1Controller, player2Controller);
+        gameControllerRepository.add(gameController.getGameId(), gameController);
+
+        webSocketGameStateRouter.registerForUpdates(dto.getPlayerId(), gameController.getGameId());
+        game.registerListener(webSocketGameStateRouter);
+        //gameController.getGame().registerListener(new PrintGameListener());
+        ClientWebSocket clientWebSocket = clientWebSocketRepository.get(dto.getPlayerId());
+        clientWebSocket.setCurrentGameId(gameController.getGame().getId());
+
+        gameController.start();
+
         GameDto gameDto = new GameDto(gameController.getGame());
         gameDto.setPlayingField(null);
         LOG.debug("Response: " + gameDto);
         return gameDto;
     }
 
-    /**
-     * Starts a new game.
-     *
-     * @return A GameDto object containing details about the new game.
-     */
-    @POST
-    @Path("singleplayer/{singlePlayerWebSocketId}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public GameDto startSinglePlayerGame(@PathParam("singlePlayerWebSocketId") String singlePlayerWebSocketId) {
-        GameController gameController = createSinglePlayerGameEngine(singlePlayerWebSocketId);
-        long gameEngineId = gameController.getId();
-        gameRepository.addGameEngine(gameEngineId, gameController);
-        GameDto gameDto = new GameDto(gameController.getGame());
-        LOG.debug("Response: " + gameDto);
-        return gameDto;
-    }
-
-    private GameController createAiGameEngine() {
-        GameController gameController = GameControllerFactory.getOnlineGameEngine();
-        gameController.start();
-        return gameController;
-    }
-
-
-    private GameController createSinglePlayerGameEngine(String playerWebSocketId) {
-        killAnyRunningGame(playerWebSocketId);
-
-        Player player1 = new Player(1, 33, 50, Direction.RIGHT);
-        Player player2 = new Player(2, 66, 50, Direction.LEFT);
-
-        PlayerController aiPlayerController = new SimplePlayerAi(player2);
-        ClientWebSocket clientWebSocket = clientWebSocketRepository.getClientWebSocket(playerWebSocketId);
-        WebSocketPlayerController webSocketPlayerController = new WebSocketPlayerController(player1, clientWebSocket);
-
-        GameController gameController = GameControllerFactory.getLocalGameEngine(player1, player2, webSocketPlayerController, aiPlayerController);
-
-        webSocketGameStateRouter.registerForUpdates(playerWebSocketId, gameController.getId());
-        gameController.getGame().registerListener(webSocketGameStateRouter);
-        //gameController.getGame().registerListener(new PrintGameListener());
-        clientWebSocket.setCurrentGameId(gameController.getGame().getId());
-        clientWebSocket.setPlayer(player1);
-        gameController.start();
-        return gameController;
-    }
-
     private void killAnyRunningGame(String playerWebSocketId) {
         //kill any existing game started by the player
-        ClientWebSocket webSocketGameStateListener = clientWebSocketRepository.getClientWebSocket(playerWebSocketId);
-        GameController runningGame = gameRepository.getGameEngine(webSocketGameStateListener.getCurrentGameId());
+        ClientWebSocket webSocketGameStateListener = clientWebSocketRepository.get(playerWebSocketId);
+        GameController runningGame = gameControllerRepository.get(webSocketGameStateListener.getCurrentGameId());
         if (runningGame != null) {
             runningGame.kill();
-            gameRepository.delete(webSocketGameStateListener.getCurrentGameId());
+            gameControllerRepository.delete(webSocketGameStateListener.getCurrentGameId());
         }
     }
 
@@ -163,8 +130,8 @@ public class GameApi {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public GameDto spectateGame(@PathParam("id") long id, SpectateDto spectateDto) {
-        GameController gameController = gameRepository.getGameEngine(id);
-        webSocketGameStateRouter.registerForUpdates(spectateDto.getPlayerId(), gameController.getId());
+        GameController gameController = gameControllerRepository.get(id);
+        webSocketGameStateRouter.registerForUpdates(spectateDto.getPlayerId(), gameController.getGameId());
 
         GameDto gameDto = new GameDto(gameController.getGame());
         LOG.debug("Response: " + gameDto);
@@ -189,21 +156,21 @@ public class GameApi {
         }
 
         if (command.getCommandString().toLowerCase().equals("pause")) {
-            GameController gameController = gameRepository.getGameEngine(gameEngineId);
+            GameController gameController = gameControllerRepository.get(gameEngineId);
             if (gameController != null) {
                 gameController.pauseThread();
             } else {
                 throw new WebApplicationException("Invalid game ID");
             }
         } else if (command.getCommandString().toLowerCase().equals("unpause")) {
-            GameController gameController = gameRepository.getGameEngine(gameEngineId);
+            GameController gameController = gameControllerRepository.get(gameEngineId);
             if (gameController != null) {
                 gameController.resumeThread();
             } else {
                 throw new WebApplicationException("Invalid game ID");
             }
         } else if (command.getCommandString().toLowerCase().equals("kill")) {
-            GameController gameController = gameRepository.getGameEngine(gameEngineId);
+            GameController gameController = gameControllerRepository.get(gameEngineId);
             if (gameController != null) {
                 gameController.kill();
             } else {

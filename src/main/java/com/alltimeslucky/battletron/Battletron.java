@@ -1,15 +1,14 @@
 package com.alltimeslucky.battletron;
 
 import com.alltimeslucky.battletron.game.controller.GameController;
-import com.alltimeslucky.battletron.game.view.PrintGameListener;
-import com.alltimeslucky.battletron.player.model.Direction;
 import com.alltimeslucky.battletron.game.controller.GameControllerFactory;
+import com.alltimeslucky.battletron.game.view.PrintGameListener;
 import com.alltimeslucky.battletron.player.controller.KeyboardLeftPlayerController;
 import com.alltimeslucky.battletron.player.controller.KeyboardPlayerController;
 import com.alltimeslucky.battletron.player.controller.KeyboardRightPlayerController;
-import com.alltimeslucky.battletron.player.model.Player;
 import com.alltimeslucky.battletron.player.controller.PlayerController;
 import com.alltimeslucky.battletron.player.controller.SimplePlayerAi;
+import com.alltimeslucky.battletron.player.model.Player;
 import com.alltimeslucky.battletron.ui.BattletronWindow;
 
 /**
@@ -55,24 +54,25 @@ public class Battletron {
      * @return a newly create GameController object
      */
     private GameController createOnePlayerGame() {
-        Player player1 = new Player(1, 33, 50, Direction.RIGHT);
-        Player player2 = new Player(2, 66, 50, Direction.LEFT);
+        Player player1 = new Player(1, 33, 50);
+        Player player2 = new Player(2, 66, 50);
         KeyboardPlayerController keyboardPlayerController = new KeyboardLeftPlayerController(player1);
         PlayerController player2Controller = new SimplePlayerAi(player2);
         window = new BattletronWindow(keyboardPlayerController, null);
-        GameController gameController = GameControllerFactory.getLocalGameEngine(player1, player2, keyboardPlayerController, player2Controller);
+        GameController gameController = GameControllerFactory.getLocalGameController(player1, player2,
+                keyboardPlayerController, player2Controller);
         gameController.getGame().registerListener(window.getGameStateListener());
         gameController.getGame().registerListener(new PrintGameListener());
         return gameController;
     }
 
     private GameController createTwoPlayerGame() {
-        Player player1 = new Player(1, 33, 50, Direction.RIGHT);
-        Player player2 = new Player(2, 66, 50, Direction.LEFT);
+        Player player1 = new Player(1, 33, 50);
+        Player player2 = new Player(2, 66, 50);
         KeyboardPlayerController keyboardPlayer1Controller = new KeyboardLeftPlayerController(player1);
         KeyboardPlayerController keyboardPlayer2Controller = new KeyboardRightPlayerController(player2);
         window = new BattletronWindow(keyboardPlayer1Controller, keyboardPlayer2Controller);
-        GameController gameController = GameControllerFactory.getLocalGameEngine(player1, player2,
+        GameController gameController = GameControllerFactory.getLocalGameController(player1, player2,
                 keyboardPlayer1Controller, keyboardPlayer2Controller);
         gameController.getGame().registerListener(window.getGameStateListener());
         gameController.getGame().registerListener(new PrintGameListener());
@@ -80,12 +80,13 @@ public class Battletron {
     }
 
     private GameController createAiGame() {
-        Player player1 = new Player(1, 33, 50, Direction.RIGHT);
-        Player player2 = new Player(2, 66, 50, Direction.LEFT);
+        Player player1 = new Player(1, 33, 50);
+        Player player2 = new Player(2, 66, 50);
         PlayerController player1Controller = new SimplePlayerAi(player1);
         PlayerController player2Controller = new SimplePlayerAi(player2);
         window = new BattletronWindow(null, null);
-        GameController gameController = GameControllerFactory.getLocalGameEngine(player1, player2, player1Controller, player2Controller);
+        GameController gameController = GameControllerFactory.getLocalGameController(player1, player2,
+                player1Controller, player2Controller);
         gameController.getGame().registerListener(window.getGameStateListener());
         gameController.getGame().registerListener(new PrintGameListener());
         return gameController;

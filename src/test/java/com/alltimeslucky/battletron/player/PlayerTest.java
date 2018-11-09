@@ -18,7 +18,7 @@ public class PlayerTest {
 
     @Before
     public void setup() {
-        player = new Player(1, X, Y, Direction.RIGHT);
+        player = new Player(1, X, Y);
     }
 
     @Test

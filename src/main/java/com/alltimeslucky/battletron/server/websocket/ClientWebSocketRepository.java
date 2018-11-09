@@ -28,7 +28,7 @@ public class ClientWebSocketRepository {
         data.put(onlinePlayerId, socket);
     }
 
-    public ClientWebSocket getClientWebSocket(String onlinePlayerId) {
+    public ClientWebSocket get(String onlinePlayerId) {
         return data.get(onlinePlayerId);
     }
 

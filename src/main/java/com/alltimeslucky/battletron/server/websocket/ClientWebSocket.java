@@ -23,11 +23,12 @@ public class ClientWebSocket extends WebSocketAdapter {
 
     private static final Logger LOG = LogManager.getLogger();
 
-    private Direction direction = Direction.RIGHT;
+    private Direction direction;
+    private Direction rightKeysDirection;
+    private Direction leftKeysDirection;
     private ObjectMapper objectMapper;
     private String playerId = "";
     private long currentGameId;
-    private Player player;
 
     public ClientWebSocket() {
         objectMapper = new ObjectMapper();
@@ -52,17 +53,34 @@ public class ClientWebSocket extends WebSocketAdapter {
         super.onWebSocketText(message);
         LOG.debug("Message from player (" + playerId + "): " + message);
 
-        if (message.equals("READY")) {
-            player.setReady(true);
-        } else if (message.equals("UP")) {
+        if (message.equals("W")) {
             direction = Direction.UP;
+            leftKeysDirection = Direction.UP;
+        } else if (message.equals("A")) {
+            direction = Direction.LEFT;
+            leftKeysDirection = Direction.LEFT;
+        } else if (message.equals("S")) {
+            direction = Direction.DOWN;
+            leftKeysDirection = Direction.DOWN;
+        } else if (message.equals("D")) {
+            direction = Direction.RIGHT;
+            leftKeysDirection = Direction.RIGHT;
+        }
+
+        if (message.equals("UP")) {
+            direction = Direction.UP;
+            rightKeysDirection = Direction.UP;
         } else if (message.equals("LEFT")) {
             direction = Direction.LEFT;
+            rightKeysDirection = Direction.LEFT;
         } else if (message.equals("DOWN")) {
             direction = Direction.DOWN;
+            rightKeysDirection = Direction.DOWN;
         } else if (message.equals("RIGHT")) {
             direction = Direction.RIGHT;
+            rightKeysDirection = Direction.RIGHT;
         }
+
     }
 
     @Override
@@ -82,6 +100,7 @@ public class ClientWebSocket extends WebSocketAdapter {
 
     /**
      * Sends the specified Game to the client browser.
+     *
      * @param game The instance Game to send.
      */
     public void sendGameState(Game game) {
@@ -105,7 +124,11 @@ public class ClientWebSocket extends WebSocketAdapter {
         this.currentGameId = currentGameId;
     }
 
-    public void setPlayer(Player player) {
-        this.player = player;
+    public Direction getRightKeysDirection() {
+        return rightKeysDirection;
+    }
+
+    public Direction getLeftKeysDirection() {
+        return leftKeysDirection;
     }
 }

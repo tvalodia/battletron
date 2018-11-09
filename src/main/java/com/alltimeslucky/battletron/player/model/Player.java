@@ -8,7 +8,6 @@ public class Player {
     private int id;
     private int positionX;
     private int positionY;
-    private boolean ready;
     private Direction direction;
 
     /**
@@ -21,14 +20,11 @@ public class Player {
      * @param id The ID of the player.
      * @param positionX The starting X coordinate in the playing field.
      * @param positionY The starting Y coordinate in the playing field.
-     * @param startingDirection The direction that the player should be facing at the start of the game.
      */
-    public Player(int id, int positionX, int positionY, Direction startingDirection) {
+    public Player(int id, int positionX, int positionY) {
         this.id = id;
         this.positionX = positionX;
         this.positionY = positionY;
-        this.direction = startingDirection;
-        this.ready = false;
     }
 
     public int getId() {
@@ -79,11 +75,7 @@ public class Player {
     }
 
     public boolean isReady() {
-        return ready;
-    }
-
-    public void setReady(boolean ready) {
-        this.ready = ready;
+        return direction != null;
     }
 
     public Direction getDirection() {

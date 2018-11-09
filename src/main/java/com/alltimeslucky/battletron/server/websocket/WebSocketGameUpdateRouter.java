@@ -25,7 +25,7 @@ public class WebSocketGameUpdateRouter implements GameListener {
     public void onGameStateUpdate(Game game) {
         playerGameMap.forEach((playerId, gameId) -> {
             if (game.getId() == gameId) {
-                clientWebSocketRepository.getClientWebSocket(playerId).sendGameState(game);
+                clientWebSocketRepository.get(playerId).sendGameState(game);
             }
         }
         );

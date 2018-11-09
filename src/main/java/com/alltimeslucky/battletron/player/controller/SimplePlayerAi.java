@@ -1,7 +1,7 @@
 package com.alltimeslucky.battletron.player.controller;
 
-import com.alltimeslucky.battletron.player.model.Direction;
 import com.alltimeslucky.battletron.game.model.Game;
+import com.alltimeslucky.battletron.player.model.Direction;
 import com.alltimeslucky.battletron.player.model.Player;
 
 import java.util.Random;
@@ -12,7 +12,6 @@ public class SimplePlayerAi implements PlayerController {
 
     public SimplePlayerAi(Player player) {
         this.player = player;
-        player.setReady(true);
     }
 
     /**
