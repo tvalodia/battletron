@@ -1,6 +1,7 @@
 package com.alltimeslucky.battletron.server.api.game;
 
 import com.alltimeslucky.battletron.game.controller.GameController;
+import com.alltimeslucky.battletron.game.controller.GameControllerFactory;
 import com.alltimeslucky.battletron.game.model.Game;
 import com.alltimeslucky.battletron.game.model.GameFactory;
 import com.alltimeslucky.battletron.player.controller.PlayerController;
@@ -93,7 +94,7 @@ public class GameApi {
 
         PlayerController player1Controller = PlayerControllerFactory.getPlayerController(dto.getPlayer1Type(), dto.getPlayerId(), player1);
         PlayerController player2Controller = PlayerControllerFactory.getPlayerController(dto.getPlayer2Type(), dto.getPlayerId(), player2);
-        GameController gameController = new GameController(game, player1Controller, player2Controller);
+        GameController gameController = GameControllerFactory.getGameController(game, player1Controller, player2Controller);
         gameControllerRepository.add(gameController.getGameId(), gameController);
 
         webSocketGameStateRouter.registerForUpdates(dto.getPlayerId(), gameController.getGameId());
@@ -130,6 +131,7 @@ public class GameApi {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public GameDto spectateGame(@PathParam("id") long id, SpectateDto spectateDto) {
+        killAnyRunningGame(spectateDto.getPlayerId());
         GameController gameController = gameControllerRepository.get(id);
         webSocketGameStateRouter.registerForUpdates(spectateDto.getPlayerId(), gameController.getGameId());
 
