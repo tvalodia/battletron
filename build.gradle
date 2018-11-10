@@ -24,6 +24,7 @@ sourceSets {
 dependencies {
     compile group: 'org.eclipse.jetty', name: 'jetty-server', version: '9.4.12.v20180830'
     compile group: 'org.eclipse.jetty', name: 'jetty-servlet', version: '9.4.12.v20180830'
+    compile group: 'org.eclipse.jetty', name: 'jetty-servlets', version: '9.4.12.v20180830'
     compile group: 'org.eclipse.jetty.websocket', name: 'websocket-api', version: '9.4.12.v20180830'
     compile group: 'org.eclipse.jetty.websocket', name: 'websocket-server', version: '9.4.12.v20180830'
     compile group: 'org.eclipse.jetty.websocket', name: 'websocket-servlet', version: '9.4.12.v20180830'

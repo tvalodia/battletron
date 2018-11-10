@@ -46,7 +46,6 @@ export class NewGameComponent implements OnInit {
   }
 
   public start() {
-    console.log("start()");
     this.gameService.createGame(this.playerId, this.player1Type, this.player2Type)
       .subscribe((data: Array<object>) => {
         console.log(data);

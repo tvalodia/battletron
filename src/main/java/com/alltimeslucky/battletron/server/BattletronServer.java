@@ -7,15 +7,18 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 
+import java.util.EnumSet;
+
+import javax.servlet.DispatcherType;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.DefaultServlet;
+import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
-
-
-//import org.apache.logging.log4j.L;
+import org.eclipse.jetty.servlets.CrossOriginFilter;
 
 /**
  * A Jetty-based application to run simulations on a headless server.
@@ -49,21 +52,30 @@ public class BattletronServer {
         DefaultServlet defaultServlet = new DefaultServlet();
         ServletHolder holderPwd = new ServletHolder("default-static", defaultServlet);
         holderPwd.setInitParameter("resourceBase", getStaticWebRootUri());
-        holderPwd.setInitParameter("dirAllowed","true");
-        holderPwd.setInitParameter("pathInfoOnly","true");
+        holderPwd.setInitParameter("dirAllowed", "true");
+        holderPwd.setInitParameter("pathInfoOnly", "true");
         context.addServlet(holderPwd, "/html/*");
 
         DefaultServlet webappDefaultServlet = new DefaultServlet();
         ServletHolder webappServletHolder = new ServletHolder("default-webapp", webappDefaultServlet);
         webappServletHolder.setInitParameter("resourceBase", getWebappWebRootUri());
-        webappServletHolder.setInitParameter("dirAllowed","true");
-        webappServletHolder.setInitParameter("pathInfoOnly","true");
+        webappServletHolder.setInitParameter("dirAllowed", "true");
+        webappServletHolder.setInitParameter("pathInfoOnly", "true");
         context.addServlet(webappServletHolder, "/*");
 
         // Add a websocket to a specific path spec
         //Use this when not injecting a dependency
         ServletHolder holderEvents = new ServletHolder("ws-player", BattletronWebSocketServlet.class);
         context.addServlet(holderEvents, "/player/*");
+
+        //Disabling the CORS security feature so that the Angular webapp hosted on the NodeJS live DEV server is allowed to
+        //communicate with this Jetty server.
+        FilterHolder cors = context.addFilter(CrossOriginFilter.class, "/*", EnumSet.of(DispatcherType.REQUEST));
+        cors.setInitParameter(CrossOriginFilter.ALLOWED_ORIGINS_PARAM, "*");
+        cors.setInitParameter(CrossOriginFilter.ACCESS_CONTROL_ALLOW_ORIGIN_HEADER, "*");
+        cors.setInitParameter(CrossOriginFilter.ALLOWED_METHODS_PARAM, "GET,POST,HEAD");
+        cors.setInitParameter(CrossOriginFilter.ALLOWED_HEADERS_PARAM, "X-Requested-With,Content-Type,Accept,Origin");
+
 
         try {
             jettyServer.start();

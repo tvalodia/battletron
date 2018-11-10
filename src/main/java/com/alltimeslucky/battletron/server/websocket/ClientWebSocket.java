@@ -1,6 +1,7 @@
 package com.alltimeslucky.battletron.server.websocket;
 
 import com.alltimeslucky.battletron.game.model.Game;
+import com.alltimeslucky.battletron.game.model.GameStatus;
 import com.alltimeslucky.battletron.player.model.Direction;
 import com.alltimeslucky.battletron.player.model.Player;
 import com.alltimeslucky.battletron.server.api.game.GameDto;
@@ -99,11 +100,17 @@ public class ClientWebSocket extends WebSocketAdapter {
     }
 
     /**
-     * Sends the specified Game to the client browser.
+     * Sends the specified Game to the client browser. Clears the player direction values when it detects that the game has ended.
      *
-     * @param game The instance Game to send.
+     * @param game The instance of Game to send.
      */
     public void sendGameState(Game game) {
+        if (game.getGameStatus().equals(GameStatus.COMPLETED_WINNER) || game.getGameStatus().equals(GameStatus.COMPLETED_DRAW)) {
+            leftKeysDirection = null;
+            rightKeysDirection = null;
+            direction = null;
+        }
+
         try {
             getSession().getRemote().sendString(objectMapper.writeValueAsString(new GameDto(game)));
         } catch (IOException e) {

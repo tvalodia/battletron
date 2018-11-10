@@ -2,101 +2,119 @@ import {
   Component,
   ElementRef,
   EventEmitter,
-  NgZone,
+  NgZone, OnDestroy,
   OnInit,
   Output,
   ViewChild
 } from '@angular/core';
-import {GameViewService} from "./game-view.service";
+import {Game, GameViewService} from "./game-view.service";
 
 @Component({
   selector: 'app-game-view',
   templateUrl: './game-view.component.html',
   styleUrls: ['./game-view.component.css']
 })
-export class GameViewComponent implements OnInit {
+export class GameViewComponent implements OnInit, OnDestroy {
 
-
+  BLOCK_SIZE: number = 5;
   @ViewChild('gameViewCanvas') canvasRef: ElementRef;
   playerId: string = '';
   @Output() newPlayerId = new EventEmitter<string>();
-  private running: boolean;
+  private game: Game;
 
   constructor(private ngZone: NgZone, private gameViewService: GameViewService) {
     gameViewService.subject.subscribe(msg => {
-      console.log("GameViewComponent - Response from websocket: " + msg.data);
-      if (msg.data.startsWith("id=")) {
-        this.playerId = msg.data.substr(3);
-        this.newPlayerId.emit(msg.data.substr(3));
+      if (msg.startsWith("id=")) {
+        this.playerId = msg.substr(3);
+        this.newPlayerId.emit(msg.substr(3));
+      } else {
+        this.game = JSON.parse(msg);
+        this.paint();
       }
     });
   }
 
   ngOnInit() {
-    this.running = true;
-    this.ngZone.runOutsideAngular(() => this.paint());
   }
 
   ngOnDestroy() {
-    this.running = false;
+    this.gameViewService.subject.unsubscribe();
+    console.log("ngOnDestroy");
   }
 
   private paint() {
-    // Check that we're still running.
-    if (!this.running) {
-      return;
-    }
-
     // Paint current frame
     let ctx: CanvasRenderingContext2D =
       this.canvasRef.nativeElement.getContext('2d');
 
-    // Draw background (which also effectively clears any previous drawing)
-    ctx.fillStyle = 'rgb(221, 0, 49)';
+    // // Draw background (which also effectively clears any previous drawing)
+    ctx.fillStyle = 'rgb(0, 0, 0)';
     // Clear any previous content.
-    ctx.clearRect(0, 0, 500, 500);
+    ctx.fillRect(0, 0, 500, 500);
+    ctx.lineWidth = 1;
 
-    // Draw the clip path that will mask everything else
-    // that we'll draw later.
-    ctx.beginPath();
-    ctx.moveTo(250, 60);
-    ctx.lineTo(63.8, 126.4);
-    ctx.lineTo(92.2, 372.6);
-    ctx.lineTo(250, 460);
-    ctx.lineTo(407.8, 372.6);
-    ctx.lineTo(436.2, 126.4);
-    ctx.moveTo(250, 104.2);
-    ctx.lineTo(133.6, 365.2);
-    ctx.lineTo(177, 365.2);
-    ctx.lineTo(200.4, 306.8);
-    ctx.lineTo(299.2, 306.8);
-    ctx.lineTo(325.2, 365.2);
-    ctx.lineTo(362.6, 365.2);
-    ctx.lineTo(250, 104.2);
-    ctx.moveTo(304, 270.8);
-    ctx.lineTo(216, 270.8);
-    ctx.lineTo(250, 189);
-    ctx.lineTo(284, 270.8);
-    ctx.clip('evenodd');
-
-    // Draw 50,000 circles at random points
-    ctx.beginPath();
-    ctx.fillStyle = '#DD0031';
-    for (let i=0 ; i < 50000 ; i++) {
-      let x = Math.random() * 500;
-      let y = Math.random() * 500;
-      ctx.moveTo(x, y);
-      ctx.arc(x, y, 1, 0, Math.PI * 2);
+    //Draw the players' trails
+    for (let x = 0; x < this.game.width; x++) {
+      for (let y = 0; y < this.game.height; y++) {
+        if (this.game.playingField[x][y] == this.game.player1.id) {
+          this.drawBlock(ctx, this.getScreenX(x), this.getScreenY(this.game.height, y), "blue");
+        }
+        if (this.game.playingField[x][y] == this.game.player2.id) {
+          this.drawBlock(ctx, this.getScreenX(x), this.getScreenY(this.game.height, y), "magenta");
+        }
+      }
     }
-    ctx.fill();
 
-    // Schedule next
-    requestAnimationFrame(() => this.paint());
+    //player 1's head
+    this.drawBlock(ctx, this.getScreenX(this.game.player1.positionX),
+      this.getScreenY(this.game.height, this.game.player1.positionY), "cyan");
+    //player 2's head
+    this.drawBlock(ctx, this.getScreenX(this.game.player2.positionX),
+      this.getScreenY(this.game.height, this.game.player2.positionY), "pink");
+
+
+  }
+
+  getScreenX(gameX: number) {
+    return gameX * this.BLOCK_SIZE;
+  }
+
+  getScreenY(playingFieldHeight: number, gameYCoordinate: number) {
+    return ((playingFieldHeight - 1) * this.BLOCK_SIZE) - (gameYCoordinate * this.BLOCK_SIZE);
+  }
+
+  drawBlock(ctx: CanvasRenderingContext2D, x: number, y: number, color: string) {
+    ctx.beginPath();
+    ctx.strokeStyle = color;
+    ctx.fillStyle = color;
+    ctx.fillRect(x, y, this.BLOCK_SIZE, this.BLOCK_SIZE);
+    ctx.stroke()
+  }
+
+  onKeydown(event) {
+    let key = event.which;
+
+    if (key === 87) {
+      this.sendMsg("W");
+    } else if (key === 83) {
+      this.sendMsg("S");
+    } else if (key === 65) {
+      this.sendMsg("A");
+    } else if (key === 68) {
+      this.sendMsg("D");
+    } else if (key === 38) {
+      this.sendMsg("UP");
+    } else if (key === 40) {
+      this.sendMsg("DOWN");
+    } else if (key === 37) {
+      this.sendMsg("LEFT");
+    } else if (key === 39) {
+      this.sendMsg("RIGHT");
+    }
   }
 
   sendMsg(direction: string) {
-    console.log('new message from client to websocket: ', {data: direction});
-    this.gameViewService.subject.next({data: direction});
+    this.gameViewService.subject.next(direction);
   }
 
 }

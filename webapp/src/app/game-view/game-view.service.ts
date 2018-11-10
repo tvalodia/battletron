@@ -1,12 +1,8 @@
 import {Injectable} from '@angular/core';
-import {Observable, Subject} from 'rxjs/Rx';
+import {Subject} from 'rxjs/Rx';
 import {WebsocketService} from './websocket.service';
 
-const CHAT_URL = 'ws://localhost:8080/player';
-
-export interface Response {
-  data: string;
-}
+const GAME_URL = 'ws://localhost:8080/player';
 
 export interface Game {
   id: number;
@@ -14,23 +10,28 @@ export interface Game {
   height: number;
   gameStatus: string;
   tickCount: number;
-  player1: object;
-  player2: object;
+  player1: Player;
+  player2: Player;
   playingField: number[][];
-  winner: object;
+  winner: Player;
+}
+
+export interface Player {
+  id: number;
+  positionX: number;
+  positionY: number;
 }
 
 @Injectable()
 export class GameViewService {
 
-  public subject: Subject<Response>;
+  public subject: Subject<string>;
 
   constructor(wsService: WebsocketService) {
-    this.subject = <Subject<Response>>wsService
-      .connect(CHAT_URL)
-      .map((response: MessageEvent): Response => {
-        console.log(response.data);
-        return { data: response.data}; //JSON.parse(response.data);
+    this.subject = <Subject<string>>wsService
+      .connect(GAME_URL)
+      .map((response: MessageEvent): string => {
+        return response.data; //JSON.parse(response.data);
       });
   }
 }
