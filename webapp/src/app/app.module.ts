@@ -10,6 +10,7 @@ import { NewGameComponent } from './new-game/new-game.component';
 import { GameViewComponent } from './game-view/game-view.component';
 import { HttpClientModule } from  '@angular/common/http';
 import { SpectateGameComponent } from './spectate-game/spectate-game.component';
+import { StatusPipe } from './spectate-game/status.pipe';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { SpectateGameComponent } from './spectate-game/spectate-game.component';
     MainMenuComponent,
     NewGameComponent,
     GameViewComponent,
-    SpectateGameComponent
+    SpectateGameComponent,
+    StatusPipe
   ],
   imports: [
     BrowserModule,
