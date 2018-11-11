@@ -9,13 +9,15 @@ import { BattletronMaterialModule } from './material';
 import { NewGameComponent } from './new-game/new-game.component';
 import { GameViewComponent } from './game-view/game-view.component';
 import { HttpClientModule } from  '@angular/common/http';
+import { SpectateGameComponent } from './spectate-game/spectate-game.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     MainMenuComponent,
     NewGameComponent,
-    GameViewComponent
+    GameViewComponent,
+    SpectateGameComponent
   ],
   imports: [
     BrowserModule,

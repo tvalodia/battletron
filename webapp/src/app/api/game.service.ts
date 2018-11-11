@@ -23,6 +23,10 @@ export class GameService {
     return  this.httpClient.get(this.API_URL);
   }
 
+  spectateGame(gameId: number, playerId: string){
+    return this.httpClient.post(this.API_URL + "/" + gameId + "/spectate" , { playerId: playerId});
+  }
+
   createGame(playerId: string,player1Type: string, player2Type: string){
     return this.httpClient.post(this.API_URL, { playerId: playerId, player1Type: player1Type, player2Type: player2Type});
   }

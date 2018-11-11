@@ -39,6 +39,7 @@ export class GameViewComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.gameViewService.subject.unsubscribe();
+    this.gameViewService.disconnect();
     console.log("ngOnDestroy");
   }
 
@@ -115,6 +116,11 @@ export class GameViewComponent implements OnInit, OnDestroy {
 
   sendMsg(direction: string) {
     this.gameViewService.subject.next(direction);
+  }
+
+  public setGame(game: Game) {
+    this.game = game;
+    this.paint();
   }
 
 }

@@ -27,11 +27,15 @@ export class GameViewService {
 
   public subject: Subject<string>;
 
-  constructor(wsService: WebsocketService) {
+  constructor(public wsService: WebsocketService) {
     this.subject = <Subject<string>>wsService
       .connect(GAME_URL)
       .map((response: MessageEvent): string => {
         return response.data; //JSON.parse(response.data);
       });
+  }
+
+  public disconnect() {
+    this.wsService.disconnect();
   }
 }

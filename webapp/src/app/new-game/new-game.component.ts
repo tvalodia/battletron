@@ -1,7 +1,6 @@
-import {AfterViewInit, Component, NgZone, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {GameViewService} from '../game-view/game-view.service';
 import {WebsocketService} from "../game-view/websocket.service";
-import {GameViewComponent} from "../game-view/game-view.component";
 import {GameService} from "../api/game.service";
 
 export interface PlayerType {
@@ -31,18 +30,10 @@ export class NewGameComponent implements OnInit {
   constructor(private gameService: GameService) {
   }
 
-  ngOnInit() {
-    this.getGames();
-  }
+  ngOnInit() {}
 
   onNewPlayerId(playerId: string) {
     this.playerId = playerId;
-  }
-
-  public getGames() {
-    this.gameService.getGames().subscribe((data: Array<object>) => {
-      console.log(data);
-    });
   }
 
   public start() {
