@@ -55,11 +55,12 @@ public class GameApi {
     @Produces(MediaType.APPLICATION_JSON)
     public List<GameDto> getAllGames() {
         List<GameDto> dtos = new LinkedList<>();
-        for (GameController gameController : gameControllerRepository.getAllGameEngines()) {
+        for (GameController gameController : gameControllerRepository.getAllGames()) {
             GameDto gameDto = new GameDto(gameController.getGame());
             gameDto.setPlayingField(null);
             dtos.add(gameDto);
         }
+
         LOG.debug("Response: " + dtos);
         return dtos;
     }
@@ -117,7 +118,7 @@ public class GameApi {
         GameController runningGame = gameControllerRepository.get(webSocketGameStateListener.getCurrentGameId());
         if (runningGame != null) {
             runningGame.kill();
-            gameControllerRepository.delete(webSocketGameStateListener.getCurrentGameId());
+           // gameControllerRepository.delete(webSocketGameStateListener.getCurrentGameId());
         }
     }
 
