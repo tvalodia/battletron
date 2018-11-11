@@ -1,3 +1,22 @@
 canvas:focus {
   outline: none;
 }
+
+.statusBar {
+  padding: 0 15px 0 15px;
+  display: block;
+  text-align: center;
+  font-size: 18px;
+}
+
+.game {
+  text-align: center;
+}
+
+.move {
+  float: left;
+}
+
+.gameOver {
+  float: right;
+}

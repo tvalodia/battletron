@@ -1,2 +1,11 @@
-<canvas tabindex="1" #gameViewCanvas width="500" height="500" (keydown)="onKeydown($event)">
-</canvas>
+<div class="game">
+  <div class="statusBar">
+  <span *ngIf="game">
+    <span class="move">Move: {{game.tickCount}}</span>
+      <span class="gameOver" *ngIf="game.gameStatus == 'COMPLETED_WINNER'">Player {{game.winner.id}} WINS!</span>
+      <span class="gameOver" *ngIf="game.gameStatus == 'COMPLETED_DRAW'">It's a DRAW!</span>
+    </span>
+  </div>
+  <canvas tabindex="1" #gameViewCanvas width="500" height="500" (keydown)="onKeydown($event)">
+  </canvas>
+</div>
