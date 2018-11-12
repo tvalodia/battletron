@@ -10,7 +10,7 @@ public class PlayerControllerFactory {
      * @param playerType The type of player
      * @param playerId The id of the player websocket.
      * @param player The instance of player
-     * @return
+     * @return an instance of PlayerController
      */
     public static PlayerController getPlayerController(String playerType, String playerId, Player player) {
         switch (playerType) {
