@@ -23,6 +23,7 @@ public class GameControllerRepository {
 
     /**
      * Returns the singleton instance of the Game Repository.
+     *
      * @return The singleton instance of the GameControllerRepository.
      */
     public static GameControllerRepository getInstance() {
@@ -32,6 +33,12 @@ public class GameControllerRepository {
         return instance;
     }
 
+    /**
+     * Inserts a new GameController into the repository.
+     *
+     * @param gameEngineId   The key to use for the GameController
+     * @param gameController The GameController to insert.
+     */
     public void add(long gameEngineId, GameController gameController) {
         data.put(gameEngineId, gameController);
     }
@@ -40,12 +47,17 @@ public class GameControllerRepository {
         return data.get(gameEngineId);
     }
 
+    /**
+     * Returns a sorted list in descending order of ID of all the games in this repository.
+     *
+     * @return A sorted list of games
+     */
     public List<GameController> getAllGames() {
         List<GameController> games = new ArrayList<>(data.values());
         games.sort((o1, o2) -> {
-            if (o1.getGameId() < o2.getGameId())
+            if (o1.getGameId() < o2.getGameId()) {
                 return 1;
-            else if (o1.getGameId() > o2.getGameId()) {
+            } else if (o1.getGameId() > o2.getGameId()) {
                 return -1;
             } else {
                 return 0;

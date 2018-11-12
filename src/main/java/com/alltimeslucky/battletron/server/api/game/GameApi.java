@@ -118,7 +118,7 @@ public class GameApi {
         GameController runningGame = gameControllerRepository.get(webSocketGameStateListener.getCurrentGameId());
         if (runningGame != null) {
             runningGame.kill();
-           // gameControllerRepository.delete(webSocketGameStateListener.getCurrentGameId());
+            // gameControllerRepository.delete(webSocketGameStateListener.getCurrentGameId());
         }
     }
 
