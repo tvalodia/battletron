@@ -10,7 +10,7 @@ import com.alltimeslucky.battletron.player.controller.PlayerController;
  */
 public class GameController extends Thread {
 
-    private static final int TICK_INTERVAL_MILLIS = 25;
+    private static final int TICK_INTERVAL_MILLIS = 50;
     private long lastTickTime;
     private final PlayerController player1Controller;
     private final PlayerController player2Controller;
@@ -24,7 +24,7 @@ public class GameController extends Thread {
      * @param player1Controller  Player 1's AI controller
      * @param player2Controller  Player 2's AI controller
      */
-    public GameController(Game game,
+    GameController(Game game,
                           PlayerController player1Controller, PlayerController player2Controller) {
         this.player1Controller = player1Controller;
         this.player2Controller = player2Controller;

@@ -20,9 +20,8 @@ public class KeyboardPlayerController implements PlayerController, KeyListener {
      * Constructor. Requires the player instance to be controlled by this controller.
      * @param player The player that this class will control.
      */
-    public KeyboardPlayerController(Player player) {
+    KeyboardPlayerController(Player player) {
         this.player = player;
-        this.direction = player.getDirection();
     }
 
     @Override

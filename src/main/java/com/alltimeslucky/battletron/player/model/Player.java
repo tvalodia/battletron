@@ -31,29 +31,24 @@ public class Player {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public int getPositionX() {
         return positionX;
-    }
-
-    public void setPositionX(int positionX) {
-        this.positionX = positionX;
     }
 
     public int getPositionY() {
         return positionY;
     }
 
-    public void setPositionY(int positionY) {
+    private void setPositionX(int positionX) {
+        this.positionX = positionX;
+    }
+
+    private void setPositionY(int positionY) {
         this.positionY = positionY;
     }
 
     /**
      * Moves the player in the current direction.
-     *
      */
     public void move() {
         switch (direction) {
