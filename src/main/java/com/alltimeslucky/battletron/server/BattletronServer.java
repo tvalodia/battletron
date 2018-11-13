@@ -38,11 +38,8 @@ public class BattletronServer {
      */
     public static void main(String[] args) throws Exception {
         LOG.info("Starting web server on port " + PORT);
-        ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
-        context.setContextPath("/");
 
         Server jettyServer = new Server(PORT);
-        jettyServer.setHandler(context);
 
         // Create the web app mainWebAppContext
         WebAppContext mainWebAppContext = new WebAppContext();
@@ -56,13 +53,6 @@ public class BattletronServer {
         jerseyServlet.setInitOrder(0);
 
         jerseyServlet.setInitParameter("jersey.config.server.provider.classnames", GameApi.class.getCanonicalName());
-
-        DefaultServlet defaultServlet = new DefaultServlet();
-        ServletHolder holderPwd = new ServletHolder("default-static", defaultServlet);
-        holderPwd.setInitParameter("resourceBase", getStaticWebRootUri());
-        holderPwd.setInitParameter("dirAllowed", "true");
-        holderPwd.setInitParameter("pathInfoOnly", "true");
-        context.addServlet(holderPwd, "/html/*");
 
         RewriteHandler urlRewriteHandler = new Html5PushStateConditionalRewriteHandler(mainWebAppContext);
         urlRewriteHandler.setRewriteRequestURI(true);
@@ -86,7 +76,7 @@ public class BattletronServer {
 
         //Disabling the CORS security feature so that the Angular webapp hosted on the NodeJS live DEV server is allowed to
         //communicate with this Jetty server.
-        FilterHolder cors = context.addFilter(CrossOriginFilter.class, "/*", EnumSet.of(DispatcherType.REQUEST));
+        FilterHolder cors = mainWebAppContext.addFilter(CrossOriginFilter.class, "/*", EnumSet.of(DispatcherType.REQUEST));
         cors.setInitParameter(CrossOriginFilter.ALLOWED_ORIGINS_PARAM, "*");
         cors.setInitParameter(CrossOriginFilter.ACCESS_CONTROL_ALLOW_ORIGIN_HEADER, "*");
         cors.setInitParameter(CrossOriginFilter.ALLOWED_METHODS_PARAM, "GET,POST,HEAD");
@@ -99,23 +89,6 @@ public class BattletronServer {
         } finally {
             jettyServer.destroy();
         }
-    }
-
-    private static String getStaticWebRootUri() throws URISyntaxException {
-        //Set up the Resource (static file hosting) servlet
-        // Figure out what path to serve content from
-        ClassLoader cl = BattletronServer.class.getClassLoader();
-        // We look for a file, as ClassLoader.getResource() is not
-        // designed to look for directories (we resolve the directory later)
-        URL f = cl.getResource("html/index.html");
-        if (f == null) {
-            throw new RuntimeException("Unable to find resource directory");
-        }
-
-        // Resolve file to directory
-        URI webRootUri = f.toURI().resolve("./").normalize();
-        LOG.info("Static WebRoot is " + webRootUri);
-        return webRootUri.toString();
     }
 
     private static String getWebappWebRootUri() throws URISyntaxException {
