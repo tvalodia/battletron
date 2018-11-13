@@ -3,22 +3,24 @@ package com.alltimeslucky.battletron.server;
 import com.alltimeslucky.battletron.server.api.game.GameApi;
 import com.alltimeslucky.battletron.server.websocket.BattletronWebSocketServlet;
 
+import java.util.EnumSet;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
-
-import java.util.EnumSet;
 
 import javax.servlet.DispatcherType;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.eclipse.jetty.rewrite.handler.RewriteHandler;
+import org.eclipse.jetty.rewrite.handler.RewriteRegexRule;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.servlets.CrossOriginFilter;
+import org.eclipse.jetty.webapp.WebAppContext;
 
 /**
  * A Jetty-based application to run simulations on a headless server.
@@ -42,8 +44,14 @@ public class BattletronServer {
         Server jettyServer = new Server(PORT);
         jettyServer.setHandler(context);
 
+        // Create the web app mainWebAppContext
+        WebAppContext mainWebAppContext = new WebAppContext();
+        mainWebAppContext.setContextPath("/");
+        mainWebAppContext.setWelcomeFiles(new String[]{"index.html"});
+        mainWebAppContext.setResourceBase(getWebappWebRootUri());
+
         //Set up the API servlet
-        ServletHolder jerseyServlet = context.addServlet(
+        ServletHolder jerseyServlet = mainWebAppContext.addServlet(
                 org.glassfish.jersey.servlet.ServletContainer.class, "/api/*");
         jerseyServlet.setInitOrder(0);
 
@@ -56,17 +64,25 @@ public class BattletronServer {
         holderPwd.setInitParameter("pathInfoOnly", "true");
         context.addServlet(holderPwd, "/html/*");
 
-        DefaultServlet webappDefaultServlet = new DefaultServlet();
-        ServletHolder webappServletHolder = new ServletHolder("default-webapp", webappDefaultServlet);
-        webappServletHolder.setInitParameter("resourceBase", getWebappWebRootUri());
-        webappServletHolder.setInitParameter("dirAllowed", "true");
-        webappServletHolder.setInitParameter("pathInfoOnly", "true");
-        context.addServlet(webappServletHolder, "/*");
+        RewriteHandler urlRewriteHandler = new Html5PushStateConditionalRewriteHandler(mainWebAppContext);
+        urlRewriteHandler.setRewriteRequestURI(true);
+        urlRewriteHandler.setRewritePathInfo(false);
+        urlRewriteHandler.setOriginalPathAttribute("requestedPath");
+
+        RewriteRegexRule html5pushState = new RewriteRegexRule();
+        html5pushState.setRegex("/.*");
+        html5pushState.setReplacement("/index.html");
+        urlRewriteHandler.addRule(html5pushState);
+
+        // Handler Structure: UrlRewriteHandler will filter URLs before they reach the webapp context.
+        urlRewriteHandler.setHandler(mainWebAppContext);
+        jettyServer.setHandler(urlRewriteHandler);
+
 
         // Add a websocket to a specific path spec
         //Use this when not injecting a dependency
         ServletHolder holderEvents = new ServletHolder("ws-player", BattletronWebSocketServlet.class);
-        context.addServlet(holderEvents, "/player/*");
+        mainWebAppContext.addServlet(holderEvents, "/player/*");
 
         //Disabling the CORS security feature so that the Angular webapp hosted on the NodeJS live DEV server is allowed to
         //communicate with this Jetty server.
