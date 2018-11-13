@@ -15,9 +15,7 @@ import org.apache.logging.log4j.Logger;
 import org.eclipse.jetty.rewrite.handler.RewriteHandler;
 import org.eclipse.jetty.rewrite.handler.RewriteRegexRule;
 import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.FilterHolder;
-import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.servlets.CrossOriginFilter;
 import org.eclipse.jetty.webapp.WebAppContext;
@@ -63,11 +61,9 @@ public class BattletronServer {
         html5pushState.setRegex("/.*");
         html5pushState.setReplacement("/index.html");
         urlRewriteHandler.addRule(html5pushState);
-
         // Handler Structure: UrlRewriteHandler will filter URLs before they reach the webapp context.
         urlRewriteHandler.setHandler(mainWebAppContext);
         jettyServer.setHandler(urlRewriteHandler);
-
 
         // Add a websocket to a specific path spec
         //Use this when not injecting a dependency
@@ -81,7 +77,6 @@ public class BattletronServer {
         cors.setInitParameter(CrossOriginFilter.ACCESS_CONTROL_ALLOW_ORIGIN_HEADER, "*");
         cors.setInitParameter(CrossOriginFilter.ALLOWED_METHODS_PARAM, "GET,POST,HEAD");
         cors.setInitParameter(CrossOriginFilter.ALLOWED_HEADERS_PARAM, "X-Requested-With,Content-Type,Accept,Origin");
-
 
         try {
             jettyServer.start();
