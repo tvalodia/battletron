@@ -1,5 +1,6 @@
 package com.alltimeslucky.battletron;
 
+import com.alltimeslucky.battletron.config.BattletronModule;
 import com.alltimeslucky.battletron.game.controller.GameController;
 import com.alltimeslucky.battletron.game.controller.GameControllerFactory;
 import com.alltimeslucky.battletron.game.view.PrintGameListener;
@@ -10,6 +11,8 @@ import com.alltimeslucky.battletron.player.controller.PlayerController;
 import com.alltimeslucky.battletron.player.controller.SimplePlayerAi;
 import com.alltimeslucky.battletron.player.model.Player;
 import com.alltimeslucky.battletron.ui.BattletronWindow;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 
 /**
  * This class bootstraps the simulation.
@@ -24,13 +27,15 @@ public class Battletron {
      * @param args Program arguments
      */
     public static void main(String[] args) {
-        new Battletron().play();
+        Injector injector = Guice.createInjector(new BattletronModule());
+        injector.getInstance(Battletron.class).play();
     }
 
     /**
      * Constructor. Creates the core components for the simulation.
      */
     public Battletron() {
+
         gameController = createTwoPlayerGame();
         window.initialise();
 

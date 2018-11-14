@@ -24,11 +24,14 @@ public class Html5PushStateConditionalRewriteHandler extends RewriteHandler {
     }
 
     @Override
-    public void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+    public void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response)
+            throws IOException, ServletException {
+
         if (isStarted()) {
 
             final MappedResource<ServletHolder> mappedServlet = webAppContext.getServletHandler().getMappedServlet(target);
-            boolean fileExists = (mappedServlet.getResource().getServlet().getServletConfig().getServletContext().getResource(target) != null);
+            boolean fileExists = (mappedServlet.getResource().getServlet()
+                                                             .getServletConfig().getServletContext().getResource(target) != null);
             boolean isDefaultServlet = mappedServlet.getResource().getName().equals("default");
 
             // Do not interfere with urls that either :
@@ -41,8 +44,9 @@ public class Html5PushStateConditionalRewriteHandler extends RewriteHandler {
                 // Pass along unchanged
                 if (!baseRequest.isHandled()) {
                     Handler handler = _handler;
-                    if (handler != null)
+                    if (handler != null) {
                         handler.handle(target, baseRequest, request, response);
+                    }
                 }
             }
         }

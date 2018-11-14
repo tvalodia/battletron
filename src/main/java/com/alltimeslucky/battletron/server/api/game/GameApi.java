@@ -15,6 +15,7 @@ import com.alltimeslucky.battletron.server.websocket.WebSocketGameUpdateRouter;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -40,6 +41,7 @@ public class GameApi {
     /**
      * Constructor.
      */
+    @Inject
     public GameApi() {
         gameControllerRepository = GameControllerRepository.getInstance();
         clientWebSocketRepository = ClientWebSocketRepository.getInstance();

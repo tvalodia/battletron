@@ -1,12 +1,14 @@
 package com.alltimeslucky.battletron.server;
 
-import com.alltimeslucky.battletron.server.api.game.GameApi;
+import com.alltimeslucky.battletron.config.BattletronModule;
 import com.alltimeslucky.battletron.server.websocket.BattletronWebSocketServlet;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 
-import java.util.EnumSet;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.EnumSet;
 
 import javax.servlet.DispatcherType;
 
@@ -19,6 +21,8 @@ import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.servlets.CrossOriginFilter;
 import org.eclipse.jetty.webapp.WebAppContext;
+import org.glassfish.jersey.server.ResourceConfig;
+import org.glassfish.jersey.servlet.ServletContainer;
 
 /**
  * A Jetty-based application to run simulations on a headless server.
@@ -37,20 +41,19 @@ public class BattletronServer {
     public static void main(String[] args) throws Exception {
         LOG.info("Starting web server on port " + PORT);
 
-        Server jettyServer = new Server(PORT);
-
         // Create the web app mainWebAppContext
         WebAppContext mainWebAppContext = new WebAppContext();
         mainWebAppContext.setContextPath("/");
         mainWebAppContext.setWelcomeFiles(new String[]{"index.html"});
         mainWebAppContext.setResourceBase(getWebappWebRootUri());
 
-        //Set up the API servlet
-        ServletHolder jerseyServlet = mainWebAppContext.addServlet(
-                org.glassfish.jersey.servlet.ServletContainer.class, "/api/*");
-        jerseyServlet.setInitOrder(0);
+        Injector injector = Guice.createInjector(new BattletronModule());
 
-        jerseyServlet.setInitParameter("jersey.config.server.provider.classnames", GameApi.class.getCanonicalName());
+        ResourceConfig config = buildResourceConfig(injector);
+        ServletContainer jerseyServletContainer = new org.glassfish.jersey.servlet.ServletContainer(config);
+        ServletHolder jerseyServletHolder = new ServletHolder(jerseyServletContainer);
+        //Set up the API servlet
+        mainWebAppContext.addServlet(jerseyServletHolder, "/api/*");
 
         RewriteHandler urlRewriteHandler = new Html5PushStateConditionalRewriteHandler(mainWebAppContext);
         urlRewriteHandler.setRewriteRequestURI(true);
@@ -63,11 +66,13 @@ public class BattletronServer {
         urlRewriteHandler.addRule(html5pushState);
         // Handler Structure: UrlRewriteHandler will filter URLs before they reach the webapp context.
         urlRewriteHandler.setHandler(mainWebAppContext);
+
+        Server jettyServer = new Server(PORT);
         jettyServer.setHandler(urlRewriteHandler);
 
         // Add a websocket to a specific path spec
         //Use this when not injecting a dependency
-        ServletHolder holderEvents = new ServletHolder("ws-player", BattletronWebSocketServlet.class);
+        ServletHolder holderEvents = new ServletHolder("ws-player", injector.getInstance(BattletronWebSocketServlet.class));
         mainWebAppContext.addServlet(holderEvents, "/player/*");
 
         //Disabling the CORS security feature so that the Angular webapp hosted on the NodeJS live DEV server is allowed to
@@ -92,11 +97,17 @@ public class BattletronServer {
         if (f == null) {
             throw new RuntimeException("Unable to find resource directory");
         }
-
         // Resolve file to directory
         URI webRootUri = f.toURI().resolve("./").normalize();
         LOG.info("Webapp WebRoot is " + webRootUri);
         return webRootUri.toString();
+    }
+
+    private static ResourceConfig buildResourceConfig(Injector injector) {
+        ResourceConfig config = new ResourceConfig();
+        config.register(new GuiceToHK2(injector));
+        config.packages("com.alltimeslucky.battletron");
+        return config;
     }
 }
 
