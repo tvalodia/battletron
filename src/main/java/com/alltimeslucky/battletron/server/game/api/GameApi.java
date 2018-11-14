@@ -82,7 +82,7 @@ public class GameApi {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     public GameDto createGame(NewGameDto dto) {
-        Game game = gameService.createGame(dto.getPlayerId(), dto.getPlayer1Type(), dto.getPlayer1Type());
+        Game game = gameService.createGame(dto.getPlayerId(), dto.getPlayer1Type(), dto.getPlayer2Type());
         GameDto gameDto = new GameDto(game);
         gameDto.setPlayingField(null);
         LOG.debug("Response: " + gameDto);
