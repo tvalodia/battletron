@@ -2,7 +2,7 @@ package com.alltimeslucky.battletron.game.view;
 
 import com.alltimeslucky.battletron.game.model.Game;
 import com.alltimeslucky.battletron.game.model.GameListener;
-import com.alltimeslucky.battletron.server.api.game.GameDto;
+import com.alltimeslucky.battletron.server.game.api.dto.GameDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 

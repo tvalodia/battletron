@@ -1,10 +1,8 @@
-package com.alltimeslucky.battletron.server.api.game;
+package com.alltimeslucky.battletron.server.game.repository;
 
 import com.alltimeslucky.battletron.game.controller.GameController;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -13,24 +11,10 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class GameControllerRepository {
 
-    private static GameControllerRepository instance;
     private ConcurrentHashMap<Long, GameController> data;
 
-
-    private GameControllerRepository() {
+    public GameControllerRepository() {
         data = new ConcurrentHashMap<>();
-    }
-
-    /**
-     * Returns the singleton instance of the Game Repository.
-     *
-     * @return The singleton instance of the GameControllerRepository.
-     */
-    public static GameControllerRepository getInstance() {
-        if (instance == null) {
-            instance = new GameControllerRepository();
-        }
-        return instance;
     }
 
     /**
@@ -52,7 +36,7 @@ public class GameControllerRepository {
      *
      * @return A sorted list of games
      */
-    public List<GameController> getAllGames() {
+    public List<GameController> getAllGameControllers() {
         List<GameController> games = new ArrayList<>(data.values());
         games.sort((o1, o2) -> {
             if (o1.getGameId() < o2.getGameId()) {

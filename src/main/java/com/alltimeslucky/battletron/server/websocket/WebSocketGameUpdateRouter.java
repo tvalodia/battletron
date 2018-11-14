@@ -6,6 +6,8 @@ import com.alltimeslucky.battletron.game.model.GameListener;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import javax.inject.Inject;
+
 /**
  * This class listens for Game updates and routes them to the
  * mapped sockets.
@@ -13,11 +15,12 @@ import java.util.concurrent.ConcurrentHashMap;
 public class WebSocketGameUpdateRouter implements GameListener {
 
     private Map<String, Long> playerGameMap;
-    private ClientWebSocketRepository clientWebSocketRepository;
+    private final ClientWebSocketRepository clientWebSocketRepository;
 
-    public WebSocketGameUpdateRouter() {
+    @Inject
+    public WebSocketGameUpdateRouter(ClientWebSocketRepository clientWebSocketRepository) {
         playerGameMap = new ConcurrentHashMap<>();
-        clientWebSocketRepository = ClientWebSocketRepository.getInstance();
+        this.clientWebSocketRepository = clientWebSocketRepository;
     }
 
 

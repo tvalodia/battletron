@@ -3,8 +3,7 @@ package com.alltimeslucky.battletron.server.websocket;
 import com.alltimeslucky.battletron.game.model.Game;
 import com.alltimeslucky.battletron.game.model.GameStatus;
 import com.alltimeslucky.battletron.player.model.Direction;
-import com.alltimeslucky.battletron.player.model.Player;
-import com.alltimeslucky.battletron.server.api.game.GameDto;
+import com.alltimeslucky.battletron.server.game.api.dto.GameDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
@@ -30,8 +29,12 @@ public class ClientWebSocket extends WebSocketAdapter {
     private ObjectMapper objectMapper;
     private String playerId = "";
     private long currentGameId;
+    private ClientWebSocketRepository clientWebSocketRepository;
+    private WebSocketGameUpdateRouter webSocketGameUpdateRouter;
 
-    public ClientWebSocket() {
+    public ClientWebSocket(ClientWebSocketRepository clientWebSocketRepository, WebSocketGameUpdateRouter webSocketGameUpdateRouter) {
+        this.clientWebSocketRepository = clientWebSocketRepository;
+        this.webSocketGameUpdateRouter = webSocketGameUpdateRouter;
         objectMapper = new ObjectMapper();
     }
 
@@ -40,7 +43,7 @@ public class ClientWebSocket extends WebSocketAdapter {
         super.onWebSocketConnect(session);
         LOG.debug("New WebSocket connection: " + getSession());
         playerId = UUID.randomUUID().toString();
-        ClientWebSocketRepository.getInstance().addOnlinePlayerSocket(playerId, this);
+        clientWebSocketRepository.add(playerId, this);
         try {
             session.getRemote().sendString("id=" + playerId);
         } catch (IOException e) {
@@ -88,15 +91,15 @@ public class ClientWebSocket extends WebSocketAdapter {
     public void onWebSocketClose(int statusCode, String reason) {
         super.onWebSocketClose(statusCode, reason);
         LOG.info("Socket Closed: [" + statusCode + "] " + reason);
-        ClientWebSocketRepository.getInstance().delete(playerId);
-        WebSocketGameStateRouterFactory.getWebSocketGameStateUpdateRouter().deregisterForUpdates(playerId);
+        clientWebSocketRepository.delete(playerId);
+        webSocketGameUpdateRouter.deregisterForUpdates(playerId);
     }
 
     @Override
     public void onWebSocketError(Throwable cause) {
         super.onWebSocketError(cause);
         LOG.error(cause);
-        ClientWebSocketRepository.getInstance().delete(playerId);
+        clientWebSocketRepository.delete(playerId);
     }
 
     /**

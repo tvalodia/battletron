@@ -3,7 +3,16 @@ package com.alltimeslucky.battletron.player.controller;
 import com.alltimeslucky.battletron.player.model.Player;
 import com.alltimeslucky.battletron.server.websocket.ClientWebSocketRepository;
 
+import javax.inject.Inject;
+
 public class PlayerControllerFactory {
+
+    private ClientWebSocketRepository clientWebSocketRepository;
+
+    @Inject
+    public PlayerControllerFactory(ClientWebSocketRepository clientWebSocketRepository) {
+        this.clientWebSocketRepository = clientWebSocketRepository;
+    }
 
     /**
      * Returns a PlayerController implementation based on the give inputs.
@@ -12,11 +21,11 @@ public class PlayerControllerFactory {
      * @param player The instance of player
      * @return an instance of PlayerController
      */
-    public static PlayerController getPlayerController(String playerType, String playerId, Player player) {
+    public PlayerController getPlayerController(String playerType, String playerId, Player player) {
         switch (playerType) {
-            case "w-a-s-d": return new WebSocketLeftKeysPlayerController(player, ClientWebSocketRepository.getInstance().get(playerId));
-            case "arrowKeys": return new WebSocketRightKeysPlayerController(player, ClientWebSocketRepository.getInstance().get(playerId));
-            case "keyboard": return new WebSocketPlayerController(player, ClientWebSocketRepository.getInstance().get(playerId));
+            case "w-a-s-d": return new WebSocketLeftKeysPlayerController(player, clientWebSocketRepository.get(playerId));
+            case "arrowKeys": return new WebSocketRightKeysPlayerController(player, clientWebSocketRepository.get(playerId));
+            case "keyboard": return new WebSocketPlayerController(player, clientWebSocketRepository.get(playerId));
             case "simpleAi": return new SimplePlayerAi(player);
             case "downLeftAi": return new DownLeftPlayerController(player);
 

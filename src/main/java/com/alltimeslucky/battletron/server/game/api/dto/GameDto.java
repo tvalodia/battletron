@@ -1,4 +1,4 @@
-package com.alltimeslucky.battletron.server.api.game;
+package com.alltimeslucky.battletron.server.game.api.dto;
 
 import com.alltimeslucky.battletron.game.model.Game;
 import com.alltimeslucky.battletron.game.model.GameStatus;

@@ -4,27 +4,13 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class ClientWebSocketRepository {
 
-    private static ClientWebSocketRepository instance;
     private ConcurrentHashMap<String, ClientWebSocket> data;
 
-
-    private ClientWebSocketRepository() {
+    public ClientWebSocketRepository() {
         data = new ConcurrentHashMap<>();
     }
 
-    /**
-     * Returns the singleton instance of the ClientWebSocketRepository.
-     *
-     * @return The instance of ClientWebSocketRepository
-     */
-    public static ClientWebSocketRepository getInstance() {
-        if (instance == null) {
-            instance = new ClientWebSocketRepository();
-        }
-        return instance;
-    }
-
-    public void addOnlinePlayerSocket(String onlinePlayerId, ClientWebSocket socket) {
+    public void add(String onlinePlayerId, ClientWebSocket socket) {
         data.put(onlinePlayerId, socket);
     }
 

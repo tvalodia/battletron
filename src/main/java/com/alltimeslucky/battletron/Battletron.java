@@ -21,6 +21,7 @@ public class Battletron {
 
     private GameController gameController;
     private BattletronWindow window;
+    private GameControllerFactory gameControllerFactory;
 
     /**
      * Main entry point into the application.
@@ -34,7 +35,8 @@ public class Battletron {
     /**
      * Constructor. Creates the core components for the simulation.
      */
-    public Battletron() {
+    public Battletron(GameControllerFactory gameControllerFactory) {
+        this.gameControllerFactory = gameControllerFactory;
 
         gameController = createTwoPlayerGame();
         window.initialise();
@@ -64,7 +66,7 @@ public class Battletron {
         KeyboardPlayerController keyboardPlayerController = new KeyboardLeftPlayerController(player1);
         PlayerController player2Controller = new SimplePlayerAi(player2);
         window = new BattletronWindow(keyboardPlayerController, null);
-        GameController gameController = GameControllerFactory.getGameController(player1, player2,
+        GameController gameController = gameControllerFactory.getGameController(player1, player2,
                 keyboardPlayerController, player2Controller);
         gameController.getGame().registerListener(window.getGameStateListener());
         gameController.getGame().registerListener(new PrintGameListener());
@@ -77,7 +79,7 @@ public class Battletron {
         KeyboardPlayerController keyboardPlayer1Controller = new KeyboardLeftPlayerController(player1);
         KeyboardPlayerController keyboardPlayer2Controller = new KeyboardRightPlayerController(player2);
         window = new BattletronWindow(keyboardPlayer1Controller, keyboardPlayer2Controller);
-        GameController gameController = GameControllerFactory.getGameController(player1, player2,
+        GameController gameController = gameControllerFactory.getGameController(player1, player2,
                 keyboardPlayer1Controller, keyboardPlayer2Controller);
         gameController.getGame().registerListener(window.getGameStateListener());
         gameController.getGame().registerListener(new PrintGameListener());
@@ -90,7 +92,7 @@ public class Battletron {
         PlayerController player1Controller = new SimplePlayerAi(player1);
         PlayerController player2Controller = new SimplePlayerAi(player2);
         window = new BattletronWindow(null, null);
-        GameController gameController = GameControllerFactory.getGameController(player1, player2,
+        GameController gameController = gameControllerFactory.getGameController(player1, player2,
                 player1Controller, player2Controller);
         gameController.getGame().registerListener(window.getGameStateListener());
         gameController.getGame().registerListener(new PrintGameListener());
