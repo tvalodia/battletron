@@ -30,6 +30,7 @@ public class GameServiceImpl implements GameService {
     private WebSocketGameUpdateRouter webSocketGameStateRouter;
     private PlayerControllerFactory playerControllerFactory;
     private GameControllerFactory gameControllerFactory;
+    private GameFactory gameFactory;
 
     /**
      * Constructor.
@@ -37,12 +38,13 @@ public class GameServiceImpl implements GameService {
     @Inject
     public GameServiceImpl(GameControllerRepository gameControllerRepository, ClientWebSocketRepository clientWebSocketRepository,
                            WebSocketGameUpdateRouter webSocketGameStateRouter, PlayerControllerFactory playerControllerFactory,
-                           GameControllerFactory gameControllerFactory) {
+                           GameControllerFactory gameControllerFactory, GameFactory gameFactory) {
         this.gameControllerRepository = gameControllerRepository;
         this.clientWebSocketRepository = clientWebSocketRepository;
         this.webSocketGameStateRouter = webSocketGameStateRouter;
         this.playerControllerFactory = playerControllerFactory;
         this.gameControllerFactory = gameControllerFactory;
+        this.gameFactory = gameFactory;
     }
 
     /**
@@ -77,15 +79,12 @@ public class GameServiceImpl implements GameService {
      */
     public Game createGame(String playerId, String player1Type, String player2Type) {
         killAnyRunningGame(playerId);
-        Player player1 = new Player(1, 33, 50);
-        Player player2 = new Player(2, 66, 50);
-        Game game = GameFactory.getGame(player1, player2);
 
-        PlayerController player1Controller = playerControllerFactory.getPlayerController(player1Type, playerId, player1);
-        PlayerController player2Controller = playerControllerFactory.getPlayerController(player2Type, playerId, player2);
-        GameController gameController = gameControllerFactory.getGameController(game, player1Controller, player2Controller);
+        Game game = gameFactory.get();
+        PlayerController player1Controller = playerControllerFactory.getPlayerController(player1Type, playerId, game.getPlayer1());
+        PlayerController player2Controller = playerControllerFactory.getPlayerController(player2Type, playerId, game.getPlayer2());
+        GameController gameController = gameControllerFactory.get(game, player1Controller, player2Controller);
         gameControllerRepository.add(gameController.getGameId(), gameController);
-
         webSocketGameStateRouter.registerForUpdates(playerId, gameController.getGameId());
         game.registerListener(webSocketGameStateRouter);
         //gameController.getGame().registerListener(new PrintGameListener());

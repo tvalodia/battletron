@@ -1,5 +1,7 @@
 package com.alltimeslucky.battletron.config;
 
+import com.alltimeslucky.battletron.game.controller.GameControllerFactory;
+import com.alltimeslucky.battletron.game.model.GameFactory;
 import com.alltimeslucky.battletron.server.game.api.GameApi;
 import com.alltimeslucky.battletron.server.game.repository.GameControllerRepository;
 import com.alltimeslucky.battletron.server.game.service.GameService;
@@ -16,5 +18,7 @@ public class BattletronModule extends AbstractModule {
         bind(GameControllerRepository.class).asEagerSingleton();
         bind(ClientWebSocketRepository.class).asEagerSingleton();
         bind(WebSocketGameUpdateRouter.class).asEagerSingleton();
+        bind(GameControllerFactory.class).asEagerSingleton();
+        bind(GameFactory.class).asEagerSingleton();
     }
 }

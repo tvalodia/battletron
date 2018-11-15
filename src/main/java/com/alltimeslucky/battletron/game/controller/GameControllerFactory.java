@@ -15,19 +15,8 @@ public class GameControllerFactory {
      *
      * @return An instance of GameController
      */
-    public GameController getGameController(Player player1, Player player2,
-                                            PlayerController player1Controller, PlayerController player2Controller) {
-        Game game = GameFactory.getGame(player1, player2);
-        return new GameController(game, player1Controller, player2Controller);
-    }
-
-    /**
-     * Instantiates a GameController with the specified values.
-     *
-     * @return An instance of GameController
-     */
-    public GameController getGameController(Game game,
-                                            PlayerController player1Controller, PlayerController player2Controller) {
+    public GameController get(Game game,
+                              PlayerController player1Controller, PlayerController player2Controller) {
         return new GameController(game, player1Controller, player2Controller);
     }
 
