@@ -28,7 +28,7 @@ public interface GameService {
      * @param player2Type The type pf player for player 2
      * @return A new GameController
      */
-     Game createGame(String playerId, String player1Type, String player2Type);
+    Game createGame(String playerId, String player1Type, String player2Type);
 
     /**
      * Start spectating a game.
@@ -39,6 +39,7 @@ public interface GameService {
 
     /**
      * Pauses the specified game.
+     *
      * @param gameId The id of the game to pause
      * @throws Exception Thrown when the gameId is invalid
      */
@@ -46,6 +47,7 @@ public interface GameService {
 
     /**
      * Resumes the specified game.
+     *
      * @param gameId The id of the game to resume
      * @throws Exception Thrown when the gameId is invalid
      */
@@ -53,6 +55,7 @@ public interface GameService {
 
     /**
      * Deletes the specified game.
+     *
      * @param gameId The id of the game to delete
      * @throws Exception Thrown when the gameId is invalid
      */

@@ -32,6 +32,11 @@ public class ClientWebSocket extends WebSocketAdapter {
     private ClientWebSocketRepository clientWebSocketRepository;
     private WebSocketGameUpdateRouter webSocketGameUpdateRouter;
 
+    /**
+     * Constructor.
+     * @param clientWebSocketRepository The ClientWebSocketRepository instance use to store sockets.
+     * @param webSocketGameUpdateRouter The WebSocketGameUpdateRouter used to register this socket for game updates.
+     */
     public ClientWebSocket(ClientWebSocketRepository clientWebSocketRepository, WebSocketGameUpdateRouter webSocketGameUpdateRouter) {
         this.clientWebSocketRepository = clientWebSocketRepository;
         this.webSocketGameUpdateRouter = webSocketGameUpdateRouter;

@@ -125,7 +125,7 @@ public class GameApi {
         if (command.getCommandString().toLowerCase().equals("pause")) {
             gameService.pauseGame(gameEngineId);
         } else if (command.getCommandString().toLowerCase().equals("unpause")) {
-             gameService.resumeGame(gameEngineId);
+            gameService.resumeGame(gameEngineId);
         } else if (command.getCommandString().toLowerCase().equals("kill")) {
             gameService.deleteGame(gameEngineId);
         }

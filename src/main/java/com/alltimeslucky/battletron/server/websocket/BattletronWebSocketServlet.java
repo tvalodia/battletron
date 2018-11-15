@@ -14,6 +14,11 @@ public class BattletronWebSocketServlet extends WebSocketServlet {
     private final ClientWebSocketRepository clientWebSocketRepository;
     private final WebSocketGameUpdateRouter webSocketGameUpdateRouter;
 
+    /**
+     * Constructor.
+     * @param clientWebSocketRepository The instance of ClientWebSocketRepository
+     * @param webSocketGameUpdateRouter WebSocketGameUpdateRouter webSocketGameUpdateRouter
+     */
     @Inject
     public BattletronWebSocketServlet(ClientWebSocketRepository clientWebSocketRepository,
                                       WebSocketGameUpdateRouter webSocketGameUpdateRouter) {

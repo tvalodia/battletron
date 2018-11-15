@@ -1,13 +1,11 @@
 package com.alltimeslucky.battletron.server.game.service;
 
-
 import com.alltimeslucky.battletron.game.controller.GameController;
 import com.alltimeslucky.battletron.game.controller.GameControllerFactory;
 import com.alltimeslucky.battletron.game.model.Game;
 import com.alltimeslucky.battletron.game.model.GameFactory;
 import com.alltimeslucky.battletron.player.controller.PlayerController;
 import com.alltimeslucky.battletron.player.controller.PlayerControllerFactory;
-import com.alltimeslucky.battletron.player.model.Player;
 import com.alltimeslucky.battletron.server.game.repository.GameControllerRepository;
 import com.alltimeslucky.battletron.server.websocket.ClientWebSocket;
 import com.alltimeslucky.battletron.server.websocket.ClientWebSocketRepository;
@@ -96,9 +94,13 @@ public class GameServiceImpl implements GameService {
         return gameController.getGame();
     }
 
-    private void killAnyRunningGame(String playerWebSocketId) {
+    /**
+     * Stops and removes a game that was started by the specified player.
+     * @param playerId The id of the player
+     */
+    private void killAnyRunningGame(String playerId) {
         //kill any existing game started by the player
-        ClientWebSocket webSocketGameStateListener = clientWebSocketRepository.get(playerWebSocketId);
+        ClientWebSocket webSocketGameStateListener = clientWebSocketRepository.get(playerId);
         GameController runningGame = gameControllerRepository.get(webSocketGameStateListener.getCurrentGameId());
         if (runningGame != null) {
             runningGame.kill();
@@ -118,6 +120,11 @@ public class GameServiceImpl implements GameService {
         return gameController.getGame();
     }
 
+    /**
+     * Pauses the game.
+     * @param gameId The id of the game to pause
+     * @throws Exception Thrown in the event of an error.
+     */
     public void pauseGame(long gameId) throws Exception {
         GameController gameController = gameControllerRepository.get(gameId);
         if (gameController != null) {
@@ -127,6 +134,11 @@ public class GameServiceImpl implements GameService {
         }
     }
 
+    /**
+     * Resumes a game.
+     * @param gameId The id of the game to resume
+     * @throws Exception Thrown in the event of an error.
+     */
     public void resumeGame(long gameId) throws Exception {
         GameController gameController = gameControllerRepository.get(gameId);
         if (gameController != null) {
@@ -136,6 +148,11 @@ public class GameServiceImpl implements GameService {
         }
     }
 
+    /**
+     * Deletes a game from the system.
+     * @param gameId The id of the game to delete
+     * @throws Exception Thrown in the event of an error.
+     */
     public void deleteGame(long gameId) throws Exception {
         GameController gameController = gameControllerRepository.get(gameId);
         if (gameController != null) {
