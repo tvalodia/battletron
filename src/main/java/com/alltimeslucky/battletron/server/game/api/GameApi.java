@@ -1,6 +1,7 @@
 package com.alltimeslucky.battletron.server.game.api;
 
 import com.alltimeslucky.battletron.game.model.Game;
+import com.alltimeslucky.battletron.player.controller.PlayerControllerType;
 import com.alltimeslucky.battletron.server.game.api.dto.GameCommandDto;
 import com.alltimeslucky.battletron.server.game.api.dto.GameDto;
 import com.alltimeslucky.battletron.server.game.api.dto.NewGameDto;
@@ -82,7 +83,8 @@ public class GameApi {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     public GameDto createGame(NewGameDto dto) {
-        Game game = gameService.createGame(dto.getPlayerId(), dto.getPlayer1Type(), dto.getPlayer2Type());
+        Game game = gameService.createGame(dto.getPlayerId(), PlayerControllerType.valueOf(dto.getPlayer1Type()),
+                                                              PlayerControllerType.valueOf(dto.getPlayer2Type()));
         GameDto gameDto = new GameDto(game);
         gameDto.setPlayingField(null);
         LOG.debug("Response: " + gameDto);

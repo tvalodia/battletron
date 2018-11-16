@@ -17,10 +17,10 @@ export interface PlayerType {
 export class NewGameComponent implements OnInit {
 
   playerTypes: PlayerType[] = [
-    {value: 'w-a-s-d', viewValue: 'Human - WASD keys'},
-    {value: 'arrowKeys', viewValue: 'Human - Arrow keys'},
-    {value: 'simpleAi', viewValue: 'AI - Simple'},
-    {value: 'downLeftAi', viewValue: 'AI - Down Left'}
+    {value: 'KEYBOARD_WASD_KEYS', viewValue: 'Human - WASD keys'},
+    {value: 'KEYWORD_ARROW_KEYS', viewValue: 'Human - Arrow keys'},
+    {value: 'AI_SIMPLE', viewValue: 'AI - Simple'},
+    {value: 'AI_DOWNLEFT', viewValue: 'AI - Down Left'}
   ];
 
   playerId: string = '';

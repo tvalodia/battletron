@@ -6,6 +6,7 @@ import com.alltimeslucky.battletron.game.model.Game;
 import com.alltimeslucky.battletron.game.model.GameFactory;
 import com.alltimeslucky.battletron.player.controller.PlayerController;
 import com.alltimeslucky.battletron.player.controller.PlayerControllerFactory;
+import com.alltimeslucky.battletron.player.controller.PlayerControllerType;
 import com.alltimeslucky.battletron.server.game.repository.GameControllerRepository;
 import com.alltimeslucky.battletron.server.websocket.ClientWebSocket;
 import com.alltimeslucky.battletron.server.websocket.ClientWebSocketRepository;
@@ -75,7 +76,7 @@ public class GameServiceImpl implements GameService {
      * @param player2Type The type pf player for player 2
      * @return A new GameController
      */
-    public Game createGame(String playerId, String player1Type, String player2Type) {
+    public Game createGame(String playerId, PlayerControllerType player1Type, PlayerControllerType player2Type) {
         killAnyRunningGame(playerId);
 
         Game game = gameFactory.get();

@@ -1,6 +1,7 @@
 package com.alltimeslucky.battletron.server.game.service;
 
 import com.alltimeslucky.battletron.game.model.Game;
+import com.alltimeslucky.battletron.player.controller.PlayerControllerType;
 
 import java.util.List;
 
@@ -28,7 +29,7 @@ public interface GameService {
      * @param player2Type The type pf player for player 2
      * @return A new GameController
      */
-    Game createGame(String playerId, String player1Type, String player2Type);
+    Game createGame(String playerId, PlayerControllerType player1Type, PlayerControllerType player2Type);
 
     /**
      * Start spectating a game.

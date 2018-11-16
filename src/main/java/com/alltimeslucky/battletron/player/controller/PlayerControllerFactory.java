@@ -16,18 +16,18 @@ public class PlayerControllerFactory {
 
     /**
      * Returns a PlayerController implementation based on the give inputs.
-     * @param playerType The type of player
+     * @param controllerType The type of player
      * @param playerId The id of the player websocket.
      * @param player The instance of player
      * @return an instance of PlayerController
      */
-    public PlayerController getPlayerController(String playerType, String playerId, Player player) {
-        switch (playerType) {
-            case "w-a-s-d": return new WebSocketLeftKeysPlayerController(player, clientWebSocketRepository.get(playerId));
-            case "arrowKeys": return new WebSocketRightKeysPlayerController(player, clientWebSocketRepository.get(playerId));
-            case "keyboard": return new WebSocketPlayerController(player, clientWebSocketRepository.get(playerId));
-            case "simpleAi": return new SimplePlayerAi(player);
-            case "downLeftAi": return new DownLeftPlayerController(player);
+    public PlayerController getPlayerController(PlayerControllerType controllerType, String playerId, Player player) {
+        switch (controllerType) {
+            case KEYBOARD_WASD_KEYS: return new WebSocketLeftKeysPlayerController(player, clientWebSocketRepository.get(playerId));
+            case KEYWORD_ARROW_KEYS: return new WebSocketRightKeysPlayerController(player, clientWebSocketRepository.get(playerId));
+            case KEYBOARD: return new WebSocketPlayerController(player, clientWebSocketRepository.get(playerId));
+            case AI_SIMPLE: return new SimplePlayerAi(player);
+            case AI_DOWNLEFT: return new DownLeftPlayerController(player);
 
             default: return null;
         }
