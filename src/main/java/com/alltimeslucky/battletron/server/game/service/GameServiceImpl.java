@@ -9,8 +9,8 @@ import com.alltimeslucky.battletron.player.controller.PlayerControllerFactory;
 import com.alltimeslucky.battletron.player.controller.PlayerControllerType;
 import com.alltimeslucky.battletron.server.game.repository.GameControllerRepository;
 import com.alltimeslucky.battletron.server.websocket.ClientWebSocket;
-import com.alltimeslucky.battletron.server.websocket.ClientWebSocketRepository;
 import com.alltimeslucky.battletron.server.websocket.ClientWebSocketController;
+import com.alltimeslucky.battletron.server.websocket.ClientWebSocketRepository;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -46,6 +46,7 @@ public class GameServiceImpl implements GameService {
         this.gameFactory = gameFactory;
     }
 
+    @Override
     public List<Game> getAllGames() {
         List<Game> games = new LinkedList<>();
         for (GameController gameController : gameControllerRepository.getAllGameControllers()) {
@@ -54,10 +55,12 @@ public class GameServiceImpl implements GameService {
         return games;
     }
 
+    @Override
     public Game getGame(long id) {
         return gameControllerRepository.get(id).getGame();
     }
 
+    @Override
     public Game createGame(String playerId, PlayerControllerType player1Type, PlayerControllerType player2Type) {
         killAnyRunningGame(playerId);
 
@@ -93,6 +96,7 @@ public class GameServiceImpl implements GameService {
         }
     }
 
+    @Override
     public Game spectateGame(long gameId, String playerId) {
         killAnyRunningGame(playerId);
         GameController gameController = gameControllerRepository.get(gameId);
@@ -100,6 +104,7 @@ public class GameServiceImpl implements GameService {
         return gameController.getGame();
     }
 
+    @Override
     public void pauseGame(long gameId) throws Exception {
         GameController gameController = gameControllerRepository.get(gameId);
         if (gameController != null) {
@@ -109,6 +114,7 @@ public class GameServiceImpl implements GameService {
         }
     }
 
+    @Override
     public void resumeGame(long gameId) throws Exception {
         GameController gameController = gameControllerRepository.get(gameId);
         if (gameController != null) {
@@ -118,6 +124,7 @@ public class GameServiceImpl implements GameService {
         }
     }
 
+    @Override
     public void deleteGame(long gameId) throws Exception {
         GameController gameController = gameControllerRepository.get(gameId);
         if (gameController != null) {
@@ -128,6 +135,7 @@ public class GameServiceImpl implements GameService {
         }
     }
 
+    @Override
     public void stopGame(long gameId) throws Exception {
         GameController gameController = gameControllerRepository.get(gameId);
         if (gameController != null) {

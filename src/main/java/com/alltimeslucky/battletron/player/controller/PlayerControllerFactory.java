@@ -23,8 +23,8 @@ public class PlayerControllerFactory {
      */
     public PlayerController getPlayerController(PlayerControllerType controllerType, String playerId, Player player) {
         switch (controllerType) {
-            case KEYBOARD_WASD_KEYS: return new WebSocketLeftKeysPlayerController(player, clientWebSocketRepository.get(playerId));
-            case KEYWORD_ARROW_KEYS: return new WebSocketRightKeysPlayerController(player, clientWebSocketRepository.get(playerId));
+            case KEYBOARD_WASD_KEYS: return new WebSocketWasdKeysPlayerController(player, clientWebSocketRepository.get(playerId));
+            case KEYWORD_ARROW_KEYS: return new WebSocketArrowKeysPlayerController(player, clientWebSocketRepository.get(playerId));
             case KEYBOARD: return new WebSocketPlayerController(player, clientWebSocketRepository.get(playerId));
             case AI_SIMPLE: return new SimplePlayerAi(player);
             case AI_DOWNLEFT: return new DownLeftPlayerController(player);

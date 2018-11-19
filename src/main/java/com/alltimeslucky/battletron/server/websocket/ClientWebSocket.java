@@ -30,6 +30,7 @@ public class ClientWebSocket extends WebSocketAdapter {
     private String sessionId = "";
     private Long currentGameId;
     private ClientWebSocketListener listener;
+
     /**
      * Constructor.
      */
@@ -136,7 +137,7 @@ public class ClientWebSocket extends WebSocketAdapter {
         return rightKeysDirection;
     }
 
-    public Direction getLeftKeysDirection() {
+    public Direction getWasdKeysDirection() {
         return leftKeysDirection;
     }
 

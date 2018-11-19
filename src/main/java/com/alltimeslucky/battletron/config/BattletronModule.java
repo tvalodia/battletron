@@ -6,8 +6,8 @@ import com.alltimeslucky.battletron.server.game.api.GameApi;
 import com.alltimeslucky.battletron.server.game.repository.GameControllerRepository;
 import com.alltimeslucky.battletron.server.game.service.GameService;
 import com.alltimeslucky.battletron.server.game.service.GameServiceImpl;
-import com.alltimeslucky.battletron.server.websocket.ClientWebSocketRepository;
 import com.alltimeslucky.battletron.server.websocket.ClientWebSocketController;
+import com.alltimeslucky.battletron.server.websocket.ClientWebSocketRepository;
 import com.google.inject.AbstractModule;
 
 public class BattletronModule extends AbstractModule {
