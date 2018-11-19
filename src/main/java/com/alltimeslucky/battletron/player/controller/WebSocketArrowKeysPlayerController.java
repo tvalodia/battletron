@@ -16,6 +16,6 @@ public class WebSocketArrowKeysPlayerController implements PlayerController {
 
     @Override
     public void execute(Game game) {
-        this.player.setDirection(socket.getRightKeysDirection());
+        this.player.setDirection(socket.getArrowKeysDirection());
     }
 }
