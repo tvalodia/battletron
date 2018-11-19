@@ -27,7 +27,7 @@ public class GameControllerRepository {
         data.put(gameEngineId, gameController);
     }
 
-    public GameController get(long gameEngineId) {
+    public GameController get(Long gameEngineId) {
         return data.get(gameEngineId);
     }
 

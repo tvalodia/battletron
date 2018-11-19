@@ -61,4 +61,12 @@ public interface GameService {
      * @throws Exception Thrown when the gameId is invalid
      */
     void deleteGame(long gameId) throws Exception;
+
+    /**
+     * Stops the specified game.
+     *
+     * @param gameId The id of the game to stop
+     * @throws Exception Thrown when the gameId is invalid
+     */
+    void stopGame(long gameId) throws Exception;
 }

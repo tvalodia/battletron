@@ -27,19 +27,13 @@ public class ClientWebSocket extends WebSocketAdapter {
     private Direction rightKeysDirection;
     private Direction leftKeysDirection;
     private ObjectMapper objectMapper;
-    private String playerId = "";
-    private long currentGameId;
-    private ClientWebSocketRepository clientWebSocketRepository;
-    private WebSocketGameUpdateRouter webSocketGameUpdateRouter;
-
+    private String sessionId = "";
+    private Long currentGameId;
+    private ClientWebSocketListener listener;
     /**
      * Constructor.
-     * @param clientWebSocketRepository The ClientWebSocketRepository instance use to store sockets.
-     * @param webSocketGameUpdateRouter The WebSocketGameUpdateRouter used to register this socket for game updates.
      */
-    public ClientWebSocket(ClientWebSocketRepository clientWebSocketRepository, WebSocketGameUpdateRouter webSocketGameUpdateRouter) {
-        this.clientWebSocketRepository = clientWebSocketRepository;
-        this.webSocketGameUpdateRouter = webSocketGameUpdateRouter;
+    public ClientWebSocket() {
         objectMapper = new ObjectMapper();
     }
 
@@ -47,10 +41,10 @@ public class ClientWebSocket extends WebSocketAdapter {
     public void onWebSocketConnect(Session session) {
         super.onWebSocketConnect(session);
         LOG.debug("New WebSocket connection: " + getSession());
-        playerId = UUID.randomUUID().toString();
-        clientWebSocketRepository.add(playerId, this);
+        sessionId = UUID.randomUUID().toString();
         try {
-            session.getRemote().sendString("id=" + playerId);
+            session.getRemote().sendString("id=" + sessionId);
+            listener.onConnect(this);
         } catch (IOException e) {
             LOG.error(e.getMessage());
             getSession().close(-1, "IO Error");
@@ -60,7 +54,7 @@ public class ClientWebSocket extends WebSocketAdapter {
     @Override
     public void onWebSocketText(String message) {
         super.onWebSocketText(message);
-        LOG.debug("Message from player (" + playerId + "): " + message);
+        LOG.debug("Message from player (" + sessionId + "): " + message);
 
         if (message.equals("W")) {
             direction = Direction.UP;
@@ -96,15 +90,14 @@ public class ClientWebSocket extends WebSocketAdapter {
     public void onWebSocketClose(int statusCode, String reason) {
         super.onWebSocketClose(statusCode, reason);
         LOG.info("Socket Closed: [" + statusCode + "] " + reason);
-        clientWebSocketRepository.delete(playerId);
-        webSocketGameUpdateRouter.deregisterForUpdates(playerId);
+        listener.onDisconnect(this);
     }
 
     @Override
     public void onWebSocketError(Throwable cause) {
         super.onWebSocketError(cause);
         LOG.error(cause);
-        clientWebSocketRepository.delete(playerId);
+        listener.onDisconnect(this);
     }
 
     /**
@@ -131,7 +124,7 @@ public class ClientWebSocket extends WebSocketAdapter {
         return direction;
     }
 
-    public long getCurrentGameId() {
+    public Long getCurrentGameId() {
         return currentGameId;
     }
 
@@ -145,5 +138,13 @@ public class ClientWebSocket extends WebSocketAdapter {
 
     public Direction getLeftKeysDirection() {
         return leftKeysDirection;
+    }
+
+    public void setListener(ClientWebSocketListener listener) {
+        this.listener = listener;
+    }
+
+    public String getSessionId() {
+        return sessionId;
     }
 }

@@ -12,13 +12,13 @@ import javax.inject.Inject;
  * This class listens for Game updates and routes them to the
  * mapped sockets.
  */
-public class WebSocketGameUpdateRouter implements GameListener {
+public class ClientWebSocketController implements GameListener {
 
     private Map<String, Long> playerGameMap;
     private final ClientWebSocketRepository clientWebSocketRepository;
 
     @Inject
-    public WebSocketGameUpdateRouter(ClientWebSocketRepository clientWebSocketRepository) {
+    public ClientWebSocketController(ClientWebSocketRepository clientWebSocketRepository) {
         playerGameMap = new ConcurrentHashMap<>();
         this.clientWebSocketRepository = clientWebSocketRepository;
     }

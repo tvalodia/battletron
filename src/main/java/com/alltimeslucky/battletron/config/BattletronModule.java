@@ -7,7 +7,7 @@ import com.alltimeslucky.battletron.server.game.repository.GameControllerReposit
 import com.alltimeslucky.battletron.server.game.service.GameService;
 import com.alltimeslucky.battletron.server.game.service.GameServiceImpl;
 import com.alltimeslucky.battletron.server.websocket.ClientWebSocketRepository;
-import com.alltimeslucky.battletron.server.websocket.WebSocketGameUpdateRouter;
+import com.alltimeslucky.battletron.server.websocket.ClientWebSocketController;
 import com.google.inject.AbstractModule;
 
 public class BattletronModule extends AbstractModule {
@@ -17,7 +17,7 @@ public class BattletronModule extends AbstractModule {
         bind(GameService.class).to(GameServiceImpl.class);
         bind(GameControllerRepository.class).asEagerSingleton();
         bind(ClientWebSocketRepository.class).asEagerSingleton();
-        bind(WebSocketGameUpdateRouter.class).asEagerSingleton();
+        bind(ClientWebSocketController.class).asEagerSingleton();
         bind(GameControllerFactory.class).asEagerSingleton();
         bind(GameFactory.class).asEagerSingleton();
     }

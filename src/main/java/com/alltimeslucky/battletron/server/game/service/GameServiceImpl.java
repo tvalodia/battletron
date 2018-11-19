@@ -10,7 +10,7 @@ import com.alltimeslucky.battletron.player.controller.PlayerControllerType;
 import com.alltimeslucky.battletron.server.game.repository.GameControllerRepository;
 import com.alltimeslucky.battletron.server.websocket.ClientWebSocket;
 import com.alltimeslucky.battletron.server.websocket.ClientWebSocketRepository;
-import com.alltimeslucky.battletron.server.websocket.WebSocketGameUpdateRouter;
+import com.alltimeslucky.battletron.server.websocket.ClientWebSocketController;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -26,7 +26,7 @@ public class GameServiceImpl implements GameService {
 
     private final GameControllerRepository gameControllerRepository;
     private final ClientWebSocketRepository clientWebSocketRepository;
-    private WebSocketGameUpdateRouter webSocketGameStateRouter;
+    private ClientWebSocketController clientWebSocketController;
     private PlayerControllerFactory playerControllerFactory;
     private GameControllerFactory gameControllerFactory;
     private GameFactory gameFactory;
@@ -36,21 +36,16 @@ public class GameServiceImpl implements GameService {
      */
     @Inject
     public GameServiceImpl(GameControllerRepository gameControllerRepository, ClientWebSocketRepository clientWebSocketRepository,
-                           WebSocketGameUpdateRouter webSocketGameStateRouter, PlayerControllerFactory playerControllerFactory,
+                           ClientWebSocketController clientWebSocketController, PlayerControllerFactory playerControllerFactory,
                            GameControllerFactory gameControllerFactory, GameFactory gameFactory) {
         this.gameControllerRepository = gameControllerRepository;
         this.clientWebSocketRepository = clientWebSocketRepository;
-        this.webSocketGameStateRouter = webSocketGameStateRouter;
+        this.clientWebSocketController = clientWebSocketController;
         this.playerControllerFactory = playerControllerFactory;
         this.gameControllerFactory = gameControllerFactory;
         this.gameFactory = gameFactory;
     }
 
-    /**
-     * Gets all stored instances of GameController objects.
-     *
-     * @return A list of GameController
-     */
     public List<Game> getAllGames() {
         List<Game> games = new LinkedList<>();
         for (GameController gameController : gameControllerRepository.getAllGameControllers()) {
@@ -59,23 +54,10 @@ public class GameServiceImpl implements GameService {
         return games;
     }
 
-    /**
-     * Gets the GameControlelr with the specified ID.
-     *
-     * @return The complete list of games.
-     */
     public Game getGame(long id) {
         return gameControllerRepository.get(id).getGame();
     }
 
-    /**
-     * Creates a new GameController with a Game for the two given player types.
-     *
-     * @param playerId    The id of the player creating the game
-     * @param player1Type The type of player for player 1
-     * @param player2Type The type pf player for player 2
-     * @return A new GameController
-     */
     public Game createGame(String playerId, PlayerControllerType player1Type, PlayerControllerType player2Type) {
         killAnyRunningGame(playerId);
 
@@ -84,8 +66,8 @@ public class GameServiceImpl implements GameService {
         PlayerController player2Controller = playerControllerFactory.getPlayerController(player2Type, playerId, game.getPlayer2());
         GameController gameController = gameControllerFactory.get(game, player1Controller, player2Controller);
         gameControllerRepository.add(gameController.getGameId(), gameController);
-        webSocketGameStateRouter.registerForUpdates(playerId, gameController.getGameId());
-        game.registerListener(webSocketGameStateRouter);
+        clientWebSocketController.registerForUpdates(playerId, gameController.getGameId());
+        game.registerListener(clientWebSocketController);
         //gameController.getGame().registerListener(new PrintGameListener());
         ClientWebSocket clientWebSocket = clientWebSocketRepository.get(playerId);
         clientWebSocket.setCurrentGameId(gameController.getGame().getId());
@@ -102,30 +84,22 @@ public class GameServiceImpl implements GameService {
     private void killAnyRunningGame(String playerId) {
         //kill any existing game started by the player
         ClientWebSocket webSocketGameStateListener = clientWebSocketRepository.get(playerId);
-        GameController runningGame = gameControllerRepository.get(webSocketGameStateListener.getCurrentGameId());
-        if (runningGame != null) {
-            runningGame.kill();
-            // gameControllerRepository.delete(webSocketGameStateListener.getCurrentGameId());
+        if (webSocketGameStateListener.getCurrentGameId() != null) {
+            GameController runningGame = gameControllerRepository.get(webSocketGameStateListener.getCurrentGameId());
+            if (runningGame != null) {
+                runningGame.kill();
+                // gameControllerRepository.delete(webSocketGameStateListener.getCurrentGameId());
+            }
         }
     }
 
-    /**
-     * Start spectating a game.
-     *
-     * @return The GameController of the game to spectate
-     */
     public Game spectateGame(long gameId, String playerId) {
         killAnyRunningGame(playerId);
         GameController gameController = gameControllerRepository.get(gameId);
-        webSocketGameStateRouter.registerForUpdates(playerId, gameController.getGameId());
+        clientWebSocketController.registerForUpdates(playerId, gameController.getGameId());
         return gameController.getGame();
     }
 
-    /**
-     * Pauses the game.
-     * @param gameId The id of the game to pause
-     * @throws Exception Thrown in the event of an error.
-     */
     public void pauseGame(long gameId) throws Exception {
         GameController gameController = gameControllerRepository.get(gameId);
         if (gameController != null) {
@@ -135,11 +109,6 @@ public class GameServiceImpl implements GameService {
         }
     }
 
-    /**
-     * Resumes a game.
-     * @param gameId The id of the game to resume
-     * @throws Exception Thrown in the event of an error.
-     */
     public void resumeGame(long gameId) throws Exception {
         GameController gameController = gameControllerRepository.get(gameId);
         if (gameController != null) {
@@ -149,16 +118,20 @@ public class GameServiceImpl implements GameService {
         }
     }
 
-    /**
-     * Deletes a game from the system.
-     * @param gameId The id of the game to delete
-     * @throws Exception Thrown in the event of an error.
-     */
     public void deleteGame(long gameId) throws Exception {
         GameController gameController = gameControllerRepository.get(gameId);
         if (gameController != null) {
             gameController.kill();
             gameControllerRepository.delete(gameId);
+        } else {
+            throw new Exception("Invalid game ID");
+        }
+    }
+
+    public void stopGame(long gameId) throws Exception {
+        GameController gameController = gameControllerRepository.get(gameId);
+        if (gameController != null) {
+            gameController.kill();
         } else {
             throw new Exception("Invalid game ID");
         }
