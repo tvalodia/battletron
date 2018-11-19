@@ -30,12 +30,14 @@ public class ClientWebSocket extends WebSocketAdapter {
     private String sessionId = "";
     private Long currentGameId;
     private ClientWebSocketListener listener;
+    private boolean ignoreInput;
 
     /**
      * Constructor.
      */
     public ClientWebSocket() {
         objectMapper = new ObjectMapper();
+        ignoreInput = true;
     }
 
     @Override
@@ -56,6 +58,10 @@ public class ClientWebSocket extends WebSocketAdapter {
     public void onWebSocketText(String message) {
         super.onWebSocketText(message);
         LOG.debug("Message from player (" + sessionId + "): " + message);
+
+        if (ignoreInput) {
+            return;
+        }
 
         if (message.equals("W")) {
             direction = Direction.UP;
@@ -111,6 +117,9 @@ public class ClientWebSocket extends WebSocketAdapter {
             wasdKeysDirection = null;
             arrowKeysDirection = null;
             direction = null;
+            ignoreInput = true;
+        } else {
+            ignoreInput = false;
         }
 
         try {
