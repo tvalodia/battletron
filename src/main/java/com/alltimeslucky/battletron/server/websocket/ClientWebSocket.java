@@ -24,8 +24,8 @@ public class ClientWebSocket extends WebSocketAdapter {
     private static final Logger LOG = LogManager.getLogger();
 
     private Direction direction;
-    private Direction rightKeysDirection;
-    private Direction leftKeysDirection;
+    private Direction arrowKeysDirection;
+    private Direction wasdKeysDirection;
     private ObjectMapper objectMapper;
     private String sessionId = "";
     private Long currentGameId;
@@ -59,30 +59,30 @@ public class ClientWebSocket extends WebSocketAdapter {
 
         if (message.equals("W")) {
             direction = Direction.UP;
-            leftKeysDirection = Direction.UP;
+            wasdKeysDirection = Direction.UP;
         } else if (message.equals("A")) {
             direction = Direction.LEFT;
-            leftKeysDirection = Direction.LEFT;
+            wasdKeysDirection = Direction.LEFT;
         } else if (message.equals("S")) {
             direction = Direction.DOWN;
-            leftKeysDirection = Direction.DOWN;
+            wasdKeysDirection = Direction.DOWN;
         } else if (message.equals("D")) {
             direction = Direction.RIGHT;
-            leftKeysDirection = Direction.RIGHT;
+            wasdKeysDirection = Direction.RIGHT;
         }
 
         if (message.equals("UP")) {
             direction = Direction.UP;
-            rightKeysDirection = Direction.UP;
+            arrowKeysDirection = Direction.UP;
         } else if (message.equals("LEFT")) {
             direction = Direction.LEFT;
-            rightKeysDirection = Direction.LEFT;
+            arrowKeysDirection = Direction.LEFT;
         } else if (message.equals("DOWN")) {
             direction = Direction.DOWN;
-            rightKeysDirection = Direction.DOWN;
+            arrowKeysDirection = Direction.DOWN;
         } else if (message.equals("RIGHT")) {
             direction = Direction.RIGHT;
-            rightKeysDirection = Direction.RIGHT;
+            arrowKeysDirection = Direction.RIGHT;
         }
 
     }
@@ -108,8 +108,8 @@ public class ClientWebSocket extends WebSocketAdapter {
      */
     public void sendGameState(Game game) {
         if (game.getGameStatus().equals(GameStatus.COMPLETED_WINNER) || game.getGameStatus().equals(GameStatus.COMPLETED_DRAW)) {
-            leftKeysDirection = null;
-            rightKeysDirection = null;
+            wasdKeysDirection = null;
+            arrowKeysDirection = null;
             direction = null;
         }
 
@@ -133,12 +133,12 @@ public class ClientWebSocket extends WebSocketAdapter {
         this.currentGameId = currentGameId;
     }
 
-    public Direction getRightKeysDirection() {
-        return rightKeysDirection;
+    public Direction getArrowKeysDirection() {
+        return arrowKeysDirection;
     }
 
     public Direction getWasdKeysDirection() {
-        return leftKeysDirection;
+        return wasdKeysDirection;
     }
 
     public void setListener(ClientWebSocketListener listener) {
