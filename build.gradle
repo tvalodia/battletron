@@ -56,9 +56,9 @@ checkstyle {
     toolVersion '8.11'
 }
 
-processResources {
-    dependsOn "buildAngular"
-}
+//processResources {
+//    dependsOn "buildAngular"
+//}
 
 task serveAngular(type:Exec) {
     // installAngular should be run prior to this task
