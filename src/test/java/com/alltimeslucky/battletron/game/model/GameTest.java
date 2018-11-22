@@ -1,6 +1,7 @@
 package com.alltimeslucky.battletron.game.model;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 import com.alltimeslucky.battletron.player.model.PlayerFactory;
 import org.junit.Before;
@@ -35,8 +36,13 @@ public class GameTest {
     }
 
     @Test
-    public void testGetPlayer1() {
-        assertEquals(playerFactory.getPlayer1(), game.getPlayer1());
+    public void testGetTickCount() {
+        assertEquals(0, game.getTickCount());
+    }
+
+    @Test
+    public void testGetWinner() {
+        assertNull(game.getWinner());
     }
 
 }
