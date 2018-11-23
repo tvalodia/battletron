@@ -11,10 +11,10 @@ import com.alltimeslucky.battletron.player.controller.KeyboardPlayerController;
 import com.alltimeslucky.battletron.player.controller.KeyboardRightPlayerController;
 import com.alltimeslucky.battletron.player.controller.PlayerController;
 import com.alltimeslucky.battletron.player.controller.SimplePlayerAi;
-import com.alltimeslucky.battletron.player.model.Player;
 import com.alltimeslucky.battletron.ui.BattletronWindow;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import javax.inject.Inject;
 
 /**
  * This class bootstraps the simulation.
@@ -38,6 +38,7 @@ public class Battletron {
     /**
      * Constructor. Creates the core components for the simulation.
      */
+    @Inject
     public Battletron(GameControllerFactory gameControllerFactory, GameFactory gameFactory) {
         this.gameControllerFactory = gameControllerFactory;
         this.gameFactory = gameFactory;
