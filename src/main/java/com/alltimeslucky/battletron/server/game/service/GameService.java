@@ -1,5 +1,6 @@
 package com.alltimeslucky.battletron.server.game.service;
 
+import com.alltimeslucky.battletron.exception.BattletronException;
 import com.alltimeslucky.battletron.game.model.Game;
 import com.alltimeslucky.battletron.player.controller.PlayerControllerType;
 
@@ -19,7 +20,7 @@ public interface GameService {
      *
      * @return The complete list of games.
      */
-    Game getGame(long id);
+    Game getGame(long id) throws BattletronException;
 
     /**
      * Creates a new GameController with a Game for the two given player types.
@@ -29,7 +30,7 @@ public interface GameService {
      * @param player2Type The type pf player for player 2
      * @return A new GameController
      */
-    Game createGame(String playerId, PlayerControllerType player1Type, PlayerControllerType player2Type);
+    Game createGame(String playerId, String player1Type, String player2Type) throws BattletronException;
 
     /**
      * Start spectating a game.

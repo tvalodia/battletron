@@ -1,5 +1,6 @@
 package com.alltimeslucky.battletron.server.game.api;
 
+import com.alltimeslucky.battletron.exception.BattletronException;
 import com.alltimeslucky.battletron.game.model.Game;
 import com.alltimeslucky.battletron.player.controller.PlayerControllerType;
 import com.alltimeslucky.battletron.server.game.api.dto.GameCommandDto;
@@ -14,6 +15,7 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.NotFoundException;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -21,6 +23,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -68,7 +71,7 @@ public class GameApi {
     @GET
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public GameDto getGame(@PathParam("id") long id) {
+    public GameDto getGame(@PathParam("id") long id) throws BattletronException {
         Game game = gameService.getGame(id);
         GameDto gameDto = new GameDto(game);
         LOG.debug("Response: " + gameDto);
@@ -82,9 +85,8 @@ public class GameApi {
      */
     @POST
     @Produces(MediaType.APPLICATION_JSON)
-    public GameDto createGame(NewGameDto dto) {
-        Game game = gameService.createGame(dto.getPlayerId(), PlayerControllerType.valueOf(dto.getPlayer1Type()),
-                                                              PlayerControllerType.valueOf(dto.getPlayer2Type()));
+    public GameDto createGame(NewGameDto dto) throws BattletronException {
+        Game game = gameService.createGame(dto.getPlayerId(),dto.getPlayer1Type(), dto.getPlayer2Type());
         GameDto gameDto = new GameDto(game);
         gameDto.setPlayingField(null);
         LOG.debug("Response: " + gameDto);

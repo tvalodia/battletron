@@ -53,4 +53,8 @@ public class GameControllerRepository {
     public void delete(long gameEngineId) {
         data.remove(gameEngineId);
     }
+
+    public boolean contains(long gameId) {
+        return data.containsKey(gameId);
+    }
 }

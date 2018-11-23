@@ -1,8 +1,8 @@
 package com.alltimeslucky.battletron.player.model;
 
-import org.junit.Test;
-
 import static org.junit.Assert.assertEquals;
+
+import org.junit.Test;
 
 public class PlayerFactoryTest {
 

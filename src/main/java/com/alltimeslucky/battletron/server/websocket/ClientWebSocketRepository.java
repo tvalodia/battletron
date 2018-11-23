@@ -10,15 +10,29 @@ public class ClientWebSocketRepository {
         data = new ConcurrentHashMap<>();
     }
 
-    public void add(String onlinePlayerId, ClientWebSocket socket) {
-        data.put(onlinePlayerId, socket);
+    public void add(String sessionId, ClientWebSocket socket) {
+        data.put(sessionId, socket);
     }
 
-    public ClientWebSocket get(String onlinePlayerId) {
-        return data.get(onlinePlayerId);
+    public ClientWebSocket get(String sessionId) {
+        return data.get(sessionId);
     }
 
-    public void delete(String onlinePlayerId) {
-        data.remove(onlinePlayerId);
+    public void delete(String sessionId) {
+        data.remove(sessionId);
+    }
+
+    /**
+     * Indicates whether a ClientWebSocket with the specified sessiondId exists in this repository.
+     *
+     * @param sessionId The sessionId of the web socket
+     * @return True if the ClientWebSocket exists, otherwise returns false
+     */
+    public boolean contains(String sessionId) {
+        if (sessionId == null) {
+            return false;
+        } else {
+            return data.containsKey(sessionId);
+        }
     }
 }
