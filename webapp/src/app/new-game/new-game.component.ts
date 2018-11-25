@@ -24,8 +24,8 @@ export class NewGameComponent implements OnInit {
   ];
 
   playerId: string = '';
-  player1Type: string = '';
-  player2Type: string = '';
+  player1Type: string = 'KEYBOARD_WASD_KEYS';
+  player2Type: string = 'KEYWORD_ARROW_KEYS';
 
   constructor(private gameService: GameService) {
   }
