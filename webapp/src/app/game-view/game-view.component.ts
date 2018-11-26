@@ -57,7 +57,7 @@ export class GameViewComponent implements OnInit, OnDestroy {
     //Draw the players' trails
     for (let x = 0; x < this.game.width; x++) {
       for (let y = 0; y < this.game.height; y++) {
-        if (this.game.playingField[x][y] == this.game.player1.id) {
+        if (this.game.playingField[x][y] == this.game.playerOne.id) {
           this.drawBlock(ctx, this.getScreenX(x), this.getScreenY(this.game.height, y), "blue");
         }
         if (this.game.playingField[x][y] == this.game.player2.id) {
@@ -67,8 +67,8 @@ export class GameViewComponent implements OnInit, OnDestroy {
     }
 
     //player 1's head
-    this.drawBlock(ctx, this.getScreenX(this.game.player1.positionX),
-      this.getScreenY(this.game.height, this.game.player1.positionY), "cyan");
+    this.drawBlock(ctx, this.getScreenX(this.game.playerOne.positionX),
+      this.getScreenY(this.game.height, this.game.playerOne.positionY), "cyan");
     //player 2's head
     this.drawBlock(ctx, this.getScreenX(this.game.player2.positionX),
       this.getScreenY(this.game.height, this.game.player2.positionY), "pink");

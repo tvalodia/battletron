@@ -17,7 +17,7 @@ public class GameDto {
     //The current phase in the lifecycle of the game
     private GameStatus gameStatus;
     private int tickCount;
-    private Player player1;
+    private Player playerOne;
     private Player player2;
     //Keeps track of players trails
     private int[][] playingField;
@@ -37,7 +37,7 @@ public class GameDto {
         setId(game.getId());
         setWidth(game.getWidth());
         setHeight(game.getHeight());
-        setPlayer1(game.getPlayer1());
+        setPlayerOne(game.getPlayerOne());
         setPlayer2(game.getPlayer2());
         setTickCount(game.getTickCount());
         setPlayingField(game.getPlayingField());
@@ -77,12 +77,12 @@ public class GameDto {
         this.tickCount = tickCount;
     }
 
-    public Player getPlayer1() {
-        return player1;
+    public Player getPlayerOne() {
+        return playerOne;
     }
 
-    public void setPlayer1(Player player1) {
-        this.player1 = player1;
+    public void setPlayerOne(Player playerOne) {
+        this.playerOne = playerOne;
     }
 
     public Player getPlayer2() {
@@ -125,7 +125,7 @@ public class GameDto {
                 + ", height=" + height
                 + ", gameStatus=" + gameStatus
                 + ", tickCount=" + tickCount
-                + ", player1=" + player1
+                + ", playerOne=" + playerOne
                 + ", player2=" + player2
                 + ", playingField=" + Arrays.toString(playingField)
                 + ", winner=" + winner

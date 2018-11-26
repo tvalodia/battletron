@@ -16,8 +16,8 @@ public class GameControllerFactory {
      * @return An instance of GameController
      */
     public GameController get(Game game,
-                              PlayerController player1Controller, PlayerController player2Controller) {
-        return new GameController(game, player1Controller, player2Controller);
+                              PlayerController playerOneController, PlayerController player2Controller) {
+        return new GameController(game, playerOneController, player2Controller);
     }
 
 }

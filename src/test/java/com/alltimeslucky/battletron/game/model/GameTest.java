@@ -17,7 +17,7 @@ public class GameTest {
     @Before
     public void setup() {
         game = new Game(1,
-                WIDTH, HEIGHT, playerFactory.getPlayer1(), playerFactory.getPlayer2());
+                WIDTH, HEIGHT, playerFactory.getPlayerOne(), playerFactory.getPlayer2());
     }
 
     @Test

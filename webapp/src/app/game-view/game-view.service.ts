@@ -10,7 +10,7 @@ export interface Game {
   height: number;
   gameStatus: string;
   tickCount: number;
-  player1: Player;
+  playerOne: Player;
   player2: Player;
   playingField: number[][];
   winner: Player;

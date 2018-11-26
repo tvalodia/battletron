@@ -12,7 +12,7 @@ public class GameController extends Thread {
 
     private static final int TICK_INTERVAL_MILLIS = 50;
     private long lastTickTime;
-    private final PlayerController player1Controller;
+    private final PlayerController playerOneController;
     private final PlayerController player2Controller;
     private Game game;
     private volatile boolean pauseThreadFlag;
@@ -21,12 +21,12 @@ public class GameController extends Thread {
      * Constructor. Initialises the game engine.
      *
      * @param game The Game model that holds the game state data
-     * @param player1Controller  Player 1's AI controller
+     * @param playerOneController  Player 1's AI controller
      * @param player2Controller  Player 2's AI controller
      */
     GameController(Game game,
-                          PlayerController player1Controller, PlayerController player2Controller) {
-        this.player1Controller = player1Controller;
+                          PlayerController playerOneController, PlayerController player2Controller) {
+        this.playerOneController = playerOneController;
         this.player2Controller = player2Controller;
         this.lastTickTime = 0;
         this.game = game;
@@ -55,7 +55,7 @@ public class GameController extends Thread {
             if (currentTime - lastTickTime >= TICK_INTERVAL_MILLIS) {
 
                 //Have the player controllers act given the current game
-                player1Controller.execute(game);
+                playerOneController.execute(game);
                 player2Controller.execute(game);
 
                 //update the playing field

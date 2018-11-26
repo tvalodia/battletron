@@ -6,7 +6,7 @@ import java.util.GregorianCalendar;
 
 public class PlayerFactory {
 
-    public Player getPlayer1() {
+    public Player getPlayerOne() {
         return new Player(1, 33, 50);
     }
 

@@ -11,7 +11,7 @@ public class PlayerFactoryTest {
     @Test
     public void testPlayerOneId() {
 
-        Player player1 = playerFactory.getPlayer1();
+        Player player1 = playerFactory.getPlayerOne();
 
         assertEquals(1, player1.getId());
 
@@ -29,7 +29,7 @@ public class PlayerFactoryTest {
     @Test
     public void testPlayerOnePositionX() {
 
-        Player player1 = playerFactory.getPlayer1();
+        Player player1 = playerFactory.getPlayerOne();
 
         assertEquals(33, player1.getPositionX());
 
@@ -38,7 +38,7 @@ public class PlayerFactoryTest {
     @Test
     public void testPlayerOnePositionY() {
 
-        Player player1 = playerFactory.getPlayer1();
+        Player player1 = playerFactory.getPlayerOne();
 
         assertEquals(50, player1.getPositionY());
 

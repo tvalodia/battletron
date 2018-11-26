@@ -68,7 +68,7 @@ public class GameView extends JComponent implements GameListener {
             //Draw the players' trails
             for (int x = 0; x < game.getWidth(); x++) {
                 for (int y = 0; y < game.getHeight(); y++) {
-                    if (game.getPlayingField()[x][y] == game.getPlayer1().getId()) {
+                    if (game.getPlayingField()[x][y] == game.getPlayerOne().getId()) {
                         drawBlock(getScreenX(x), getScreenY(game.getHeight(), y), Color.blue);
                     }
                     if (game.getPlayingField()[x][y] == game.getPlayer2().getId()) {
@@ -78,8 +78,8 @@ public class GameView extends JComponent implements GameListener {
             }
 
             //player 1's head
-            drawBlock(getScreenX(game.getPlayer1().getPositionX()),
-                      getScreenY(game.getHeight(), game.getPlayer1().getPositionY()),
+            drawBlock(getScreenX(game.getPlayerOne().getPositionX()),
+                      getScreenY(game.getHeight(), game.getPlayerOne().getPositionY()),
                       Color.cyan);
             //player 2's head
             drawBlock(getScreenX(game.getPlayer2().getPositionX()),

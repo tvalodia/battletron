@@ -73,16 +73,16 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public Game createGame(String playerId, String player1Type, String player2Type) throws BattletronException {
-        inputValidator.validateCreateGameInput(playerId, player1Type, player2Type);
+    public Game createGame(String playerId, String playerOneType, String player2Type) throws BattletronException {
+        inputValidator.validateCreateGameInput(playerId, playerOneType, player2Type);
         killAnyRunningGame(playerId);
 
         Game game = gameFactory.get();
-        PlayerController player1Controller = playerControllerFactory.getPlayerController(
-                PlayerControllerType.valueOf(player1Type), playerId, game.getPlayer1());
+        PlayerController playerOneController = playerControllerFactory.getPlayerController(
+                PlayerControllerType.valueOf(playerOneType), playerId, game.getPlayerOne());
         PlayerController player2Controller = playerControllerFactory.getPlayerController(
                 PlayerControllerType.valueOf(player2Type), playerId, game.getPlayer2());
-        GameController gameController = gameControllerFactory.get(game, player1Controller, player2Controller);
+        GameController gameController = gameControllerFactory.get(game, playerOneController, player2Controller);
         gameControllerRepository.add(gameController.getGameId(), gameController);
         clientWebSocketController.registerForUpdates(playerId, gameController.getGameId());
         game.registerListener(clientWebSocketController);
