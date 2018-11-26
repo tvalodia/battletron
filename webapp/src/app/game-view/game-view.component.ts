@@ -60,7 +60,7 @@ export class GameViewComponent implements OnInit, OnDestroy {
         if (this.game.playingField[x][y] == this.game.playerOne.id) {
           this.drawBlock(ctx, this.getScreenX(x), this.getScreenY(this.game.height, y), "blue");
         }
-        if (this.game.playingField[x][y] == this.game.player2.id) {
+        if (this.game.playingField[x][y] == this.game.playerTwo.id) {
           this.drawBlock(ctx, this.getScreenX(x), this.getScreenY(this.game.height, y), "magenta");
         }
       }
@@ -70,8 +70,8 @@ export class GameViewComponent implements OnInit, OnDestroy {
     this.drawBlock(ctx, this.getScreenX(this.game.playerOne.positionX),
       this.getScreenY(this.game.height, this.game.playerOne.positionY), "cyan");
     //player 2's head
-    this.drawBlock(ctx, this.getScreenX(this.game.player2.positionX),
-      this.getScreenY(this.game.height, this.game.player2.positionY), "pink");
+    this.drawBlock(ctx, this.getScreenX(this.game.playerTwo.positionX),
+      this.getScreenY(this.game.height, this.game.playerTwo.positionY), "pink");
 
 
   }

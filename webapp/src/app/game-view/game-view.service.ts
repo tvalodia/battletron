@@ -11,7 +11,7 @@ export interface Game {
   gameStatus: string;
   tickCount: number;
   playerOne: Player;
-  player2: Player;
+  playerTwo: Player;
   playingField: number[][];
   winner: Player;
 }

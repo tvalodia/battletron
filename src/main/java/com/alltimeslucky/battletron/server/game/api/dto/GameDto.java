@@ -18,7 +18,7 @@ public class GameDto {
     private GameStatus gameStatus;
     private int tickCount;
     private Player playerOne;
-    private Player player2;
+    private Player playerTwo;
     //Keeps track of players trails
     private int[][] playingField;
     //The winner of the current game is there is one.
@@ -38,7 +38,7 @@ public class GameDto {
         setWidth(game.getWidth());
         setHeight(game.getHeight());
         setPlayerOne(game.getPlayerOne());
-        setPlayer2(game.getPlayer2());
+        setPlayerTwo(game.getPlayerTwo());
         setTickCount(game.getTickCount());
         setPlayingField(game.getPlayingField());
         setGameStatus(game.getGameStatus());
@@ -85,12 +85,12 @@ public class GameDto {
         this.playerOne = playerOne;
     }
 
-    public Player getPlayer2() {
-        return player2;
+    public Player getPlayerTwo() {
+        return playerTwo;
     }
 
-    public void setPlayer2(Player player2) {
-        this.player2 = player2;
+    public void setPlayerTwo(Player playerTwo) {
+        this.playerTwo = playerTwo;
     }
 
     public int[][] getPlayingField() {
@@ -126,7 +126,7 @@ public class GameDto {
                 + ", gameStatus=" + gameStatus
                 + ", tickCount=" + tickCount
                 + ", playerOne=" + playerOne
-                + ", player2=" + player2
+                + ", playerTwo=" + playerTwo
                 + ", playingField=" + Arrays.toString(playingField)
                 + ", winner=" + winner
                 + '}';

@@ -68,11 +68,11 @@ public class Battletron {
     private GameController createOnePlayerGame() {
         Game game = gameFactory.get();
         KeyboardPlayerController keyboardPlayerController = new KeyboardLeftPlayerController(game.getPlayerOne());
-        PlayerController player2Controller = new SimplePlayerAi(game.getPlayer2());
+        PlayerController playerTwoController = new SimplePlayerAi(game.getPlayerTwo());
         window = new BattletronWindow(keyboardPlayerController, null);
 
         GameController gameController = gameControllerFactory.get(game,
-                keyboardPlayerController, player2Controller);
+                keyboardPlayerController, playerTwoController);
         gameController.getGame().registerListener(window.getGameStateListener());
         gameController.getGame().registerListener(new PrintGameListener());
         return gameController;
@@ -81,11 +81,11 @@ public class Battletron {
     private GameController createTwoPlayerGame() {
         Game game = gameFactory.get();
         KeyboardPlayerController keyboardPlayerOneController = new KeyboardLeftPlayerController(game.getPlayerOne());
-        KeyboardPlayerController keyboardPlayer2Controller = new KeyboardRightPlayerController(game.getPlayer2());
-        window = new BattletronWindow(keyboardPlayerOneController, keyboardPlayer2Controller);
+        KeyboardPlayerController keyboardPlayerTwoController = new KeyboardRightPlayerController(game.getPlayerTwo());
+        window = new BattletronWindow(keyboardPlayerOneController, keyboardPlayerTwoController);
 
         GameController gameController = gameControllerFactory.get(game,
-                keyboardPlayerOneController, keyboardPlayer2Controller);
+                keyboardPlayerOneController, keyboardPlayerTwoController);
         gameController.getGame().registerListener(window.getGameStateListener());
         gameController.getGame().registerListener(new PrintGameListener());
         return gameController;
@@ -94,11 +94,11 @@ public class Battletron {
     private GameController createAiGame() {
         Game game = gameFactory.get();
         PlayerController playerOneController = new SimplePlayerAi(game.getPlayerOne());
-        PlayerController player2Controller = new SimplePlayerAi(game.getPlayer2());
+        PlayerController playerTwoController = new SimplePlayerAi(game.getPlayerTwo());
         window = new BattletronWindow(null, null);
 
         GameController gameController = gameControllerFactory.get(game,
-                playerOneController, player2Controller);
+                playerOneController, playerTwoController);
         gameController.getGame().registerListener(window.getGameStateListener());
         gameController.getGame().registerListener(new PrintGameListener());
         return gameController;

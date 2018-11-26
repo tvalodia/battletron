@@ -13,16 +13,16 @@ public class BattletronWindow {
     private GameView drawArea;
 
     private KeyListener playerOneKeyListener;
-    private KeyListener player2KeyListener;
+    private KeyListener playerTwoKeyListener;
 
     /**
      * Constructor. Takes implementations of KeyListener for handling keys initiated by the two players.
      * @param playerOneKeyListener The KeyListener for handling keys pressed by player 1.
-     * @param player2KeyListener The KeyListener for handling keys pressed by player 2.
+     * @param playerTwoKeyListener The KeyListener for handling keys pressed by player 2.
      */
-    public BattletronWindow(KeyListener playerOneKeyListener, KeyListener player2KeyListener) {
+    public BattletronWindow(KeyListener playerOneKeyListener, KeyListener playerTwoKeyListener) {
         this.playerOneKeyListener = playerOneKeyListener;
-        this.player2KeyListener = player2KeyListener;
+        this.playerTwoKeyListener = playerTwoKeyListener;
         drawArea = new GameView();
     }
 
@@ -44,7 +44,7 @@ public class BattletronWindow {
         // can close frame
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.addKeyListener(playerOneKeyListener);
-        frame.addKeyListener(player2KeyListener);
+        frame.addKeyListener(playerTwoKeyListener);
         // show the swing paint result
         frame.setVisible(true);
     }

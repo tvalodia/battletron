@@ -10,7 +10,7 @@ public class PlayerFactory {
         return new Player(1, 33, 50);
     }
 
-    public Player getPlayer2() {
+    public Player getPlayerTwo() {
         return new Player(2, 66, 50);
     }
 }

@@ -11,7 +11,7 @@
     </mat-form-field>
     VS
     <mat-form-field>
-      <mat-select placeholder="Player 2" [(value)]="player2Type" panelClass="mat-select-panel">
+      <mat-select placeholder="Player 2" [(value)]="playerTwoType" panelClass="mat-select-panel">
         <mat-option *ngFor="let playerType of playerTypes" [value]="playerType.value">
           {{playerType.viewValue}}
         </mat-option>

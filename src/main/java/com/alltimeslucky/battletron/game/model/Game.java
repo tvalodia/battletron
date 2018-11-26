@@ -21,7 +21,7 @@ public class Game {
     private GameStatus gameStatus;
     private int tickCount;
     private final Player playerOne;
-    private final Player player2;
+    private final Player playerTwo;
 
     //Keeps track of players trails
     private int[][] playingField;
@@ -39,18 +39,18 @@ public class Game {
      * @param width   The width of the playing field
      * @param height  The height of the playing field
      * @param playerOne The first player of the game
-     * @param player2 The second player of the game
+     * @param playerTwo The second player of the game
      */
-    public Game(long id, int width, int height, Player playerOne, Player player2) {
+    public Game(long id, int width, int height, Player playerOne, Player playerTwo) {
         this.id = id;
         this.width = width;
         this.height = height;
         this.tickCount = 0;
         this.playerOne = playerOne;
-        this.player2 = player2;
+        this.playerTwo = playerTwo;
         this.playingField = new int[width][height];
         this.playingField[playerOne.getPositionX()][playerOne.getPositionY()] = playerOne.getId();
-        this.playingField[player2.getPositionX()][player2.getPositionY()] = player2.getId();
+        this.playingField[playerTwo.getPositionX()][playerTwo.getPositionY()] = playerTwo.getId();
         this.winner = null;
         this.gameListeners = Collections.synchronizedList(new LinkedList<>());
         this.gameStatus = GameStatus.WAITING_FOR_READY;
@@ -79,11 +79,11 @@ public class Game {
      * Determines whether the two players are colliding.
      *
      * @param playerOne Player 1
-     * @param player2 Player 2
+     * @param playerTwo Player 2
      * @return true is the two players are colliding
      */
-    public boolean isColliding(Player playerOne, Player player2) {
-        return playerOne.getPositionX() == player2.getPositionX() && playerOne.getPositionY() == player2.getPositionY();
+    public boolean isColliding(Player playerOne, Player playerTwo) {
+        return playerOne.getPositionX() == playerTwo.getPositionX() && playerOne.getPositionY() == playerTwo.getPositionY();
     }
 
     /**
@@ -98,15 +98,15 @@ public class Game {
         if (gameStatus == GameStatus.STARTED) {
             //update the player given the AI's direction input
             playerOne.move();
-            player2.move();
+            playerTwo.move();
 
             //Check for collisions on the playing field
-            if (isColliding(playerOne) && isColliding(player2) || isColliding(playerOne, player2)) {
+            if (isColliding(playerOne) && isColliding(playerTwo) || isColliding(playerOne, playerTwo)) {
                 setGameStatus(GameStatus.COMPLETED_DRAW);
             } else if (isColliding(playerOne)) {
                 setGameStatus(GameStatus.COMPLETED_WINNER);
-                setWinner(player2);
-            } else if (isColliding(player2)) {
+                setWinner(playerTwo);
+            } else if (isColliding(playerTwo)) {
                 setGameStatus(GameStatus.COMPLETED_WINNER);
                 setWinner(playerOne);
             }
@@ -116,9 +116,9 @@ public class Game {
                 playingField[playerOne.getPositionX()][playerOne.getPositionY()] = playerOne.getId();
             }
 
-            if (player2.getPositionX() >= 0 && player2.getPositionX() < width
-                    && player2.getPositionY() >= 0 && player2.getPositionY() < height) {
-                playingField[player2.getPositionX()][player2.getPositionY()] = player2.getId();
+            if (playerTwo.getPositionX() >= 0 && playerTwo.getPositionX() < width
+                    && playerTwo.getPositionY() >= 0 && playerTwo.getPositionY() < height) {
+                playingField[playerTwo.getPositionX()][playerTwo.getPositionY()] = playerTwo.getId();
             }
 
             tickCount++;
@@ -133,7 +133,7 @@ public class Game {
     }
 
     private boolean isReadyToStart() {
-        return playerOne.isReady() && player2.isReady();
+        return playerOne.isReady() && playerTwo.isReady();
     }
 
     public long getId() {
@@ -164,8 +164,8 @@ public class Game {
         return playerOne;
     }
 
-    public Player getPlayer2() {
-        return player2;
+    public Player getPlayerTwo() {
+        return playerTwo;
     }
 
     public GameStatus getGameStatus() {

@@ -25,7 +25,7 @@ export class NewGameComponent implements OnInit {
 
   playerId: string = '';
   playerOneType: string = 'KEYBOARD_WASD_KEYS';
-  player2Type: string = 'KEYWORD_ARROW_KEYS';
+  playerTwoType: string = 'KEYWORD_ARROW_KEYS';
 
   constructor(private gameService: GameService) {
   }
@@ -37,7 +37,7 @@ export class NewGameComponent implements OnInit {
   }
 
   public start() {
-    this.gameService.createGame(this.playerId, this.playerOneType, this.player2Type)
+    this.gameService.createGame(this.playerId, this.playerOneType, this.playerTwoType)
       .subscribe((data: Array<object>) => {
         console.log(data);
       });

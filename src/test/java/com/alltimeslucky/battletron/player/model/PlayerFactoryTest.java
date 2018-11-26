@@ -11,54 +11,54 @@ public class PlayerFactoryTest {
     @Test
     public void testPlayerOneId() {
 
-        Player player1 = playerFactory.getPlayerOne();
+        Player playerOne = playerFactory.getPlayerOne();
 
-        assertEquals(1, player1.getId());
+        assertEquals(1, playerOne.getId());
 
     }
 
     @Test
     public void testPlayerTwoId() {
 
-        Player player2 = playerFactory.getPlayer2();
+        Player playerTwo = playerFactory.getPlayerTwo();
 
-        assertEquals(2, player2.getId());
+        assertEquals(2, playerTwo.getId());
 
     }
 
     @Test
     public void testPlayerOnePositionX() {
 
-        Player player1 = playerFactory.getPlayerOne();
+        Player playerOne = playerFactory.getPlayerOne();
 
-        assertEquals(33, player1.getPositionX());
+        assertEquals(33, playerOne.getPositionX());
 
     }
 
     @Test
     public void testPlayerOnePositionY() {
 
-        Player player1 = playerFactory.getPlayerOne();
+        Player playerOne = playerFactory.getPlayerOne();
 
-        assertEquals(50, player1.getPositionY());
+        assertEquals(50, playerOne.getPositionY());
 
     }
 
     @Test
     public void testPlayerTwoPositionX() {
 
-        Player player2 = playerFactory.getPlayer2();
+        Player playerTwo = playerFactory.getPlayerTwo();
 
-        assertEquals(66, player2.getPositionX());
+        assertEquals(66, playerTwo.getPositionX());
 
     }
 
     @Test
     public void testPlayerTwoPositionY() {
 
-        Player player2 = playerFactory.getPlayer2();
+        Player playerTwo = playerFactory.getPlayerTwo();
 
-        assertEquals(50, player2.getPositionY());
+        assertEquals(50, playerTwo.getPositionY());
 
     }
 

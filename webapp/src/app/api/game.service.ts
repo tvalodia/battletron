@@ -5,7 +5,7 @@ import {HttpClient} from '@angular/common/http';
 export interface NewGame {
   playerId: string,
   playerOneType: string,
-  player2Type: string
+  playerTwoType: string
 }
 
 
@@ -27,7 +27,7 @@ export class GameService {
     return this.httpClient.post(this.API_URL + "/" + gameId + "/spectate" , { playerId: playerId});
   }
 
-  createGame(playerId: string,playerOneType: string, player2Type: string){
-    return this.httpClient.post(this.API_URL, { playerId: playerId, playerOneType: playerOneType, player2Type: player2Type});
+  createGame(playerId: string,playerOneType: string, playerTwoType: string){
+    return this.httpClient.post(this.API_URL, { playerId: playerId, playerOneType: playerOneType, playerTwoType: playerTwoType});
   }
 }

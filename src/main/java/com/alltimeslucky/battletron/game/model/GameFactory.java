@@ -20,6 +20,6 @@ public class GameFactory {
 
     public Game get() {
         return new Game(GregorianCalendar.getInstance().getTimeInMillis(),
-                WIDTH, HEIGHT, playerFactory.getPlayerOne(), playerFactory.getPlayer2());
+                WIDTH, HEIGHT, playerFactory.getPlayerOne(), playerFactory.getPlayerTwo());
     }
 }

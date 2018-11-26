@@ -13,7 +13,7 @@ public class GameController extends Thread {
     private static final int TICK_INTERVAL_MILLIS = 50;
     private long lastTickTime;
     private final PlayerController playerOneController;
-    private final PlayerController player2Controller;
+    private final PlayerController playerTwoController;
     private Game game;
     private volatile boolean pauseThreadFlag;
 
@@ -22,12 +22,12 @@ public class GameController extends Thread {
      *
      * @param game The Game model that holds the game state data
      * @param playerOneController  Player 1's AI controller
-     * @param player2Controller  Player 2's AI controller
+     * @param playerTwoController  Player 2's AI controller
      */
     GameController(Game game,
-                          PlayerController playerOneController, PlayerController player2Controller) {
+                          PlayerController playerOneController, PlayerController playerTwoController) {
         this.playerOneController = playerOneController;
-        this.player2Controller = player2Controller;
+        this.playerTwoController = playerTwoController;
         this.lastTickTime = 0;
         this.game = game;
     }
@@ -56,7 +56,7 @@ public class GameController extends Thread {
 
                 //Have the player controllers act given the current game
                 playerOneController.execute(game);
-                player2Controller.execute(game);
+                playerTwoController.execute(game);
 
                 //update the playing field
                 game.update();

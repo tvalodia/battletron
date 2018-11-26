@@ -27,10 +27,10 @@ public interface GameService {
      *
      * @param playerId    The id of the player creating the game
      * @param playerOneType The type of player for player 1
-     * @param player2Type The type pf player for player 2
+     * @param playerTwoType The type pf player for player 2
      * @return A new GameController
      */
-    Game createGame(String playerId, String playerOneType, String player2Type) throws BattletronException;
+    Game createGame(String playerId, String playerOneType, String playerTwoType) throws BattletronException;
 
     /**
      * Start spectating a game.

@@ -71,7 +71,7 @@ public class GameView extends JComponent implements GameListener {
                     if (game.getPlayingField()[x][y] == game.getPlayerOne().getId()) {
                         drawBlock(getScreenX(x), getScreenY(game.getHeight(), y), Color.blue);
                     }
-                    if (game.getPlayingField()[x][y] == game.getPlayer2().getId()) {
+                    if (game.getPlayingField()[x][y] == game.getPlayerTwo().getId()) {
                         drawBlock(getScreenX(x), getScreenY(game.getHeight(), y), Color.magenta);
                     }
                 }
@@ -82,8 +82,8 @@ public class GameView extends JComponent implements GameListener {
                       getScreenY(game.getHeight(), game.getPlayerOne().getPositionY()),
                       Color.cyan);
             //player 2's head
-            drawBlock(getScreenX(game.getPlayer2().getPositionX()),
-                      getScreenY(game.getHeight(), game.getPlayer2().getPositionY()),
+            drawBlock(getScreenX(game.getPlayerTwo().getPositionX()),
+                      getScreenY(game.getHeight(), game.getPlayerTwo().getPositionY()),
                       Color.pink);
 
             if (game.getGameStatus() == GameStatus.COMPLETED_WINNER) {
