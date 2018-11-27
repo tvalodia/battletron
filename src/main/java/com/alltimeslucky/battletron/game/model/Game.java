@@ -35,9 +35,9 @@ public class Game {
      * Constructor.
      * Initialises the playingField.
      *
-     * @param id      The unique identifier of the game state
-     * @param width   The width of the playing field
-     * @param height  The height of the playing field
+     * @param id        The unique identifier of the game state
+     * @param width     The width of the playing field
+     * @param height    The height of the playing field
      * @param playerOne The first player of the game
      * @param playerTwo The second player of the game
      */
@@ -63,16 +63,12 @@ public class Game {
      * @param player The player for which to test collisions
      * @return true if the player is colliding with any obstacles
      */
-    public boolean isColliding(Player player) {
+    private boolean isColliding(Player player) {
         if (player.getPositionX() >= width || player.getPositionX() < 0) {
             return true;
         } else if (player.getPositionY() >= height || player.getPositionY() < 0) {
             return true;
-        } else if (playingField[player.getPositionX()][player.getPositionY()] != 0) {
-            return true;
-        } else {
-            return false;
-        }
+        } else return (playingField[player.getPositionX()][player.getPositionY()] != 0);
     }
 
     /**
@@ -82,7 +78,7 @@ public class Game {
      * @param playerTwo Player 2
      * @return true is the two players are colliding
      */
-    public boolean isColliding(Player playerOne, Player playerTwo) {
+    private boolean isColliding(Player playerOne, Player playerTwo) {
         return playerOne.getPositionX() == playerTwo.getPositionX() && playerOne.getPositionY() == playerTwo.getPositionY();
     }
 
@@ -172,7 +168,7 @@ public class Game {
         return gameStatus;
     }
 
-    public void setGameStatus(GameStatus gameStatus) {
+    private void setGameStatus(GameStatus gameStatus) {
         this.gameStatus = gameStatus;
     }
 
@@ -184,8 +180,8 @@ public class Game {
         gameListeners.add(listener);
     }
 
-    public void deregisterListener(GameListener listener) {
+    /* public void deregisterListener(GameListener listener) {
         gameListeners.remove(listener);
-    }
+    } */
 
 }

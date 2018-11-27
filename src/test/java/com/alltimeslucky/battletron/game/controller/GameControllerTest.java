@@ -1,6 +1,6 @@
 package com.alltimeslucky.battletron.game.controller;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertEquals;
 
 import com.alltimeslucky.battletron.game.model.Game;
 import com.alltimeslucky.battletron.game.model.GameFactory;
@@ -12,24 +12,27 @@ import org.junit.Test;
 
 public class GameControllerTest {
 
-    private PlayerFactory playerFactory = new PlayerFactory();
-    private GameFactory gameFactory = new GameFactory(playerFactory);
-    private GameControllerFactory gameControllerFactory = new GameControllerFactory();
     private GameController gameController;
+
+    private Game game;
 
     @Before
     public void setup() {
-        Game game = gameFactory.get();
+        PlayerFactory playerFactory = new PlayerFactory();
+        GameFactory gameFactory = new GameFactory(playerFactory);
+        GameControllerFactory gameControllerFactory = new GameControllerFactory();
+
+        game = gameFactory.get();
         PlayerController playerOneController = new SimplePlayerAi(game.getPlayerOne());
         PlayerController playerTwoController = new SimplePlayerAi(game.getPlayerTwo());
+
         gameController = gameControllerFactory.get(game,
                 playerOneController, playerTwoController);
     }
 
     @Test
-    public void testGameControllerFromFactoryIsNotNull() {
-        assertNotNull(gameController);
+    public void testGetGameId() {
+        assertEquals(gameController.getGameId(), game.getId());
     }
 
 }
-/*Placeholder for now.*/

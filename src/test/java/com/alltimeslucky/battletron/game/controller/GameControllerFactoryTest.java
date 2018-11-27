@@ -13,18 +13,18 @@ import org.junit.Test;
 
 public class GameControllerFactoryTest {
 
-    private PlayerFactory playerFactory = new PlayerFactory();
-    private GameFactory gameFactory = new GameFactory(playerFactory);
-    private GameControllerFactory gameControllerFactory = new GameControllerFactory();
+    private GameControllerFactory gameControllerFactory;
 
     private Game game;
     private PlayerController playerOneController;
     private PlayerController playerTwoController;
 
-    private GameController gameController;
-
     @Before
     public void setup() {
+        PlayerFactory playerFactory = new PlayerFactory();
+        GameFactory gameFactory = new GameFactory(playerFactory);
+        gameControllerFactory = new GameControllerFactory();
+
         game = gameFactory.get();
         playerOneController = new SimplePlayerAi(game.getPlayerOne());
         playerTwoController = new SimplePlayerAi(game.getPlayerTwo());
@@ -32,7 +32,7 @@ public class GameControllerFactoryTest {
 
     @Test
     public void testGameControllerFromFactoryIsNotNull() {
-        gameController = gameControllerFactory.get(game,
+        GameController gameController = gameControllerFactory.get(game,
                 playerOneController, playerTwoController);
 
         assertNotNull(gameController);
@@ -40,7 +40,7 @@ public class GameControllerFactoryTest {
 
     @Test
     public void testGameControllerFromFactoryIsNotSingletonPooledOrCached() {
-        gameController = gameControllerFactory.get(game,
+        GameController gameController = gameControllerFactory.get(game,
                 playerOneController, playerTwoController);
 
         GameController anotherGameController = gameControllerFactory.get(game,
