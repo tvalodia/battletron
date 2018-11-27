@@ -19,6 +19,10 @@ public class GameControllerFactoryTest {
     private PlayerController playerOneController;
     private PlayerController playerTwoController;
 
+    /**
+     * We want a fresh instance of gameControllerFactory to test each time. We need some other attributes in order to
+     * run the get() method in the tests.
+     */
     @Before
     public void setup() {
         PlayerFactory playerFactory = new PlayerFactory();

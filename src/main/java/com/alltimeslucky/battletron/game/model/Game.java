@@ -68,7 +68,9 @@ public class Game {
             return true;
         } else if (player.getPositionY() >= height || player.getPositionY() < 0) {
             return true;
-        } else return (playingField[player.getPositionX()][player.getPositionY()] != 0);
+        } else {
+            return (playingField[player.getPositionX()][player.getPositionY()] != 0);
+        }
     }
 
     /**

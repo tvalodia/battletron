@@ -16,6 +16,9 @@ public class GameControllerTest {
 
     private Game game;
 
+    /**
+     * We want a fresh instance of gameController to test each time.
+     */
     @Before
     public void setup() {
         PlayerFactory playerFactory = new PlayerFactory();
