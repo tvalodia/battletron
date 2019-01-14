@@ -45,7 +45,7 @@ public class BattletronServer {
         WebAppContext mainWebAppContext = new WebAppContext();
         mainWebAppContext.setContextPath("/");
         mainWebAppContext.setWelcomeFiles(new String[]{"index.html"});
-        mainWebAppContext.setResourceBase(getWebappWebRootUri());
+        mainWebAppContext.setResourceBase(BattletronServer.class.getClassLoader().getResource("webapp").toExternalForm());
 
         Injector injector = Guice.createInjector(new BattletronModule());
 
@@ -89,18 +89,6 @@ public class BattletronServer {
         } finally {
             jettyServer.destroy();
         }
-    }
-
-    private static String getWebappWebRootUri() throws URISyntaxException {
-        ClassLoader cl = BattletronServer.class.getClassLoader();
-        URL f = cl.getResource("webapp/index.html");
-        if (f == null) {
-            throw new RuntimeException("Unable to find resource directory");
-        }
-        // Resolve file to directory
-        URI webRootUri = f.toURI().resolve("./").normalize();
-        LOG.info("Webapp WebRoot is " + webRootUri);
-        return webRootUri.toString();
     }
 
     private static ResourceConfig buildResourceConfig(Injector injector) {
