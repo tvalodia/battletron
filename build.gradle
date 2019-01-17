@@ -86,7 +86,7 @@ task buildAngular(type: Exec) {
     dependsOn "installAngular"
     workingDir "$webappDir"
     inputs.dir "$webappDir"
-//    outputs.dir "$webappDir/dist/webapp"
+
     // Add task to the standard build group
     group = BasePlugin.BUILD_GROUP
     // ng doesn't exist as a file in windows -> ng.cmd
@@ -113,13 +113,3 @@ task buildAll(type: Task) {
     dependsOn "buildAngular"
     group = BasePlugin.BUILD_GROUP
 }
-
-//distributions {
-//    main {
-//        contents {
-//            from(buildAngular) {
-//                into "webapp"
-//            }
-//        }
-//    }
-//}
