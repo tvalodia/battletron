@@ -20,7 +20,11 @@ export class GameService {
   }
 
   getGames(){
-    return  this.httpClient.get(this.API_URL);
+    return this.httpClient.get(this.API_URL);
+  }
+
+  getJoinableGames(){
+    return this.httpClient.get(this.API_URL + "/open");
   }
 
   spectateGame(gameId: number, playerId: string){

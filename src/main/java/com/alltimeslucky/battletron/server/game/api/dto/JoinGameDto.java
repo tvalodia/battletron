@@ -1,6 +1,6 @@
 package com.alltimeslucky.battletron.server.game.api.dto;
 
-public class SpectateDto {
+public class JoinGameDto {
 
     private String playerId;
 

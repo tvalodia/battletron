@@ -4,8 +4,9 @@ import com.alltimeslucky.battletron.exception.BattletronException;
 import com.alltimeslucky.battletron.game.model.Game;
 import com.alltimeslucky.battletron.server.game.api.dto.GameCommandDto;
 import com.alltimeslucky.battletron.server.game.api.dto.GameDto;
+import com.alltimeslucky.battletron.server.game.api.dto.JoinGameDto;
 import com.alltimeslucky.battletron.server.game.api.dto.NewGameDto;
-import com.alltimeslucky.battletron.server.game.api.dto.SpectateDto;
+import com.alltimeslucky.battletron.server.game.api.dto.SpectateGameDto;
 import com.alltimeslucky.battletron.server.game.service.GameService;
 
 import java.util.LinkedList;
@@ -66,6 +67,26 @@ public class GameApi {
      * @return The complete list of games.
      */
     @GET
+    @Path("/open")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<GameDto> getJoinableGames() {
+        List<GameDto> dtos = new LinkedList<>();
+        for (Game game : gameService.getJoinableGames()) {
+            GameDto gameDto = new GameDto(game);
+            gameDto.setPlayingField(null);
+            dtos.add(gameDto);
+        }
+
+        LOG.debug("Response: " + dtos);
+        return dtos;
+    }
+
+    /**
+     * Fetches a list of all games.
+     *
+     * @return The complete list of games.
+     */
+    @GET
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public GameDto getGame(@PathParam("id") long id) throws BattletronException {
@@ -99,8 +120,8 @@ public class GameApi {
     @Path("{id}/spectate")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public GameDto spectateGame(@PathParam("id") long id, SpectateDto spectateDto) throws Exception {
-        Game game = gameService.spectateGame(id, spectateDto.getPlayerId());
+    public GameDto spectateGame(@PathParam("id") long id, SpectateGameDto spectateGameDto) throws Exception {
+        Game game = gameService.spectateGame(id, spectateGameDto.getPlayerId());
         GameDto gameDto = new GameDto(game);
         LOG.debug("Response: " + gameDto);
         return gameDto;
@@ -115,8 +136,8 @@ public class GameApi {
     @Path("{id}/join")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public GameDto joinGame(@PathParam("id") long id, SpectateDto spectateDto) throws Exception {
-        Game game = gameService.joinGame(id, spectateDto.getPlayerId());
+    public GameDto joinGame(@PathParam("id") long id, JoinGameDto joinGameDto) throws Exception {
+        Game game = gameService.joinGame(id, joinGameDto.getPlayerId());
         GameDto gameDto = new GameDto(game);
         LOG.debug("Response: " + gameDto);
         return gameDto;

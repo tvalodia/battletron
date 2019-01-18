@@ -62,6 +62,17 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
+    public List<Game> getJoinableGames() {
+        List<Game> games = new LinkedList<>();
+        for (GameController gameController : gameControllerRepository.getAllGameControllers()) {
+            if (gameController.isJoinable()) {
+                games.add(gameController.getGame());
+            }
+        }
+        return games;
+    }
+
+    @Override
     public Game getGame(long gameId) throws BattletronException {
         inputValidator.validateGameId(gameId);
 

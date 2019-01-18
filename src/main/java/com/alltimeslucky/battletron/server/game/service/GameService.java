@@ -9,11 +9,18 @@ import java.util.List;
 public interface GameService {
 
     /**
-     * Gets all stored instances of GameController objects.
+     * Gets all stored instances of Game objects.
      *
-     * @return A list of GameController
+     * @return A list of Game
      */
     List<Game> getAllGames();
+
+    /**
+     * Gets all Game objects that have an available (null) PlayerController.
+     *
+     * @return A list of GameControllers
+     */
+    List<Game> getJoinableGames();
 
     /**
      * Gets the GameControlelr with the specified ID.

@@ -28,7 +28,7 @@ export class JoinGameComponent implements OnInit {
   }
 
   public getGames() {
-    this.gameService.getGames().subscribe((data: Array<Game>) => {
+    this.gameService.getJoinableGames().subscribe((data: Array<Game>) => {
       this.games = data;
       console.log(data);
     });

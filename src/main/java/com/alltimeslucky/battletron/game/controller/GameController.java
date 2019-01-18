@@ -149,4 +149,7 @@ public class GameController extends Thread {
         }
     }
 
+    public boolean isJoinable() {
+        return (playerOneController == null || playerTwoController == null) && game.getGameStatus() == GameStatus.WAITING_FOR_READY;
+    }
 }
