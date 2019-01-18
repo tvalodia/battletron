@@ -1,0 +1,10 @@
+mat-card {
+  min-width: 800px;
+}
+
+.buildingsListContainer {
+  display: block;
+  overflow-y: auto;
+  width: 100%;
+  height: 100%;
+}

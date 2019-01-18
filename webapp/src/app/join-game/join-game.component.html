@@ -1,0 +1,28 @@
+<div class="container">
+  <mat-card>
+    <mat-card-title>Join</mat-card-title>
+
+    <mat-card-content>
+      <button mat-button (click)="refresh()" color="primary">Refresh</button>
+      <mat-grid-list cols="3" [rowHeight]="550">
+        <mat-grid-tile>
+          <div class="buildingsListContainer">
+            <mat-nav-list>
+              <mat-list-item *ngFor="let game of games" (click)="joinGame(game.id)">
+                <p mat-line>{{game.id | date:'medium'}}</p>
+                <p mat-line>#Moves: {{game.tickCount}}, Status: {{game.gameStatus | status}}</p>
+              </mat-list-item>
+            </mat-nav-list>
+          </div>
+        </mat-grid-tile>
+        <mat-grid-tile [colspan]="2">
+          <app-game-view #gameView (newPlayerId)="onNewPlayerId($event)"></app-game-view>
+        </mat-grid-tile>
+      </mat-grid-list>
+    </mat-card-content>
+
+    <mat-card-footer>
+      <button mat-button routerLink="/" color="warn">Main Menu</button>
+    </mat-card-footer>
+  </mat-card>
+</div>
