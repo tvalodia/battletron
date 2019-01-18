@@ -140,7 +140,8 @@ public class GameServiceInputValidator {
             validationException.add(new BattletronException(ExceptionCode.INVALID_VALUE, SESSION_ID));
         }
 
-        if (gameControllerRepository.get(gameId).getPlayerOneController() != null && gameControllerRepository.get(gameId).getPlayerTwoController() != null) {
+        if (gameControllerRepository.get(gameId).getPlayerOneController() != null
+                && gameControllerRepository.get(gameId).getPlayerTwoController() != null) {
             validationException.add(new BattletronException(ExceptionCode.GAME_ALREADY_FULL, SESSION_ID));
         }
 

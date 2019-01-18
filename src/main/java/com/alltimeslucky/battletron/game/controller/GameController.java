@@ -141,6 +141,10 @@ public class GameController extends Thread {
         return playerTwoController;
     }
 
+    /**
+     * Assigns the given PlayerController to either player one or player two.
+     * @param playerController The new PlayerController to be used
+     */
     public void joinGame(PlayerController playerController) {
         if (playerOneController == null) {
             this.playerOneController = playerController;
