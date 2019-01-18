@@ -106,6 +106,22 @@ public class GameApi {
         return gameDto;
     }
 
+    /**
+     * Registers for spectating a game.
+     *
+     * @return A GameDto object.
+     */
+    @POST
+    @Path("{id}/join")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public GameDto joinGame(@PathParam("id") long id, SpectateDto spectateDto) throws Exception {
+        Game game = gameService.joinGame(id, spectateDto.getPlayerId());
+        GameDto gameDto = new GameDto(game);
+        LOG.debug("Response: " + gameDto);
+        return gameDto;
+    }
+
 
     /**
      * Controls the running-state of a game.

@@ -12,8 +12,8 @@ public class GameController extends Thread {
 
     private static final int TICK_INTERVAL_MILLIS = 50;
     private long lastTickTime;
-    private final PlayerController playerOneController;
-    private final PlayerController playerTwoController;
+    private PlayerController playerOneController;
+    private PlayerController playerTwoController;
     private Game game;
     private volatile boolean pauseThreadFlag;
 
@@ -24,8 +24,7 @@ public class GameController extends Thread {
      * @param playerOneController  Player 1's AI controller
      * @param playerTwoController  Player 2's AI controller
      */
-    GameController(Game game,
-                          PlayerController playerOneController, PlayerController playerTwoController) {
+    GameController(Game game, PlayerController playerOneController, PlayerController playerTwoController) {
         this.playerOneController = playerOneController;
         this.playerTwoController = playerTwoController;
         this.lastTickTime = 0;
@@ -54,9 +53,14 @@ public class GameController extends Thread {
             long currentTime = System.currentTimeMillis();
             if (currentTime - lastTickTime >= TICK_INTERVAL_MILLIS) {
 
-                //Have the player controllers act given the current game
-                playerOneController.execute(game);
-                playerTwoController.execute(game);
+                //Execute the player controllers
+                if (playerOneController != null) {
+                    playerOneController.execute(game);
+                }
+
+                if (playerTwoController != null) {
+                    playerTwoController.execute(game);
+                }
 
                 //update the playing field
                 game.update();
@@ -128,4 +132,21 @@ public class GameController extends Thread {
     public Game getGame() {
         return game;
     }
+
+    public PlayerController getPlayerOneController() {
+        return playerOneController;
+    }
+
+    public PlayerController getPlayerTwoController() {
+        return playerTwoController;
+    }
+
+    public void joinGame(PlayerController playerController) {
+        if (playerOneController == null) {
+            this.playerOneController = playerController;
+        } else if (playerTwoController == null) {
+            this.playerTwoController = playerController;
+        }
+    }
+
 }

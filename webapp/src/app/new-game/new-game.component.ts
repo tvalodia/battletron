@@ -20,7 +20,8 @@ export class NewGameComponent implements OnInit {
     {value: 'KEYBOARD_WASD_KEYS', viewValue: 'Human - WASD keys'},
     {value: 'KEYWORD_ARROW_KEYS', viewValue: 'Human - Arrow keys'},
     {value: 'AI_SIMPLE', viewValue: 'AI - Simple'},
-    {value: 'AI_DOWNLEFT', viewValue: 'AI - Down Left'}
+    {value: 'AI_DOWNLEFT', viewValue: 'AI - Down Left'},
+    {value: 'ONLINE', viewValue: 'Online'}
   ];
 
   playerId: string = '';

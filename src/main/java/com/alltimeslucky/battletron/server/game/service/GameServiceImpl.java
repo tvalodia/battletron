@@ -9,6 +9,7 @@ import com.alltimeslucky.battletron.game.model.GameFactory;
 import com.alltimeslucky.battletron.player.controller.PlayerController;
 import com.alltimeslucky.battletron.player.controller.PlayerControllerFactory;
 import com.alltimeslucky.battletron.player.controller.PlayerControllerType;
+import com.alltimeslucky.battletron.player.model.Player;
 import com.alltimeslucky.battletron.server.game.repository.GameControllerRepository;
 import com.alltimeslucky.battletron.server.game.service.validation.GameServiceInputValidator;
 import com.alltimeslucky.battletron.server.websocket.ClientWebSocket;
@@ -118,6 +119,22 @@ public class GameServiceImpl implements GameService {
 
         killAnyRunningGame(playerId);
         GameController gameController = gameControllerRepository.get(gameId);
+        clientWebSocketController.registerForUpdates(playerId, gameController.getGameId());
+        return gameController.getGame();
+    }
+
+    @Override
+    public Game joinGame(long gameId, String playerId) throws BattletronException {
+        inputValidator.validateJoinGameInput(gameId, playerId);
+
+        killAnyRunningGame(playerId);
+        GameController gameController = gameControllerRepository.get(gameId);
+        Player player  = gameController.getGame().getPlayerOne();
+        if (player != null) {
+            player  = gameController.getGame().getPlayerTwo();
+        }
+
+        gameController.joinGame(playerControllerFactory.getPlayerController(PlayerControllerType.KEYBOARD,playerId, player));
         clientWebSocketController.registerForUpdates(playerId, gameController.getGameId());
         return gameController.getGame();
     }

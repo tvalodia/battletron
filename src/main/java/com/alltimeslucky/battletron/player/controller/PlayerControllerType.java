@@ -5,5 +5,6 @@ public enum PlayerControllerType {
     KEYBOARD_WASD_KEYS,
     KEYWORD_ARROW_KEYS,
     AI_DOWNLEFT,
-    AI_SIMPLE
+    AI_SIMPLE,
+    ONLINE
 }

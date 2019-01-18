@@ -11,6 +11,7 @@ import { GameViewComponent } from './game-view/game-view.component';
 import { HttpClientModule } from  '@angular/common/http';
 import { SpectateGameComponent } from './spectate-game/spectate-game.component';
 import { StatusPipe } from './spectate-game/status.pipe';
+import { JoinGameComponent } from './join-game/join-game.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { StatusPipe } from './spectate-game/status.pipe';
     NewGameComponent,
     GameViewComponent,
     SpectateGameComponent,
-    StatusPipe
+    StatusPipe,
+    JoinGameComponent
   ],
   imports: [
     BrowserModule,

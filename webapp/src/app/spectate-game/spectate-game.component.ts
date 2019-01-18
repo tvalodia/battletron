@@ -45,6 +45,4 @@ export class SpectateGameComponent implements OnInit {
     });
 
   }
-
-
 }

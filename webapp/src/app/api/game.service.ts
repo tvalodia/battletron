@@ -30,4 +30,8 @@ export class GameService {
   createGame(playerId: string,playerOneType: string, playerTwoType: string){
     return this.httpClient.post(this.API_URL, { playerId: playerId, playerOneType: playerOneType, playerTwoType: playerTwoType});
   }
+
+  joinGame(gameId: number, playerId: string){
+    return this.httpClient.post(this.API_URL + "/" + gameId + "/join" , { playerId: playerId});
+  }
 }

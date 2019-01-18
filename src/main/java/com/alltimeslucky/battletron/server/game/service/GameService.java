@@ -40,6 +40,13 @@ public interface GameService {
     Game spectateGame(long gameId, String playerId) throws Exception;
 
     /**
+     * Join a game.
+     *
+     * @return The game that the player is joining
+     */
+    Game joinGame(long gameId, String playerId) throws BattletronException;
+
+    /**
      * Pauses the specified game.
      *
      * @param gameId The id of the game to pause
