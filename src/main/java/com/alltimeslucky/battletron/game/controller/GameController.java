@@ -41,6 +41,7 @@ public class GameController extends Thread {
         while (true) {
             if (interrupted()) {
                 System.out.println("Game Engine killed.");
+                game.stop();
                 return;
             }
 

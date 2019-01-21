@@ -14,6 +14,8 @@ export class StatusPipe implements PipeTransform {
       return "NOT STARTED";
     } else if (value == "STARTED") {
       return "IN PROGRESS";
+    } else if (value == "STOPPED") {
+      return "STOPPED";
     } else return "UNKNOWN";
   }
 

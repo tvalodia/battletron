@@ -182,6 +182,10 @@ public class Game {
         gameListeners.add(listener);
     }
 
+    public void stop() {
+        setGameStatus(GameStatus.STOPPED);
+    }
+
     /* public void deregisterListener(GameListener listener) {
         gameListeners.remove(listener);
     } */
