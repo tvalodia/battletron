@@ -28,7 +28,7 @@ public class PlayerControllerFactory {
             case KEYBOARD: return new WebSocketPlayerController(player, clientWebSocketRepository.get(playerId));
             case AI_SIMPLE: return new SimplePlayerAi(player);
             case AI_DOWNLEFT: return new DownLeftPlayerController(player);
-            case ONLINE: return null;
+            case OPEN: return null;
 
             default: return null;
         }

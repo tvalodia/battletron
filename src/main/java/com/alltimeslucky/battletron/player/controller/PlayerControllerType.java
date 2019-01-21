@@ -6,5 +6,5 @@ public enum PlayerControllerType {
     KEYWORD_ARROW_KEYS,
     AI_DOWNLEFT,
     AI_SIMPLE,
-    ONLINE
+    OPEN
 }
