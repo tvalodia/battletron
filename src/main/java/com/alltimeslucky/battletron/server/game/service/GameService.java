@@ -20,7 +20,7 @@ public interface GameService {
      *
      * @return A list of GameControllers
      */
-    List<Game> getJoinableGames();
+    List<Game> getOpenGames();
 
     /**
      * Gets the GameControlelr with the specified ID.

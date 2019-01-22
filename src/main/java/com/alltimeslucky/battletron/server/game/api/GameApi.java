@@ -62,16 +62,16 @@ public class GameApi {
     }
 
     /**
-     * Fetches a list of all games.
+     * Fetches a list of all games that players are able to join.
      *
-     * @return The complete list of games.
+     * @return The list of open games.
      */
     @GET
     @Path("/open")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<GameDto> getJoinableGames() {
+    public List<GameDto> getOpenGames() {
         List<GameDto> dtos = new LinkedList<>();
-        for (Game game : gameService.getJoinableGames()) {
+        for (Game game : gameService.getOpenGames()) {
             GameDto gameDto = new GameDto(game);
             gameDto.setPlayingField(null);
             dtos.add(gameDto);
@@ -82,9 +82,9 @@ public class GameApi {
     }
 
     /**
-     * Fetches a list of all games.
+     * Fetches a specific game.
      *
-     * @return The complete list of games.
+     * @return The requested game.
      */
     @GET
     @Path("{id}")
@@ -104,7 +104,7 @@ public class GameApi {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     public GameDto createGame(NewGameDto dto) throws BattletronException {
-        Game game = gameService.createGame(dto.getPlayerId(),dto.getPlayerOneType(), dto.getPlayerTwoType());
+        Game game = gameService.createGame(dto.getPlayerId(), dto.getPlayerOneType(), dto.getPlayerTwoType());
         GameDto gameDto = new GameDto(game);
         gameDto.setPlayingField(null);
         LOG.debug("Response: " + gameDto);

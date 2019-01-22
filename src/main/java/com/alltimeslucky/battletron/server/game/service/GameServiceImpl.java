@@ -62,7 +62,7 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public List<Game> getJoinableGames() {
+    public List<Game> getOpenGames() {
         List<Game> games = new LinkedList<>();
         for (GameController gameController : gameControllerRepository.getAllGameControllers()) {
             if (gameController.isJoinable()) {
