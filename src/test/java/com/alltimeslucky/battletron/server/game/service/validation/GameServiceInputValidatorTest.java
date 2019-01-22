@@ -198,4 +198,54 @@ public class GameServiceInputValidatorTest {
             assertEquals("Session ID", exception.getExceptions().get(0).getField());
         }
     }
+
+    @Test
+    public void testValidateJoinGameInputSuccessful() throws BattletronException {
+        gameControllerRepository.add(123L, mockGameController);
+        clientWebSocketRepository.add("abc", new ClientWebSocket());
+
+        validator.validateJoinGameInput(123, "abc");
+    }
+
+    @Test
+    public void testValidateJoinGameInputWithInvalidGameId() {
+
+        try {
+            validator.validateJoinGameInput(123, "abc");
+            fail("Exception was not thrown");
+        } catch (BattletronException exception) {
+            assertEquals(ExceptionCode.NOT_FOUND, exception.getCode());
+        }
+    }
+
+    @Test
+    public void testValidateJoinGameInputWithNullSessionId() {
+        gameControllerRepository.add(123L, mockGameController);
+
+        try {
+            validator.validateJoinGameInput(123, null);
+            fail("Exception was not thrown");
+        } catch (BattletronException exception) {
+            assertEquals(ExceptionCode.VALIDATION, exception.getCode());
+            assertEquals(1, exception.getExceptions().size());
+            assertEquals(ExceptionCode.MISSING_VALUE, exception.getExceptions().get(0).getCode());
+            assertEquals("Session ID", exception.getExceptions().get(0).getField());
+        }
+    }
+
+    @Test
+    public void testValidateJoinGameInputWithInvalidSessionId() {
+        gameControllerRepository.add(123L, mockGameController);
+
+        try {
+            validator.validateJoinGameInput(123, "abc");
+            fail("Exception was not thrown");
+        } catch (BattletronException exception) {
+            assertEquals(ExceptionCode.VALIDATION, exception.getCode());
+            assertEquals(1, exception.getExceptions().size());
+            assertEquals(ExceptionCode.INVALID_VALUE, exception.getExceptions().get(0).getCode());
+            assertEquals("Session ID", exception.getExceptions().get(0).getField());
+        }
+    }
+
 }
