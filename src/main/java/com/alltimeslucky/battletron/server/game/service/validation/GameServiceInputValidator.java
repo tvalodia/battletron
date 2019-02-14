@@ -4,6 +4,7 @@ import com.alltimeslucky.battletron.exception.BattletronException;
 import com.alltimeslucky.battletron.exception.ExceptionCode;
 import com.alltimeslucky.battletron.player.controller.PlayerControllerType;
 import com.alltimeslucky.battletron.server.game.repository.GameControllerRepository;
+import com.alltimeslucky.battletron.server.websocket.ClientWebSocket;
 import com.alltimeslucky.battletron.server.websocket.ClientWebSocketRepository;
 
 import javax.inject.Inject;
@@ -26,7 +27,8 @@ public class GameServiceInputValidator {
 
     /**
      * Validates the input of the CreateGame service.
-     * @param sessionId The id of the web socket session
+     *
+     * @param sessionId               The id of the web socket session
      * @param playerOneControllerType The type of controller for player one
      * @param playerTwoControllerType The type of controller for player one
      * @throws BattletronException Thrown when the any of the input values do not pass validation
@@ -88,7 +90,8 @@ public class GameServiceInputValidator {
 
     /**
      * Validates the input of the SpectateGame service.
-     * @param gameId The id of the game to spectate
+     *
+     * @param gameId    The id of the game to spectate
      * @param sessionId The id of the web socket session
      * @throws BattletronException Thrown when the any of the input values do not pass validation
      */
@@ -118,7 +121,8 @@ public class GameServiceInputValidator {
 
     /**
      * Validates the input of the JoinGame service.
-     * @param gameId The id of the game to spectate
+     *
+     * @param gameId    The id of the game to spectate
      * @param sessionId The id of the web socket session
      * @throws BattletronException Thrown when the any of the input values do not pass validation
      */
@@ -140,19 +144,28 @@ public class GameServiceInputValidator {
             validationException.add(new BattletronException(ExceptionCode.INVALID_VALUE, SESSION_ID));
         }
 
-        if (gameControllerRepository.get(gameId).getPlayerOneController() != null
-                && gameControllerRepository.get(gameId).getPlayerTwoController() != null) {
-            validationException.add(new BattletronException(ExceptionCode.GAME_ALREADY_FULL, SESSION_ID));
-        }
-
         if (validationException.exceptionCount() > 0) {
             throw validationException;
         }
+
+        ClientWebSocket clientWebSocket = clientWebSocketRepository.get(sessionId);
+
+        if (clientWebSocket.getPlayerController() != null
+                && (gameControllerRepository.get(gameId).getPlayerOneController() == clientWebSocket.getPlayerController()
+                || gameControllerRepository.get(gameId).getPlayerTwoController() == clientWebSocket.getPlayerController())) {
+            throw new BattletronException(ExceptionCode.ALREADY_JOINED_GAME);
+        } else if (gameControllerRepository.get(gameId).getPlayerOneController() != null
+                && gameControllerRepository.get(gameId).getPlayerTwoController() != null) {
+            throw new BattletronException(ExceptionCode.GAME_ALREADY_FULL);
+        }
+
+
 
     }
 
     /**
      * Validates the specified game id.
+     *
      * @param id The id of the game to validate
      * @throws BattletronException Thrown when a game does not exist for the given id.
      */

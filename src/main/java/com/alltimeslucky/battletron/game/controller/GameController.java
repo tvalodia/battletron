@@ -154,6 +154,18 @@ public class GameController extends Thread {
         }
     }
 
+    /**
+     * Removes the given PlayerController from the game.
+     * @param playerController The PlayerController to remove
+     */
+    public void leaveGame(PlayerController playerController) {
+        if (playerOneController == playerController) {
+            playerOneController = null;
+        } else if (playerTwoController == playerController) {
+            playerTwoController = null;
+        }
+    }
+
     public boolean isJoinable() {
         return (playerOneController == null || playerTwoController == null) && game.getGameStatus() == GameStatus.WAITING_FOR_READY;
     }

@@ -2,6 +2,7 @@ package com.alltimeslucky.battletron.server.websocket;
 
 import com.alltimeslucky.battletron.game.model.Game;
 import com.alltimeslucky.battletron.game.model.GameStatus;
+import com.alltimeslucky.battletron.player.controller.PlayerController;
 import com.alltimeslucky.battletron.player.model.Direction;
 import com.alltimeslucky.battletron.server.game.api.dto.GameDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -31,6 +32,7 @@ public class ClientWebSocket extends WebSocketAdapter {
     private Long currentGameId;
     private ClientWebSocketListener listener;
     private boolean ignoreInput;
+    private PlayerController playerController;
 
     /**
      * Constructor.
@@ -156,5 +158,13 @@ public class ClientWebSocket extends WebSocketAdapter {
 
     public String getSessionId() {
         return sessionId;
+    }
+
+    public PlayerController getPlayerController() {
+        return playerController;
+    }
+
+    public void setPlayerController(PlayerController playerController) {
+        this.playerController = playerController;
     }
 }

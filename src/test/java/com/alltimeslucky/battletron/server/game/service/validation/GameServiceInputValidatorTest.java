@@ -2,10 +2,13 @@ package com.alltimeslucky.battletron.server.game.service.validation;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import com.alltimeslucky.battletron.exception.BattletronException;
 import com.alltimeslucky.battletron.exception.ExceptionCode;
 import com.alltimeslucky.battletron.game.controller.GameController;
+import com.alltimeslucky.battletron.player.controller.PlayerController;
 import com.alltimeslucky.battletron.server.game.repository.GameControllerRepository;
 import com.alltimeslucky.battletron.server.websocket.ClientWebSocket;
 import com.alltimeslucky.battletron.server.websocket.ClientWebSocketRepository;
@@ -245,6 +248,56 @@ public class GameServiceInputValidatorTest {
             assertEquals(1, exception.getExceptions().size());
             assertEquals(ExceptionCode.INVALID_VALUE, exception.getExceptions().get(0).getCode());
             assertEquals("Session ID", exception.getExceptions().get(0).getField());
+        }
+    }
+
+    @Test
+    public void testValidateJoinGameFailsWhenAlreadyJoinedAsPlayerOne() {
+        gameControllerRepository.add(123L, mockGameController);
+        ClientWebSocket clientWebSocket = new ClientWebSocket();
+        clientWebSocketRepository.add("abc", clientWebSocket);
+        PlayerController mockPlayerController = mock(PlayerController.class);
+        clientWebSocket.setPlayerController(mockPlayerController);
+        when(mockGameController.getPlayerOneController()).thenReturn(mockPlayerController);
+
+        try {
+            validator.validateJoinGameInput(123L, "abc");
+            fail("Exception was not thrown");
+        } catch (BattletronException exception) {
+            assertEquals(ExceptionCode.ALREADY_JOINED_GAME, exception.getCode());
+        }
+    }
+
+    @Test
+    public void testValidateJoinGameFailsWhenAlreadyJoinedAsPlayerTwo() {
+        gameControllerRepository.add(123L, mockGameController);
+        ClientWebSocket clientWebSocket = new ClientWebSocket();
+        clientWebSocketRepository.add("abc", clientWebSocket);
+        PlayerController mockPlayerController = mock(PlayerController.class);
+        clientWebSocket.setPlayerController(mockPlayerController);
+        when(mockGameController.getPlayerTwoController()).thenReturn(mockPlayerController);
+
+        try {
+            validator.validateJoinGameInput(123L, "abc");
+            fail("Exception was not thrown");
+        } catch (BattletronException exception) {
+            assertEquals(ExceptionCode.ALREADY_JOINED_GAME, exception.getCode());
+        }
+    }
+
+    @Test
+    public void testValidateJoinGameFailsWhenGameAlreadyFull() {
+        gameControllerRepository.add(123L, mockGameController);
+        clientWebSocketRepository.add("abc",  new ClientWebSocket());
+        PlayerController mockPlayerController = mock(PlayerController.class);
+        when(mockGameController.getPlayerOneController()).thenReturn(mockPlayerController);
+        when(mockGameController.getPlayerTwoController()).thenReturn(mockPlayerController);
+
+        try {
+            validator.validateJoinGameInput(123L, "abc");
+            fail("Exception was not thrown");
+        } catch (BattletronException exception) {
+            assertEquals(ExceptionCode.GAME_ALREADY_FULL, exception.getCode());
         }
     }
 

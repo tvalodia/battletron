@@ -85,21 +85,21 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public Game createGame(String playerId, String playerOneType, String playerTwoType) throws BattletronException {
-        inputValidator.validateCreateGameInput(playerId, playerOneType, playerTwoType);
-        killAnyRunningGame(playerId);
+    public Game createGame(String sessionId, String playerOneType, String playerTwoType) throws BattletronException {
+        inputValidator.validateCreateGameInput(sessionId, playerOneType, playerTwoType);
+        killGamesStartedWithSessionId(sessionId);
 
         Game game = gameFactory.get();
         PlayerController playerOneController = playerControllerFactory.getPlayerController(
-                PlayerControllerType.valueOf(playerOneType), playerId, game.getPlayerOne());
+                PlayerControllerType.valueOf(playerOneType), sessionId, game.getPlayerOne());
         PlayerController playerTwoController = playerControllerFactory.getPlayerController(
-                PlayerControllerType.valueOf(playerTwoType), playerId, game.getPlayerTwo());
+                PlayerControllerType.valueOf(playerTwoType), sessionId, game.getPlayerTwo());
         GameController gameController = gameControllerFactory.get(game, playerOneController, playerTwoController);
         gameControllerRepository.add(gameController.getGameId(), gameController);
-        clientWebSocketController.registerForUpdates(playerId, gameController.getGameId());
+        clientWebSocketController.registerForUpdates(sessionId, gameController.getGameId());
         game.registerListener(clientWebSocketController);
         //gameController.getGame().registerListener(new PrintGameListener());
-        ClientWebSocket clientWebSocket = clientWebSocketRepository.get(playerId);
+        ClientWebSocket clientWebSocket = clientWebSocketRepository.get(sessionId);
         clientWebSocket.setCurrentGameId(gameController.getGame().getId());
 
         gameController.start();
@@ -110,16 +110,16 @@ public class GameServiceImpl implements GameService {
     /**
      * Stops and removes a game that was started by the specified player.
      *
-     * @param playerId The id of the player
+     * @param sessionId The id of the player
      */
-    private void killAnyRunningGame(String playerId) {
+    private void killGamesStartedWithSessionId(String sessionId) {
         //kill any existing game started by the player
-        ClientWebSocket webSocketGameStateListener = clientWebSocketRepository.get(playerId);
-        if (webSocketGameStateListener.getCurrentGameId() != null) {
-            GameController runningGame = gameControllerRepository.get(webSocketGameStateListener.getCurrentGameId());
+        ClientWebSocket clientWebSocket = clientWebSocketRepository.get(sessionId);
+        if (clientWebSocket.getCurrentGameId() != null) {
+            GameController runningGame = gameControllerRepository.get(clientWebSocket.getCurrentGameId());
             if (runningGame != null) {
                 runningGame.kill();
-                // gameControllerRepository.delete(webSocketGameStateListener.getCurrentGameId());
+                // gameControllerRepository.delete(clientWebSocket.getCurrentGameId());
             }
         }
     }
@@ -128,25 +128,28 @@ public class GameServiceImpl implements GameService {
     public Game spectateGame(long gameId, String playerId) throws BattletronException {
         inputValidator.validateSpectateGameInput(gameId, playerId);
 
-        killAnyRunningGame(playerId);
+        killGamesStartedWithSessionId(playerId);
         GameController gameController = gameControllerRepository.get(gameId);
         clientWebSocketController.registerForUpdates(playerId, gameController.getGameId());
         return gameController.getGame();
     }
 
     @Override
-    public Game joinGame(long gameId, String playerId) throws BattletronException {
-        inputValidator.validateJoinGameInput(gameId, playerId);
-
-        killAnyRunningGame(playerId);
+    public Game joinGame(long gameId, String sessionId) throws BattletronException {
+        inputValidator.validateJoinGameInput(gameId, sessionId);
+        killGamesStartedWithSessionId(sessionId);
         GameController gameController = gameControllerRepository.get(gameId);
         Player player  = gameController.getGame().getPlayerOne();
         if (player != null) {
             player  = gameController.getGame().getPlayerTwo();
         }
-
-        gameController.joinGame(playerControllerFactory.getPlayerController(PlayerControllerType.KEYBOARD,playerId, player));
-        clientWebSocketController.registerForUpdates(playerId, gameController.getGameId());
+        PlayerController playerController = playerControllerFactory.getPlayerController(PlayerControllerType.KEYBOARD, sessionId, player);
+        clientWebSocketController.registerForUpdates(sessionId, gameController.getGameId());
+        ClientWebSocket clientWebSocket = clientWebSocketRepository.get(sessionId);
+        clientWebSocket.setCurrentGameId(gameId);
+        clientWebSocket.setPlayerController(playerController);
+        gameController.leaveGame(clientWebSocket.getPlayerController());
+        gameController.joinGame(playerController);
         return gameController.getGame();
     }
 

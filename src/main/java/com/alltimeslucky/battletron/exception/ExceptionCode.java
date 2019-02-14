@@ -2,6 +2,7 @@ package com.alltimeslucky.battletron.exception;
 
 public enum ExceptionCode {
 
+    ALREADY_JOINED_GAME("You're already in this game"),
     VALIDATION("Validation errors"),
     NOT_FOUND("No record found"),
     MISSING_VALUE("Mandatory value has not been specified"),
