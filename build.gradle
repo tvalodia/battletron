@@ -109,6 +109,7 @@ task installAngular(type: Exec) {
 }
 
 task buildAll(type: Task) {
+    dependsOn "clean"
     dependsOn "buildAngular"
     dependsOn "build"
     group = BasePlugin.BUILD_GROUP
