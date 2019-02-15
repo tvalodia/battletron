@@ -2,13 +2,6 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 
 
-export interface NewGame {
-  playerId: string,
-  playerOneType: string,
-  playerTwoType: string
-}
-
-
 @Injectable({
   providedIn: 'root'
 })

@@ -1,0 +1,19 @@
+<div>
+  <h2>Error</h2>
+  <div>
+    <p>
+      {{data.description}}
+    </p>
+    <ul>
+      <ng-template #recursiveList let-data.causes>
+        <li *ngFor="let cause of data.causes">
+          {{cause.description}}
+          <ul *ngIf="cause.causes.length > 0">
+            <ng-container *ngTemplateOutlet="recursiveList; context:{ $implicit: cause.causes }"></ng-container>
+          </ul>
+        </li>
+      </ng-template>
+      <ng-container *ngTemplateOutlet="recursiveList; context:{ $implicit: data.causes }"></ng-container>
+    </ul>
+  </div>
+</div>

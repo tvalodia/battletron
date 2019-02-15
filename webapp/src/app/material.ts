@@ -2,15 +2,15 @@ import {
   MatButtonModule,
   MatButtonToggleModule,
   MatCardModule, MatGridListModule, MatListModule,
-  MatSelectModule
+  MatSelectModule, MatDialogModule
 } from "@angular/material";
 import {NgModule} from "@angular/core";
 
 @NgModule({
   imports: [MatCardModule, MatButtonModule, MatButtonToggleModule, MatSelectModule, MatGridListModule,
-            MatListModule],
+            MatListModule, MatDialogModule],
   exports: [MatCardModule, MatButtonModule, MatButtonToggleModule, MatSelectModule, MatGridListModule,
-            MatListModule]
+            MatListModule, MatDialogModule]
 })
 export class BattletronMaterialModule {
 }
