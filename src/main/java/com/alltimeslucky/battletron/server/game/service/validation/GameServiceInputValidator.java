@@ -2,6 +2,7 @@ package com.alltimeslucky.battletron.server.game.service.validation;
 
 import com.alltimeslucky.battletron.exception.BattletronException;
 import com.alltimeslucky.battletron.exception.ExceptionCode;
+import com.alltimeslucky.battletron.game.controller.GameController;
 import com.alltimeslucky.battletron.player.controller.PlayerControllerType;
 import com.alltimeslucky.battletron.server.game.repository.GameControllerRepository;
 import com.alltimeslucky.battletron.server.websocket.ClientWebSocket;
@@ -149,18 +150,15 @@ public class GameServiceInputValidator {
         }
 
         ClientWebSocket clientWebSocket = clientWebSocketRepository.get(sessionId);
-
+        GameController gameController = gameControllerRepository.get(gameId);
         if (clientWebSocket.getPlayerController() != null
-                && (gameControllerRepository.get(gameId).getPlayerOneController() == clientWebSocket.getPlayerController()
-                || gameControllerRepository.get(gameId).getPlayerTwoController() == clientWebSocket.getPlayerController())) {
+                && (gameController.getPlayerOneController() == clientWebSocket.getPlayerController()
+                || gameController.getPlayerTwoController() == clientWebSocket.getPlayerController())) {
             throw new BattletronException(ExceptionCode.ALREADY_JOINED_GAME);
-        } else if (gameControllerRepository.get(gameId).getPlayerOneController() != null
-                && gameControllerRepository.get(gameId).getPlayerTwoController() != null) {
+        } else if (gameController.getPlayerOneController() != null
+                && gameController.getPlayerTwoController() != null) {
             throw new BattletronException(ExceptionCode.GAME_ALREADY_FULL);
         }
-
-
-
     }
 
     /**

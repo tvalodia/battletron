@@ -138,6 +138,7 @@ public class GameServiceImpl implements GameService {
     public Game joinGame(long gameId, String sessionId) throws BattletronException {
         inputValidator.validateJoinGameInput(gameId, sessionId);
         killGamesStartedWithSessionId(sessionId);
+        leaveGame(sessionId);
         GameController gameController = gameControllerRepository.get(gameId);
         Player player  = gameController.getGame().getPlayerOne();
         if (player != null) {
@@ -148,7 +149,6 @@ public class GameServiceImpl implements GameService {
         ClientWebSocket clientWebSocket = clientWebSocketRepository.get(sessionId);
         clientWebSocket.setCurrentGameId(gameId);
         clientWebSocket.setPlayerController(playerController);
-        gameController.leaveGame(clientWebSocket.getPlayerController());
         gameController.joinGame(playerController);
         return gameController.getGame();
     }
@@ -196,6 +196,16 @@ public class GameServiceImpl implements GameService {
             gameController.kill();
         } else {
             throw new Exception("Invalid game ID");
+        }
+    }
+
+    private void leaveGame(String sessionId) {
+        ClientWebSocket clientWebSocket = clientWebSocketRepository.get(sessionId);
+
+        if (clientWebSocket.getCurrentGameId() != null && gameControllerRepository.contains(clientWebSocket.getCurrentGameId())) {
+            GameController oldGameController = gameControllerRepository.get(clientWebSocket.getCurrentGameId());
+            oldGameController.leaveGame(clientWebSocket.getPlayerController());
+            clientWebSocketController.deregisterForUpdates(sessionId);
         }
     }
 }
