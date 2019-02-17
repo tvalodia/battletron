@@ -1,4 +1,4 @@
-package com.alltimeslucky.battletron.server.game.repository;
+package com.alltimeslucky.battletron.game.controller;
 
 import com.alltimeslucky.battletron.game.controller.GameController;
 

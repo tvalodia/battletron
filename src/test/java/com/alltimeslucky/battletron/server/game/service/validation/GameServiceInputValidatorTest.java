@@ -9,7 +9,7 @@ import com.alltimeslucky.battletron.exception.BattletronException;
 import com.alltimeslucky.battletron.exception.ExceptionCode;
 import com.alltimeslucky.battletron.game.controller.GameController;
 import com.alltimeslucky.battletron.player.controller.PlayerController;
-import com.alltimeslucky.battletron.server.game.repository.GameControllerRepository;
+import com.alltimeslucky.battletron.game.controller.GameControllerRepository;
 import com.alltimeslucky.battletron.server.websocket.ClientWebSocket;
 import com.alltimeslucky.battletron.server.websocket.ClientWebSocketRepository;
 

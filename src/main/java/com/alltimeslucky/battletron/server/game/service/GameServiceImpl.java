@@ -10,7 +10,7 @@ import com.alltimeslucky.battletron.player.controller.PlayerController;
 import com.alltimeslucky.battletron.player.controller.PlayerControllerFactory;
 import com.alltimeslucky.battletron.player.controller.PlayerControllerType;
 import com.alltimeslucky.battletron.player.model.Player;
-import com.alltimeslucky.battletron.server.game.repository.GameControllerRepository;
+import com.alltimeslucky.battletron.game.controller.GameControllerRepository;
 import com.alltimeslucky.battletron.server.game.service.validation.GameServiceInputValidator;
 import com.alltimeslucky.battletron.server.websocket.ClientWebSocket;
 import com.alltimeslucky.battletron.server.websocket.ClientWebSocketController;
