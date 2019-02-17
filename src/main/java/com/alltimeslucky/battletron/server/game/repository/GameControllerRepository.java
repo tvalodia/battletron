@@ -4,6 +4,7 @@ import com.alltimeslucky.battletron.game.controller.GameController;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -11,7 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class GameControllerRepository {
 
-    private ConcurrentHashMap<Long, GameController> data;
+    private Map<Long, GameController> data;
 
     public GameControllerRepository() {
         data = new ConcurrentHashMap<>();
