@@ -1,6 +1,9 @@
 package com.alltimeslucky.battletron.server.websocket;
 
 import com.alltimeslucky.battletron.server.game.service.GameService;
+import com.alltimeslucky.battletron.server.session.Session;
+import com.alltimeslucky.battletron.server.session.SessionFactory;
+import com.alltimeslucky.battletron.server.session.SessionRepository;
 
 import javax.inject.Inject;
 
@@ -17,19 +20,21 @@ public class BattletronWebSocketServlet extends WebSocketServlet {
 
     private static final Logger LOG = LogManager.getLogger();
 
-    private final ClientWebSocketRepository clientWebSocketRepository;
+    private final SessionRepository sessionRepository;
+    private final SessionFactory sessionFactory;
     private final ClientWebSocketController clientWebSocketController;
-    private GameService gameService;
 
     private ClientWebSocketListener clientWebSocketListener = new ClientWebSocketListener() {
         @Override
         public void onConnect(ClientWebSocket clientWebSocket) {
-            clientWebSocketRepository.add(clientWebSocket.getSessionId(), clientWebSocket);
+            Session session = sessionFactory.get(clientWebSocket.getSessionId());
+            session.setClientWebSocket(clientWebSocket);
+            sessionRepository.add(clientWebSocket.getSessionId(), session);
         }
 
         @Override
         public void onDisconnect(ClientWebSocket clientWebSocket) {
-            clientWebSocketRepository.delete(clientWebSocket.getSessionId());
+            sessionRepository.delete(clientWebSocket.getSessionId());
             clientWebSocketController.deregisterForUpdates(clientWebSocket.getSessionId());
         }
     };
@@ -37,17 +42,16 @@ public class BattletronWebSocketServlet extends WebSocketServlet {
     /**
      * Constructor.
      *
-     * @param clientWebSocketRepository The instance of ClientWebSocketRepository
+     * @param sessionRepository         The instance of ClientWebSocketRepository
      * @param clientWebSocketController ClientWebSocketController clientWebSocketController
      */
     @Inject
-    public BattletronWebSocketServlet(ClientWebSocketRepository clientWebSocketRepository,
-                                      ClientWebSocketController clientWebSocketController,
-                                      GameService gameService) {
-
-        this.clientWebSocketRepository = clientWebSocketRepository;
+    public BattletronWebSocketServlet(SessionFactory sessionFactory,
+                                      SessionRepository sessionRepository,
+                                      ClientWebSocketController clientWebSocketController) {
+        this.sessionFactory = sessionFactory;
+        this.sessionRepository = sessionRepository;
         this.clientWebSocketController = clientWebSocketController;
-        this.gameService = gameService;
     }
 
     @Override

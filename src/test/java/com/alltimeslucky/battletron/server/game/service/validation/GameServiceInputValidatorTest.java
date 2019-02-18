@@ -10,8 +10,9 @@ import com.alltimeslucky.battletron.exception.ExceptionCode;
 import com.alltimeslucky.battletron.game.controller.GameController;
 import com.alltimeslucky.battletron.player.controller.PlayerController;
 import com.alltimeslucky.battletron.game.controller.GameControllerRepository;
+import com.alltimeslucky.battletron.server.session.Session;
+import com.alltimeslucky.battletron.server.session.SessionRepository;
 import com.alltimeslucky.battletron.server.websocket.ClientWebSocket;
-import com.alltimeslucky.battletron.server.websocket.ClientWebSocketRepository;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -22,7 +23,7 @@ public class GameServiceInputValidatorTest {
 
     private GameServiceInputValidator validator;
     private GameControllerRepository gameControllerRepository;
-    private ClientWebSocketRepository clientWebSocketRepository;
+    private SessionRepository sessionRepository;
 
     @Mock
     private GameController mockGameController;
@@ -34,8 +35,8 @@ public class GameServiceInputValidatorTest {
     public void setup() {
         MockitoAnnotations.initMocks(this);
         gameControllerRepository = new GameControllerRepository();
-        clientWebSocketRepository = new ClientWebSocketRepository();
-        validator = new GameServiceInputValidator(gameControllerRepository, clientWebSocketRepository);
+        sessionRepository = new SessionRepository();
+        validator = new GameServiceInputValidator(gameControllerRepository, sessionRepository);
     }
 
     @Test
@@ -57,7 +58,7 @@ public class GameServiceInputValidatorTest {
 
     @Test
     public void testValidateCreateGameInputSuccessful() throws BattletronException {
-        clientWebSocketRepository.add("abc", new ClientWebSocket());
+        sessionRepository.add("abc", new Session("abc"));
 
         validator.validateCreateGameInput("abc", "KEYBOARD", "KEYBOARD");
     }
@@ -77,7 +78,7 @@ public class GameServiceInputValidatorTest {
 
     @Test
     public void testValidateCreateGameInputWithNullPlayerOneControllerType() {
-        clientWebSocketRepository.add("abc", new ClientWebSocket());
+        sessionRepository.add("abc", new Session("abc"));
 
         try {
             validator.validateCreateGameInput("abc", null, "KEYBOARD");
@@ -92,7 +93,7 @@ public class GameServiceInputValidatorTest {
 
     @Test
     public void testValidateCreateGameInputWithNullPlayerTwoControllerType() {
-        clientWebSocketRepository.add("def", new ClientWebSocket());
+        sessionRepository.add("def", new Session("abc"));
 
         try {
             validator.validateCreateGameInput("def", "KEYBOARD", null);
@@ -107,7 +108,7 @@ public class GameServiceInputValidatorTest {
 
     @Test
     public void testValidateCreateGameInputWithNullInputs() {
-        clientWebSocketRepository.add("abc", new ClientWebSocket());
+        sessionRepository.add("abc", new Session("abc"));
 
         try {
             validator.validateCreateGameInput(null, null, null);
@@ -156,7 +157,7 @@ public class GameServiceInputValidatorTest {
     @Test
     public void testValidateSpectateGameInputSuccessful() throws BattletronException {
         gameControllerRepository.add(123L, mockGameController);
-        clientWebSocketRepository.add("abc", new ClientWebSocket());
+        sessionRepository.add("abc", new Session("abc"));
 
         validator.validateSpectateGameInput(123, "abc");
     }
@@ -205,7 +206,7 @@ public class GameServiceInputValidatorTest {
     @Test
     public void testValidateJoinGameInputSuccessful() throws BattletronException {
         gameControllerRepository.add(123L, mockGameController);
-        clientWebSocketRepository.add("abc", new ClientWebSocket());
+        sessionRepository.add("abc", new Session("abc"));
 
         validator.validateJoinGameInput(123, "abc");
     }
@@ -254,10 +255,10 @@ public class GameServiceInputValidatorTest {
     @Test
     public void testValidateJoinGameFailsWhenAlreadyJoinedAsPlayerOne() {
         gameControllerRepository.add(123L, mockGameController);
-        ClientWebSocket clientWebSocket = new ClientWebSocket();
-        clientWebSocketRepository.add("abc", clientWebSocket);
+        Session session = new Session("abc");
+        sessionRepository.add("abc", session);
         PlayerController mockPlayerController = mock(PlayerController.class);
-        clientWebSocket.setPlayerController(mockPlayerController);
+        session.setPlayerController(mockPlayerController);
         when(mockGameController.getPlayerOneController()).thenReturn(mockPlayerController);
 
         try {
@@ -271,10 +272,10 @@ public class GameServiceInputValidatorTest {
     @Test
     public void testValidateJoinGameFailsWhenAlreadyJoinedAsPlayerTwo() {
         gameControllerRepository.add(123L, mockGameController);
-        ClientWebSocket clientWebSocket = new ClientWebSocket();
-        clientWebSocketRepository.add("abc", clientWebSocket);
+        Session session = new Session("abc");
+        sessionRepository.add("abc", session);
         PlayerController mockPlayerController = mock(PlayerController.class);
-        clientWebSocket.setPlayerController(mockPlayerController);
+        session.setPlayerController(mockPlayerController);
         when(mockGameController.getPlayerTwoController()).thenReturn(mockPlayerController);
 
         try {
@@ -288,7 +289,7 @@ public class GameServiceInputValidatorTest {
     @Test
     public void testValidateJoinGameFailsWhenGameAlreadyFull() {
         gameControllerRepository.add(123L, mockGameController);
-        clientWebSocketRepository.add("abc",  new ClientWebSocket());
+        sessionRepository.add("abc",   new Session("abc"));
         PlayerController mockPlayerController = mock(PlayerController.class);
         when(mockGameController.getPlayerOneController()).thenReturn(mockPlayerController);
         when(mockGameController.getPlayerTwoController()).thenReturn(mockPlayerController);

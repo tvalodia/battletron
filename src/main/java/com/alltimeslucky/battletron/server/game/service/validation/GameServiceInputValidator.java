@@ -3,10 +3,11 @@ package com.alltimeslucky.battletron.server.game.service.validation;
 import com.alltimeslucky.battletron.exception.BattletronException;
 import com.alltimeslucky.battletron.exception.ExceptionCode;
 import com.alltimeslucky.battletron.game.controller.GameController;
-import com.alltimeslucky.battletron.player.controller.PlayerControllerType;
 import com.alltimeslucky.battletron.game.controller.GameControllerRepository;
+import com.alltimeslucky.battletron.player.controller.PlayerControllerType;
+import com.alltimeslucky.battletron.server.session.Session;
+import com.alltimeslucky.battletron.server.session.SessionRepository;
 import com.alltimeslucky.battletron.server.websocket.ClientWebSocket;
-import com.alltimeslucky.battletron.server.websocket.ClientWebSocketRepository;
 
 import javax.inject.Inject;
 
@@ -17,13 +18,13 @@ public class GameServiceInputValidator {
     private static final String PLAYER_TWO_CONTROLLER_TYPE = "Player Two Type";
 
     private GameControllerRepository gameControllerRepository;
-    private ClientWebSocketRepository clientWebSocketRepository;
+    private SessionRepository sessionRepository;
 
     @Inject
     public GameServiceInputValidator(GameControllerRepository gameControllerRepository,
-                                     ClientWebSocketRepository clientWebSocketRepository) {
+                                     SessionRepository sessionRepository) {
         this.gameControllerRepository = gameControllerRepository;
-        this.clientWebSocketRepository = clientWebSocketRepository;
+        this.sessionRepository = sessionRepository;
     }
 
     /**
@@ -68,7 +69,7 @@ public class GameServiceInputValidator {
 
         BattletronException validationException = new BattletronException(ExceptionCode.VALIDATION);
 
-        if (!clientWebSocketRepository.contains(sessionId)) {
+        if (!sessionRepository.contains(sessionId)) {
             validationException.add(new BattletronException(ExceptionCode.INVALID_VALUE, SESSION_ID));
         }
 
@@ -110,7 +111,7 @@ public class GameServiceInputValidator {
             throw validationException;
         }
 
-        if (!clientWebSocketRepository.contains(sessionId)) {
+        if (!sessionRepository.contains(sessionId)) {
             validationException.add(new BattletronException(ExceptionCode.INVALID_VALUE, SESSION_ID));
         }
 
@@ -141,7 +142,7 @@ public class GameServiceInputValidator {
             throw validationException;
         }
 
-        if (!clientWebSocketRepository.contains(sessionId)) {
+        if (!sessionRepository.contains(sessionId)) {
             validationException.add(new BattletronException(ExceptionCode.INVALID_VALUE, SESSION_ID));
         }
 
@@ -149,11 +150,11 @@ public class GameServiceInputValidator {
             throw validationException;
         }
 
-        ClientWebSocket clientWebSocket = clientWebSocketRepository.get(sessionId);
+        Session session = sessionRepository.get(sessionId);
         GameController gameController = gameControllerRepository.get(gameId);
-        if (clientWebSocket.getPlayerController() != null
-                && (gameController.getPlayerOneController() == clientWebSocket.getPlayerController()
-                || gameController.getPlayerTwoController() == clientWebSocket.getPlayerController())) {
+        if (session.getPlayerController() != null
+                && (gameController.getPlayerOneController() == session.getPlayerController()
+                || gameController.getPlayerTwoController() == session.getPlayerController())) {
             throw new BattletronException(ExceptionCode.ALREADY_JOINED_GAME);
         } else if (gameController.getPlayerOneController() != null
                 && gameController.getPlayerTwoController() != null) {

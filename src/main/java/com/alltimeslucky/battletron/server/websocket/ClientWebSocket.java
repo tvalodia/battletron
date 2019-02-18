@@ -29,10 +29,8 @@ public class ClientWebSocket extends WebSocketAdapter {
     private Direction wasdKeysDirection;
     private ObjectMapper objectMapper;
     private String sessionId = "";
-    private Long currentGameId;
     private ClientWebSocketListener listener;
     private boolean ignoreInput;
-    private PlayerController playerController;
 
     /**
      * Constructor.
@@ -136,14 +134,6 @@ public class ClientWebSocket extends WebSocketAdapter {
         return direction;
     }
 
-    public Long getCurrentGameId() {
-        return currentGameId;
-    }
-
-    public void setCurrentGameId(long currentGameId) {
-        this.currentGameId = currentGameId;
-    }
-
     public Direction getArrowKeysDirection() {
         return arrowKeysDirection;
     }
@@ -160,11 +150,4 @@ public class ClientWebSocket extends WebSocketAdapter {
         return sessionId;
     }
 
-    public PlayerController getPlayerController() {
-        return playerController;
-    }
-
-    public void setPlayerController(PlayerController playerController) {
-        this.playerController = playerController;
-    }
 }

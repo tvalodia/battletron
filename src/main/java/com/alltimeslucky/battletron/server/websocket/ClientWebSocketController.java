@@ -2,6 +2,7 @@ package com.alltimeslucky.battletron.server.websocket;
 
 import com.alltimeslucky.battletron.game.model.Game;
 import com.alltimeslucky.battletron.game.model.GameListener;
+import com.alltimeslucky.battletron.server.session.SessionRepository;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -14,31 +15,31 @@ import javax.inject.Inject;
  */
 public class ClientWebSocketController implements GameListener {
 
-    private Map<String, Long> playerGameMap;
-    private final ClientWebSocketRepository clientWebSocketRepository;
+    private Map<String, Long> sessionGameMap;
+    private final SessionRepository sessionRepository;
 
     @Inject
-    public ClientWebSocketController(ClientWebSocketRepository clientWebSocketRepository) {
-        playerGameMap = new ConcurrentHashMap<>();
-        this.clientWebSocketRepository = clientWebSocketRepository;
+    public ClientWebSocketController(SessionRepository sessionRepository) {
+        sessionGameMap = new ConcurrentHashMap<>();
+        this.sessionRepository = sessionRepository;
     }
 
 
     @Override
     public void onGameStateUpdate(Game game) {
-        playerGameMap.forEach((playerId, gameId) -> {
+        sessionGameMap.forEach((sessionId, gameId) -> {
             if (game.getId() == gameId) {
-                clientWebSocketRepository.get(playerId).sendGameState(game);
+                sessionRepository.get(sessionId).getClientWebSocket().sendGameState(game);
             }
         }
         );
     }
 
-    public void registerForUpdates(String playerId, long gameId) {
-        playerGameMap.put(playerId, gameId);
+    public void registerForUpdates(String sessionId, long gameId) {
+        sessionGameMap.put(sessionId, gameId);
     }
 
-    public void deregisterForUpdates(String playerId) {
-        playerGameMap.remove(playerId);
+    public void deregisterForUpdates(String sessionId) {
+        sessionGameMap.remove(sessionId);
     }
 }

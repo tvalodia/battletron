@@ -3,6 +3,7 @@ package com.alltimeslucky.battletron.server.game.service;
 import com.alltimeslucky.battletron.exception.BattletronException;
 import com.alltimeslucky.battletron.game.controller.GameController;
 import com.alltimeslucky.battletron.game.controller.GameControllerFactory;
+import com.alltimeslucky.battletron.game.controller.GameControllerRepository;
 import com.alltimeslucky.battletron.game.model.Game;
 import com.alltimeslucky.battletron.game.model.GameFactory;
 import com.alltimeslucky.battletron.game.model.GameStatus;
@@ -10,11 +11,11 @@ import com.alltimeslucky.battletron.player.controller.PlayerController;
 import com.alltimeslucky.battletron.player.controller.PlayerControllerFactory;
 import com.alltimeslucky.battletron.player.controller.PlayerControllerType;
 import com.alltimeslucky.battletron.player.model.PlayerFactory;
-import com.alltimeslucky.battletron.game.controller.GameControllerRepository;
 import com.alltimeslucky.battletron.server.game.service.validation.GameServiceInputValidator;
+import com.alltimeslucky.battletron.server.session.Session;
+import com.alltimeslucky.battletron.server.session.SessionRepository;
 import com.alltimeslucky.battletron.server.websocket.ClientWebSocket;
 import com.alltimeslucky.battletron.server.websocket.ClientWebSocketController;
-import com.alltimeslucky.battletron.server.websocket.ClientWebSocketRepository;
 
 import org.junit.After;
 import org.junit.Before;
@@ -39,26 +40,29 @@ public class GameServiceImplTest {
     private GameControllerRepository gameControllerRepository;
     private GameControllerFactory gameControllerFactory;
 
-    @Mock
-    private ClientWebSocket mockClientWebSocket;
-    @Mock
+    private Session session;
+
+        @Mock
     PlayerControllerFactory mockPlayerControllerFactory;
 
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        ClientWebSocketRepository clientWebSocketRepository = new ClientWebSocketRepository();
-        ClientWebSocketController mockClientWebSocketController = new ClientWebSocketController(clientWebSocketRepository);
+        SessionRepository  sessionRepository = new SessionRepository();
+        ClientWebSocketController mockClientWebSocketController = new ClientWebSocketController(sessionRepository);
         gameControllerFactory = new GameControllerFactory();
         PlayerController mockPlayerController1 = mock(PlayerController.class);
         when(mockPlayerControllerFactory.getPlayerController(any(), any(), any())).thenReturn(mockPlayerController1).thenReturn(null);
         gameControllerRepository = new GameControllerRepository();
         GameFactory gameFactory = new GameFactory(new PlayerFactory());
-        GameServiceInputValidator gameServiceInputValidator = new GameServiceInputValidator(gameControllerRepository, clientWebSocketRepository);
-        clientWebSocketRepository.add(PLAYER_ID, mockClientWebSocket);
-        when(mockClientWebSocket.getCurrentGameId()).thenReturn(123L);
+        GameServiceInputValidator gameServiceInputValidator = new GameServiceInputValidator(gameControllerRepository, sessionRepository);
+        session = new Session(PLAYER_ID);
+        session.setGameId(123L);
+        ClientWebSocket mockClientWebSocket = mock(ClientWebSocket.class);
+        session.setClientWebSocket(mockClientWebSocket);
+        sessionRepository.add(PLAYER_ID, session);
 
-        gameService = new GameServiceImpl(gameControllerRepository, clientWebSocketRepository, mockClientWebSocketController,
+        gameService = new GameServiceImpl(gameControllerRepository, sessionRepository, mockClientWebSocketController,
                 mockPlayerControllerFactory, gameControllerFactory, gameFactory, gameServiceInputValidator);
     }
 
@@ -78,7 +82,7 @@ public class GameServiceImplTest {
     public void testJoinSuccessful() throws BattletronException {
         Game game = gameService.createGame(PLAYER_ID, PLAYER_CONTROLLER_TYPE_OPEN, PLAYER_CONTROLLER_TYPE_OPEN);
         PlayerController mockPlayerController2 = mock(PlayerController.class);
-        when(mockPlayerControllerFactory.getPlayerController(PlayerControllerType.KEYBOARD, PLAYER_ID, game.getPlayerTwo())).thenReturn(mockPlayerController2);
+        when(mockPlayerControllerFactory.getPlayerController(PlayerControllerType.KEYBOARD, session.getClientWebSocket(), game.getPlayerTwo())).thenReturn(mockPlayerController2);
 
         Game joinedGame = gameService.joinGame(game.getId(), PLAYER_ID);
 
@@ -89,12 +93,12 @@ public class GameServiceImplTest {
 
     }
 
-    @Test (expected = BattletronException.class)
+    @Test(expected = BattletronException.class)
     public void testJoinGameFailsWhenJoiningTheSameGameTwice() throws BattletronException {
         Game game = gameService.createGame(PLAYER_ID, PLAYER_CONTROLLER_TYPE_OPEN, PLAYER_CONTROLLER_TYPE_OPEN);
         PlayerController mockPlayerController2 = mock(PlayerController.class);
-        when(mockPlayerControllerFactory.getPlayerController(PlayerControllerType.KEYBOARD, PLAYER_ID, game.getPlayerTwo())).thenReturn(mockPlayerController2);
-        when(mockClientWebSocket.getPlayerController()).thenReturn(mockPlayerController2);
+        when(mockPlayerControllerFactory.getPlayerController(PlayerControllerType.KEYBOARD, session.getClientWebSocket(), game.getPlayerTwo())).thenReturn(mockPlayerController2);
+        session.setPlayerController(mockPlayerController2);
 
         gameService.joinGame(game.getId(), PLAYER_ID);
         gameService.joinGame(game.getId(), PLAYER_ID);
