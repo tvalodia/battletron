@@ -7,6 +7,7 @@ import com.alltimeslucky.battletron.player.model.Player;
 import com.alltimeslucky.battletron.server.game.api.dto.GameDto;
 import com.alltimeslucky.battletron.server.game.api.dto.JoinGameDto;
 import com.alltimeslucky.battletron.server.game.api.dto.NewGameDto;
+import com.alltimeslucky.battletron.server.game.api.dto.NewGamePlayerDto;
 import com.alltimeslucky.battletron.server.game.api.dto.SpectateGameDto;
 import com.alltimeslucky.battletron.server.game.service.GameService;
 
@@ -38,10 +39,8 @@ public class GameApiTest {
 
     @Test
     public void testGetAllGames() {
-        Game mockGame1 = mock(Game.class);
-        when(mockGame1.getId()).thenReturn(1L);
-        Game mockGame2 = mock(Game.class);
-        when(mockGame2.getId()).thenReturn(2L);
+        Game mockGame1 = getGameMock(1L);
+        Game mockGame2 = getGameMock(2L);
 
         List<Game> expectedGames = Arrays.asList(mockGame1, mockGame2);
 
@@ -54,10 +53,8 @@ public class GameApiTest {
 
     @Test
     public void testGetOpenGames() {
-        Game mockGame1 = mock(Game.class);
-        when(mockGame1.getId()).thenReturn(1L);
-        Game mockGame2 = mock(Game.class);
-        when(mockGame2.getId()).thenReturn(2L);
+        Game mockGame1 = getGameMock(1L);
+        Game mockGame2 = getGameMock(2L);
 
         List<Game> expectedGames = Arrays.asList(mockGame1, mockGame2);
 
@@ -70,8 +67,7 @@ public class GameApiTest {
 
     @Test
     public void testGetGameSuccessful() throws Exception {
-        Game mockGame = mock(Game.class);
-        when(mockGame.getId()).thenReturn(123L);
+        Game mockGame = getGameMock(123L);
         when(mockGameService.getGame(1L)).thenReturn(mockGame);
 
         GameDto gameDto = gameApi.getGame(1L);
@@ -82,18 +78,18 @@ public class GameApiTest {
 
     @Test
     public void testCreateGameSuccessful() throws BattletronException {
-        Player player1 = new Player();
-        player1.setDirection(Direction.UP);
-        Player player2 = new Player();
-        player2.setDirection(Direction.DOWN);
-
-        Game mockGame = mock(Game.class);
-        when(mockGame.getId()).thenReturn(123L);
+        Game mockGame = getGameMock(123L);
 
         NewGameDto newGameDto = new NewGameDto();
-        newGameDto.setPlayerId("1");
-        newGameDto.setPlayerOneType("playerOneType");
-        newGameDto.setPlayerTwoType("playerTwoType");
+        newGameDto.setSessionId("1");
+        NewGamePlayerDto playerOne = new NewGamePlayerDto();
+        playerOne.setPlayerType("playerOneType");
+        newGameDto.setPlayerOne(playerOne);
+
+        NewGamePlayerDto playerTwo = new NewGamePlayerDto();
+        playerTwo.setPlayerType("playerTwoType");
+        newGameDto.setPlayerTwo(playerTwo);
+
         when(mockGameService.createGame("1", "playerOneType", "playerTwoType")).thenReturn(mockGame);
 
         GameDto gameDto = gameApi.createGame(newGameDto);
@@ -109,8 +105,7 @@ public class GameApiTest {
         Player player2 = new Player();
         player2.setDirection(Direction.DOWN);
 
-        Game mockGame = mock(Game.class);
-        when(mockGame.getId()).thenReturn(123L);
+        Game mockGame = getGameMock(123L);
 
         SpectateGameDto spectateGameDto = new SpectateGameDto();
         spectateGameDto.setPlayerId("2");
@@ -123,13 +118,7 @@ public class GameApiTest {
 
     @Test
     public void testJoinGameSuccessful() throws Exception {
-        Player player1 = new Player();
-        player1.setDirection(Direction.UP);
-        Player player2 = new Player();
-        player2.setDirection(Direction.DOWN);
-
-        Game mockGame = mock(Game.class);
-        when(mockGame.getId()).thenReturn(123L);
+        Game mockGame = getGameMock(123L);
 
         JoinGameDto joinGameDto = new JoinGameDto();
         joinGameDto.setPlayerId("2");
@@ -139,4 +128,13 @@ public class GameApiTest {
 
         assertEquals(123L, gameDto.getId());
     }
+
+    private Game getGameMock(long id) {
+        Game mockGame1 = mock(Game.class);
+        when(mockGame1.getId()).thenReturn(id);
+        when(mockGame1.getPlayerOne()).thenReturn(mock(Player.class));
+        when(mockGame1.getPlayerTwo()).thenReturn(mock(Player.class));
+        return mockGame1;
+    }
+
 }

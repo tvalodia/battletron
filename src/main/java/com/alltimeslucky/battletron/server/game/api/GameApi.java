@@ -104,7 +104,7 @@ public class GameApi {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     public GameDto createGame(NewGameDto dto) throws BattletronException {
-        Game game = gameService.createGame(dto.getPlayerId(), dto.getPlayerOneType(), dto.getPlayerTwoType());
+        Game game = gameService.createGame(dto.getSessionId(), dto.getPlayerOne().getPlayerType(), dto.getPlayerTwo().getPlayerType());
         GameDto gameDto = new GameDto(game);
         gameDto.setPlayingField(null);
         LOG.debug("Response: " + gameDto);

@@ -1,5 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
+import {NewGame} from "../new-game/new-game";
 
 
 @Injectable({
@@ -24,8 +25,8 @@ export class GameService {
     return this.httpClient.post(this.API_URL + "/" + gameId + "/spectate" , { playerId: playerId});
   }
 
-  createGame(playerId: string,playerOneType: string, playerTwoType: string){
-    return this.httpClient.post(this.API_URL, { playerId: playerId, playerOneType: playerOneType, playerTwoType: playerTwoType});
+  createGame(newGame: NewGame){
+    return this.httpClient.post(this.API_URL,  JSON.stringify(newGame));
   }
 
   joinGame(gameId: number, playerId: string){

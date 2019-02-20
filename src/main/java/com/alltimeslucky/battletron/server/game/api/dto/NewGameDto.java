@@ -2,31 +2,31 @@ package com.alltimeslucky.battletron.server.game.api.dto;
 
 public class NewGameDto {
 
-    private String playerId;
-    private String playerOneType;
-    private String playerTwoType;
+    private String sessionId;
+    private NewGamePlayerDto playerOne;
+    private NewGamePlayerDto playerTwo;
 
-    public String getPlayerId() {
-        return playerId;
+    public String getSessionId() {
+        return sessionId;
     }
 
-    public void setPlayerId(String playerId) {
-        this.playerId = playerId;
+    public void setSessionId(String sessionId) {
+        this.sessionId = sessionId;
     }
 
-    public String getPlayerOneType() {
-        return playerOneType;
+    public NewGamePlayerDto getPlayerOne() {
+        return playerOne;
     }
 
-    public void setPlayerOneType(String playerOneType) {
-        this.playerOneType = playerOneType;
+    public void setPlayerOne(NewGamePlayerDto playerOne) {
+        this.playerOne = playerOne;
     }
 
-    public String getPlayerTwoType() {
-        return playerTwoType;
+    public NewGamePlayerDto getPlayerTwo() {
+        return playerTwo;
     }
 
-    public void setPlayerTwoType(String playerTwoType) {
-        this.playerTwoType = playerTwoType;
+    public void setPlayerTwo(NewGamePlayerDto playerTwo) {
+        this.playerTwo = playerTwo;
     }
 }
