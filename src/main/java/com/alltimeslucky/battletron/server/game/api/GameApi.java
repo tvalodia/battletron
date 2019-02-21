@@ -121,7 +121,7 @@ public class GameApi {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public GameDto spectateGame(@PathParam("id") long id, SpectateGameDto spectateGameDto) throws Exception {
-        Game game = gameService.spectateGame(id, spectateGameDto.getPlayerId());
+        Game game = gameService.spectateGame(id, spectateGameDto.getSessionId());
         GameDto gameDto = new GameDto(game);
         LOG.debug("Response: " + gameDto);
         return gameDto;
@@ -137,7 +137,7 @@ public class GameApi {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public GameDto joinGame(@PathParam("id") long id, JoinGameDto joinGameDto) throws Exception {
-        Game game = gameService.joinGame(id, joinGameDto.getPlayerId());
+        Game game = gameService.joinGame(id, joinGameDto.getSessionId());
         GameDto gameDto = new GameDto(game);
         LOG.debug("Response: " + gameDto);
         return gameDto;

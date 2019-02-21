@@ -13,6 +13,10 @@ public class PlayerDto {
     private Direction direction;
     private Map<String, String> parameters;
 
+    /**
+     * Constructor.
+     * @param player The Player object to convert.
+     */
     public PlayerDto(Player player) {
         setId(player.getId());
         setPositionX(player.getPositionX());

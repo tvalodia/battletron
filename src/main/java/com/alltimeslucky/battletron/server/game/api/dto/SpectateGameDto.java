@@ -2,13 +2,13 @@ package com.alltimeslucky.battletron.server.game.api.dto;
 
 public class SpectateGameDto {
 
-    private String playerId;
+    private String sessionId;
 
-    public String getPlayerId() {
-        return playerId;
+    public String getSessionId() {
+        return sessionId;
     }
 
-    public void setPlayerId(String playerId) {
-        this.playerId = playerId;
+    public void setSessionId(String sessionId) {
+        this.sessionId = sessionId;
     }
 }

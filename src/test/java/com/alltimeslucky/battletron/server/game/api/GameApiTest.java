@@ -108,7 +108,7 @@ public class GameApiTest {
         Game mockGame = getGameMock(123L);
 
         SpectateGameDto spectateGameDto = new SpectateGameDto();
-        spectateGameDto.setPlayerId("2");
+        spectateGameDto.setSessionId("2");
         when(mockGameService.spectateGame(1L, "2")).thenReturn(mockGame);
 
         GameDto gameDto = gameApi.spectateGame(1L, spectateGameDto);
@@ -121,7 +121,7 @@ public class GameApiTest {
         Game mockGame = getGameMock(123L);
 
         JoinGameDto joinGameDto = new JoinGameDto();
-        joinGameDto.setPlayerId("2");
+        joinGameDto.setSessionId("2");
         when(mockGameService.joinGame(1L, "2")).thenReturn(mockGame);
 
         GameDto gameDto = gameApi.joinGame(1L, joinGameDto);
