@@ -3,6 +3,7 @@ import {GameService} from "../api/game.service";
 import {WebsocketService} from "../game-view/websocket.service";
 import {Game, GameViewService} from "../game-view/game-view.service";
 import {GameViewComponent} from "../game-view/game-view.component";
+import {JoinGame} from "./join-game";
 
 @Component({
   selector: 'app-join-game',
@@ -12,7 +13,8 @@ import {GameViewComponent} from "../game-view/game-view.component";
 })
 export class JoinGameComponent implements OnInit {
 
-  playerId: string = '';
+  joinGameData: JoinGame = new JoinGame();
+
   games: Array<Game>;
   @ViewChild('gameView') gameViewRef: GameViewComponent;
 
@@ -23,8 +25,8 @@ export class JoinGameComponent implements OnInit {
     this.getGames();
   }
 
-  onNewPlayerId(playerId: string) {
-    this.playerId = playerId;
+  onSessionId(sessionId: string) {
+    this.joinGameData.sessionId = sessionId;
   }
 
   public getGames() {
@@ -39,7 +41,7 @@ export class JoinGameComponent implements OnInit {
   }
 
   public joinGame(gameId: number) {
-    this.gameService.joinGame(gameId, this.playerId).subscribe((data: Game) => {
+    this.gameService.joinGame(gameId, this.joinGameData).subscribe((data: Game) => {
       this.gameViewRef.setGame(data);
       console.log(gameId);
     });

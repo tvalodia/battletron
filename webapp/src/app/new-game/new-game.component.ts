@@ -17,7 +17,7 @@ export interface PlayerType {
 })
 export class NewGameComponent implements OnInit {
 
-  newGame: NewGame = new NewGame();
+  newGameData: NewGame = new NewGame();
 
   playerTypes: PlayerType[] = [
     {value: 'KEYBOARD_WASD_KEYS', viewValue: 'Human - WASD keys'},
@@ -28,18 +28,18 @@ export class NewGameComponent implements OnInit {
   ];
 
   constructor(private gameService: GameService) {
-    this.newGame.playerOne.playerType = this.playerTypes[0].value;
-    this.newGame.playerTwo.playerType = this.playerTypes[0].value;
+    this.newGameData.playerOne.playerType = this.playerTypes[0].value;
+    this.newGameData.playerTwo.playerType = this.playerTypes[0].value;
   }
 
   ngOnInit() {}
 
   onNewPlayerId(sessionId: string) {
-    this.newGame.sessionId = sessionId;
+    this.newGameData.sessionId = sessionId;
   }
 
   public start() {
-    this.gameService.createGame(this.newGame)
+    this.gameService.createGame(this.newGameData)
       .subscribe((data: Array<object>) => {
         console.log(data);
       });

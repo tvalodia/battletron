@@ -3,6 +3,7 @@ import {GameService} from "../api/game.service";
 import {WebsocketService} from "../game-view/websocket.service";
 import {Game, GameViewService} from "../game-view/game-view.service";
 import {GameViewComponent} from "../game-view/game-view.component";
+import {SpectateGame} from "./spectate-game";
 
 @Component({
   selector: 'app-spectate-game',
@@ -12,7 +13,7 @@ import {GameViewComponent} from "../game-view/game-view.component";
 })
 export class SpectateGameComponent implements OnInit {
 
-  playerId: string = '';
+  spectateGameData: SpectateGame = new SpectateGame();
   games: Array<Game>;
   @ViewChild('gameView') gameViewRef: GameViewComponent;
 
@@ -23,8 +24,8 @@ export class SpectateGameComponent implements OnInit {
     this.getGames();
   }
 
-  onNewPlayerId(playerId: string) {
-    this.playerId = playerId;
+  onSessionId(sessionId: string) {
+    this.spectateGameData.sessionId = sessionId;
   }
 
   public getGames() {
@@ -39,7 +40,7 @@ export class SpectateGameComponent implements OnInit {
   }
 
   public spectateGame(gameId: number) {
-    this.gameService.spectateGame(gameId, this.playerId).subscribe((data: Game) => {
+    this.gameService.spectateGame(gameId, this.spectateGameData).subscribe((data: Game) => {
       this.gameViewRef.setGame(data);
       console.log(gameId);
     });

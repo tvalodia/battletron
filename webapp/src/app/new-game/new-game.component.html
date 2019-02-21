@@ -3,7 +3,7 @@
     <mat-card-title>New Game</mat-card-title>
 
     <mat-form-field>
-      <mat-select placeholder="Player 1" [(value)]="newGame.playerOne.playerType" panelClass="mat-select-panel">
+      <mat-select placeholder="Player 1" [(value)]="newGameData.playerOne.playerType" panelClass="mat-select-panel">
         <mat-option *ngFor="let playerType of playerTypes" [value]="playerType.value">
           {{playerType.viewValue}}
         </mat-option>
@@ -11,7 +11,7 @@
     </mat-form-field>
     VS
     <mat-form-field>
-      <mat-select placeholder="Player 2" [(value)]="newGame.playerTwo.playerType" panelClass="mat-select-panel">
+      <mat-select placeholder="Player 2" [(value)]="newGameData.playerTwo.playerType" panelClass="mat-select-panel">
         <mat-option *ngFor="let playerType of playerTypes" [value]="playerType.value">
           {{playerType.viewValue}}
         </mat-option>
@@ -19,7 +19,7 @@
     </mat-form-field>
     <button mat-button color="primary" (click)="start()">Start</button>
     <mat-card-content>
-      <app-game-view (newPlayerId)="onNewPlayerId($event)"></app-game-view>
+      <app-game-view (sessionIdEventEmitter)="onNewPlayerId($event)"></app-game-view>
     </mat-card-content>
     <mat-card-footer>
       <button mat-button routerLink="/" color="warn">Main Menu</button>

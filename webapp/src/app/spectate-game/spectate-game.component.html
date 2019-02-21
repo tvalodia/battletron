@@ -16,7 +16,7 @@
           </div>
         </mat-grid-tile>
         <mat-grid-tile [colspan]="2">
-          <app-game-view #gameView (newPlayerId)="onNewPlayerId($event)"></app-game-view>
+          <app-game-view #gameView (sessionIdEventEmitter)="onSessionId($event)"></app-game-view>
         </mat-grid-tile>
       </mat-grid-list>
     </mat-card-content>

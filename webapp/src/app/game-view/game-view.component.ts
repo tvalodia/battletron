@@ -18,15 +18,15 @@ export class GameViewComponent implements OnInit, OnDestroy {
 
   BLOCK_SIZE: number = 5;
   @ViewChild('gameViewCanvas') canvasRef: ElementRef;
-  playerId: string = '';
-  @Output() newPlayerId = new EventEmitter<string>();
+  sessionId: string = '';
+  @Output() sessionIdEventEmitter = new EventEmitter<string>();
   private game: Game;
 
   constructor(private ngZone: NgZone, private gameViewService: GameViewService) {
     gameViewService.subject.subscribe(msg => {
       if (msg.startsWith("id=")) {
-        this.playerId = msg.substr(3);
-        this.newPlayerId.emit(msg.substr(3));
+        this.sessionId = msg.substr(3);
+        this.sessionIdEventEmitter.emit(msg.substr(3));
       } else {
         this.game = JSON.parse(msg);
         this.paint();
