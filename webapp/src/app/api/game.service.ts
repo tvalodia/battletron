@@ -10,7 +10,7 @@ import {SpectateGame} from "../spectate-game/spectate-game";
 })
 export class GameService {
 
-  API_URL: string  =  'http://localhost:8080/api/game';
+  API_URL: string  =  '/api/game';
 
   constructor(private  httpClient: HttpClient) {
   }
