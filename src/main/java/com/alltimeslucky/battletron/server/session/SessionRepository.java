@@ -35,4 +35,8 @@ public class SessionRepository {
     public boolean contains(String sessionId) {
         return data.containsKey(sessionId);
     }
+
+    public void clear() {
+        data.clear();
+    }
 }
