@@ -11,7 +11,6 @@ public class PlayerDto {
     private int positionX;
     private int positionY;
     private Direction direction;
-    private Map<String, String> parameters;
 
     /**
      * Constructor.
@@ -56,11 +55,4 @@ public class PlayerDto {
         this.direction = direction;
     }
 
-    public Map<String, String> getParameters() {
-        return parameters;
-    }
-
-    public void setParameters(Map<String, String> parameters) {
-        this.parameters = parameters;
-    }
 }

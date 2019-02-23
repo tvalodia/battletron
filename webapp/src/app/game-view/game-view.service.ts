@@ -40,4 +40,5 @@ export class GameViewService {
   public disconnect() {
     this.wsService.disconnect();
   }
+
 }

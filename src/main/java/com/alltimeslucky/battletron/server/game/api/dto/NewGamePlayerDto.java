@@ -5,7 +5,7 @@ import java.util.Map;
 public class NewGamePlayerDto {
 
     private String playerType;
-    private Map<String, String> parameters;
+    private String aiRemoteHost;
 
     public String getPlayerType() {
         return playerType;
@@ -15,11 +15,12 @@ public class NewGamePlayerDto {
         this.playerType = playerType;
     }
 
-    public Map<String, String> getParameters() {
-        return parameters;
+    public String getAiRemoteHost() {
+        return aiRemoteHost;
     }
 
-    public void setParameters(Map<String, String> parameters) {
-        this.parameters = parameters;
+    public void setAiRemoteHost(String aiRemoteHost) {
+        this.aiRemoteHost = aiRemoteHost;
     }
+
 }

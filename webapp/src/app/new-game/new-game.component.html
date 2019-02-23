@@ -1,24 +1,56 @@
 <div class="container">
   <mat-card>
-    <mat-card-title>New Game</mat-card-title>
 
-    <mat-form-field>
-      <mat-select placeholder="Player 1" [(value)]="newGameData.playerOne.playerType" panelClass="mat-select-panel">
-        <mat-option *ngFor="let playerType of playerTypes" [value]="playerType.value">
-          {{playerType.viewValue}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-    VS
-    <mat-form-field>
-      <mat-select placeholder="Player 2" [(value)]="newGameData.playerTwo.playerType" panelClass="mat-select-panel">
-        <mat-option *ngFor="let playerType of playerTypes" [value]="playerType.value">
-          {{playerType.viewValue}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-    <button mat-button color="primary" (click)="start()">Start</button>
+    <mat-card-title>New Game</mat-card-title>
     <mat-card-content>
+      <form [formGroup]="newGameForm" (ngSubmit)="onFormSubmit(newGameForm.value)">
+      <div>
+        <table>
+          <tr>
+            <td>
+              <mat-form-field>
+                <mat-select  formControlName="playerOneType" placeholder="Player 1" panelClass="mat-select-panel">
+                  <mat-option *ngFor="let playerType of playerTypes" [value]="playerType.value">
+                    {{playerType.viewValue}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </td>
+            <td>
+              VS
+            </td>
+            <td>
+              <mat-form-field>
+                <mat-select formControlName="playerTwoType" placeholder="Player 2" panelClass="mat-select-panel">
+                  <mat-option *ngFor="let playerType of playerTypes" [value]="playerType.value">
+                    {{playerType.viewValue}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </td>
+          </tr>
+          <tr *ngIf="showHostRow()">
+            <td>
+              <mat-form-field *ngIf="showPlayerOneHost()">
+                <input matInput placeholder="Host" formControlName="playerOneAiRemoteHost">
+              </mat-form-field>
+            </td>
+            <td>
+            </td>
+            <td>
+              <mat-form-field *ngIf="showPlayerTwoHost()">
+                <input matInput placeholder="Host" formControlName="playerTwoAiRemoteHost">
+              </mat-form-field>
+            </td>
+
+
+          </tr>
+        </table>
+      </div>
+      <div class="button-group">
+        <button mat-button color="primary">Start</button>
+      </div>
+      </form>
       <app-game-view (sessionIdEventEmitter)="onNewPlayerId($event)"></app-game-view>
     </mat-card-content>
     <mat-card-footer>

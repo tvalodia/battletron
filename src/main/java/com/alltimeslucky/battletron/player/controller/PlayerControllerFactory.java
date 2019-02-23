@@ -8,9 +8,9 @@ public class PlayerControllerFactory {
     /**
      * Returns a PlayerController implementation based on the give inputs.
      *
-     * @param controllerType The type of player
+     * @param controllerType  The type of player
      * @param clientWebSocket The user's WebSocket.
-     * @param player         The instance of player
+     * @param player          The instance of player
      * @return an instance of PlayerController
      */
     public PlayerController getPlayerController(PlayerControllerType controllerType, ClientWebSocket clientWebSocket, Player player) {
@@ -25,6 +25,8 @@ public class PlayerControllerFactory {
                 return new SimplePlayerAi(player);
             case AI_DOWNLEFT:
                 return new DownLeftPlayerController(player);
+            case AI_REMOTE:
+                return new HttpPlayerController("");
             case OPEN:
                 return null;
 

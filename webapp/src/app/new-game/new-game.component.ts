@@ -3,6 +3,7 @@ import {GameViewService} from '../game-view/game-view.service';
 import {WebsocketService} from "../game-view/websocket.service";
 import {GameService} from "../api/game.service";
 import {NewGame} from "./new-game";
+import {FormBuilder, FormGroup, NgForm} from "@angular/forms";
 
 export interface PlayerType {
   value: string;
@@ -17,32 +18,69 @@ export interface PlayerType {
 })
 export class NewGameComponent implements OnInit {
 
-  newGameData: NewGame = new NewGame();
-
+  newGameForm: FormGroup;
+  sessionId: string;
   playerTypes: PlayerType[] = [
     {value: 'KEYBOARD_WASD_KEYS', viewValue: 'Human - WASD keys'},
     {value: 'KEYWORD_ARROW_KEYS', viewValue: 'Human - Arrow keys'},
     {value: 'AI_SIMPLE', viewValue: 'AI - Simple'},
     {value: 'AI_DOWNLEFT', viewValue: 'AI - Down Left'},
+    {value: 'AI_REMOTE', viewValue: 'AI - Remote'},
     {value: 'OPEN', viewValue: 'Open'}
   ];
 
-  constructor(private gameService: GameService) {
-    this.newGameData.playerOne.playerType = this.playerTypes[0].value;
-    this.newGameData.playerTwo.playerType = this.playerTypes[0].value;
+  constructor(private formBuilder: FormBuilder, private gameService: GameService) {
+    this.newGameForm = formBuilder.group( {
+      playerOneType: [this.playerTypes[0].value],
+      playerTwoType: [this.playerTypes[0].value],
+      playerOneAiRemoteHost: ["localhost:8081"],
+      playerTwoAiRemoteHost: ["localhost:8081"]
+    });
   }
 
   ngOnInit() {}
 
   onNewPlayerId(sessionId: string) {
-    this.newGameData.sessionId = sessionId;
+    this.sessionId = sessionId;
   }
 
-  public start() {
-    this.gameService.createGame(this.newGameData)
+  public start(newGameData: NewGame) {
+    this.gameService.createGame(newGameData)
       .subscribe((data: Array<object>) => {
         console.log(data);
       });
 
   }
+
+  showPlayerOneHost() {
+    return this.newGameForm.controls.playerOneType.value === "AI_REMOTE";
+  }
+
+  showPlayerTwoHost() {
+    return this.newGameForm.controls.playerTwoType.value === "AI_REMOTE";
+  }
+
+  showHostRow() {
+    return this.showPlayerOneHost() || this.showPlayerTwoHost();
+  }
+
+  onFormSubmit(form:NgForm) {
+    let newGameData: NewGame = new NewGame();
+    newGameData.sessionId = this.sessionId;
+    newGameData.playerOne.playerType = form["playerOneType"];
+
+    if (this.showPlayerOneHost()) {
+      newGameData.playerOne.aiRemoteHost = form["playerOneAiRemoteHost"];
+    }
+
+    newGameData.playerTwo.playerType = form["playerTwoType"];
+    if (this.showPlayerTwoHost()) {
+      newGameData.playerTwo.aiRemoteHost = form["playerTwoAiRemoteHost"];
+    }
+
+    this.start(newGameData );
+
+  }
+
+
 }

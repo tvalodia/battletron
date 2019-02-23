@@ -10,28 +10,28 @@ import {SpectateGame} from "../spectate-game/spectate-game";
 })
 export class GameService {
 
-  API_URL: string  =  '/api/game';
+  API_URL: string = '/api/game';
 
   constructor(private  httpClient: HttpClient) {
   }
 
-  getGames(){
+  getGames() {
     return this.httpClient.get(this.API_URL);
   }
 
-  getJoinableGames(){
+  getJoinableGames() {
     return this.httpClient.get(this.API_URL + "/open");
   }
 
-  spectateGame(gameId: number, spectateGame: SpectateGame){
-    return this.httpClient.post(this.API_URL + "/" + gameId + "/spectate" , JSON.stringify(spectateGame));
+  spectateGame(gameId: number, spectateGame: SpectateGame) {
+    return this.httpClient.post(this.API_URL + "/" + gameId + "/spectate", JSON.stringify(spectateGame));
   }
 
-  createGame(newGame: NewGame){
-    return this.httpClient.post(this.API_URL,  JSON.stringify(newGame));
+  createGame(newGame: NewGame) {
+    return this.httpClient.post(this.API_URL, JSON.stringify(newGame));
   }
 
-  joinGame(gameId: number, joinGame: JoinGame){
-    return this.httpClient.post(this.API_URL + "/" + gameId + "/join" , JSON.stringify(joinGame));
+  joinGame(gameId: number, joinGame: JoinGame) {
+    return this.httpClient.post(this.API_URL + "/" + gameId + "/join", JSON.stringify(joinGame));
   }
 }

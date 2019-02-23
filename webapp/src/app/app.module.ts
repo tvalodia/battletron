@@ -4,6 +4,7 @@ import {NgModule} from '@angular/core';
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MainMenuComponent} from './main-menu/main-menu.component';
 import {BattletronMaterialModule} from './material';
 import {NewGameComponent} from './new-game/new-game.component';
@@ -32,6 +33,8 @@ import {HttpConfigInterceptor} from './interceptor/httpconfig.interceptor';
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
+    FormsModule,
+    ReactiveFormsModule,
     BattletronMaterialModule,
     HttpClientModule
   ],

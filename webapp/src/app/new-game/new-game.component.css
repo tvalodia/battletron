@@ -3,5 +3,19 @@
 }
 
 mat-form-field {
-  padding: 20px;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+table {
+  margin-left:auto;
+  margin-right:auto;
+}
+
+.button-group {
+  float: right;
+}
+
+.full-width {
+  width: 100%;
 }
