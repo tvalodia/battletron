@@ -26,7 +26,7 @@ public class PlayerControllerFactory {
             case AI_DOWNLEFT:
                 return new DownLeftPlayerController(player);
             case AI_REMOTE:
-                return new HttpPlayerController("");
+                return new RemoteAiPlayerController("");
             case OPEN:
                 return null;
 
