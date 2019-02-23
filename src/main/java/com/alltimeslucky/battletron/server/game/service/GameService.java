@@ -32,12 +32,15 @@ public interface GameService {
     /**
      * Creates a new GameController with a Game for the two given player types.
      *
-     * @param playerId    The id of the player creating the game
+     * @param sessionId    The id of the player creating the game
      * @param playerOneType The type of player for player 1
+     * @param playerOneAiRemoteHost The remote address of the AI player if required.
      * @param playerTwoType The type pf player for player 2
+     * @param playerTwoAiRemoteHost The remote address of the AI player if required.
      * @return A new GameController
      */
-    Game createGame(String playerId, String playerOneType, String playerTwoType) throws BattletronException;
+    Game createGame(String sessionId, String playerOneType, String playerOneAiRemoteHost,
+                    String playerTwoType, String playerTwoAiRemoteHost) throws BattletronException;
 
     /**
      * Start spectating a game.

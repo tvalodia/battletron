@@ -33,8 +33,8 @@ export class NewGameComponent implements OnInit {
     this.newGameForm = formBuilder.group( {
       playerOneType: [this.playerTypes[0].value],
       playerTwoType: [this.playerTypes[0].value],
-      playerOneAiRemoteHost: ["localhost:8081"],
-      playerTwoAiRemoteHost: ["localhost:8081"]
+      playerOneAiRemoteHost: ["http://localhost:5000"],
+      playerTwoAiRemoteHost: ["http://localhost:5000"]
     });
   }
 

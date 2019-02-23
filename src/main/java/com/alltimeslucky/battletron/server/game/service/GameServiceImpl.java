@@ -9,6 +9,7 @@ import com.alltimeslucky.battletron.game.model.Game;
 import com.alltimeslucky.battletron.game.model.GameFactory;
 import com.alltimeslucky.battletron.player.controller.PlayerController;
 import com.alltimeslucky.battletron.player.controller.PlayerControllerFactory;
+import com.alltimeslucky.battletron.player.controller.PlayerControllerSettings;
 import com.alltimeslucky.battletron.player.controller.PlayerControllerType;
 import com.alltimeslucky.battletron.player.model.Player;
 import com.alltimeslucky.battletron.server.game.service.validation.GameServiceInputValidator;
@@ -86,7 +87,9 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public Game createGame(String sessionId, String playerOneType, String playerTwoType) throws BattletronException {
+    public Game createGame(String sessionId, String playerOneType, String playerOneAiRemoteHost,
+                                             String playerTwoType, String playerTwoAiRemoteHost) throws BattletronException {
+
         inputValidator.validateCreateGameInput(sessionId, playerOneType, playerTwoType);
         Session session = sessionRepository.get(sessionId);
 
@@ -95,10 +98,18 @@ public class GameServiceImpl implements GameService {
         Game game = gameFactory.get();
 
         ClientWebSocket clientWebSocket = session.getClientWebSocket();
-        PlayerController playerOneController = playerControllerFactory.getPlayerController(
-                PlayerControllerType.valueOf(playerOneType), clientWebSocket, game.getPlayerOne());
-        PlayerController playerTwoController = playerControllerFactory.getPlayerController(
-                PlayerControllerType.valueOf(playerTwoType), clientWebSocket, game.getPlayerTwo());
+        PlayerControllerSettings playerOneControllerSettings = new PlayerControllerSettings(PlayerControllerType.valueOf(playerOneType));
+        playerOneControllerSettings.setClientWebSocket(clientWebSocket);
+        playerOneControllerSettings.setAiRemoteHost(playerOneAiRemoteHost);
+
+        PlayerController playerOneController = playerControllerFactory.getPlayerController(playerOneControllerSettings, game.getPlayerOne());
+
+
+        PlayerControllerSettings playerTwoControllerSettings = new PlayerControllerSettings(PlayerControllerType.valueOf(playerTwoType));
+        playerOneControllerSettings.setClientWebSocket(clientWebSocket);
+        playerTwoControllerSettings.setAiRemoteHost(playerTwoAiRemoteHost);
+        PlayerController playerTwoController = playerControllerFactory.getPlayerController(playerTwoControllerSettings, game.getPlayerTwo());
+
         GameController gameController = gameControllerFactory.get(game, playerOneController, playerTwoController);
         gameControllerRepository.add(gameController.getGameId(), gameController);
         clientWebSocketController.registerForUpdates(sessionId, gameController.getGameId());
@@ -148,10 +159,10 @@ public class GameServiceImpl implements GameService {
         if (player != null) {
             player  = gameController.getGame().getPlayerTwo();
         }
-        PlayerController playerController = playerControllerFactory.getPlayerController(
-                PlayerControllerType.KEYBOARD,
-                session.getClientWebSocket(),
-                player);
+
+        PlayerControllerSettings playerControllerSettings = new PlayerControllerSettings(PlayerControllerType.KEYBOARD);
+        playerControllerSettings.setClientWebSocket(session.getClientWebSocket());
+        PlayerController playerController = playerControllerFactory.getPlayerController(playerControllerSettings, player);
         clientWebSocketController.registerForUpdates(sessionId, gameController.getGameId());
         session.setGameId(gameId);
         session.setPlayerController(playerController);

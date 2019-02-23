@@ -55,7 +55,7 @@ public class GameServiceImplTest {
         ClientWebSocketController mockClientWebSocketController = new ClientWebSocketController(sessionRepository);
         gameControllerFactory = new GameControllerFactory();
         PlayerController mockPlayerController1 = mock(PlayerController.class);
-        when(mockPlayerControllerFactory.getPlayerController(any(), any(), any())).thenReturn(mockPlayerController1).thenReturn(null);
+        when(mockPlayerControllerFactory.getPlayerController(any(), any())).thenReturn(mockPlayerController1).thenReturn(null);
         gameControllerRepository = new GameControllerRepository();
         GameFactory gameFactory = new GameFactory(new PlayerFactory());
         GameServiceInputValidator gameServiceInputValidator = new GameServiceInputValidator(gameControllerRepository, sessionRepository);
@@ -73,7 +73,8 @@ public class GameServiceImplTest {
     @Test
     public void testCreateSuccessful() throws BattletronException {
 
-        Game game = gameService.createGame(SESSION_ID, PLAYER_CONTROLLER_TYPE_OPEN, PLAYER_CONTROLLER_TYPE_OPEN);
+        Game game = gameService.createGame(SESSION_ID, PLAYER_CONTROLLER_TYPE_OPEN, null,
+                PLAYER_CONTROLLER_TYPE_OPEN, null);
 
         assertTrue(gameControllerRepository.contains(game.getId()));
         assertEquals(GameStatus.WAITING_FOR_READY, game.getGameStatus());
@@ -84,10 +85,11 @@ public class GameServiceImplTest {
     @Test
     public void testJoinSuccessful() throws BattletronException {
         PlayerController mockPlayerController2 = mock(PlayerController.class);
-        when(mockPlayerControllerFactory.getPlayerController(any(), any(), any())).thenReturn(new SimplePlayerAi(null))
+        when(mockPlayerControllerFactory.getPlayerController(any(), any())).thenReturn(new SimplePlayerAi(null))
                 .thenReturn(null)
                 .thenReturn(mockPlayerController2);
-        Game game = gameService.createGame(SESSION_ID, PLAYER_CONTROLLER_TYPE_AI_SIMPLE, PLAYER_CONTROLLER_TYPE_OPEN);
+        Game game = gameService.createGame(SESSION_ID, PLAYER_CONTROLLER_TYPE_OPEN, null,
+                PLAYER_CONTROLLER_TYPE_OPEN, null);
 
         session = new Session("abc");
         ClientWebSocket mockClientWebSocket = mock(ClientWebSocket.class);
@@ -107,9 +109,10 @@ public class GameServiceImplTest {
 
     @Test(expected = BattletronException.class)
     public void testJoinGameFailsWhenJoiningTheSameGameTwice() throws BattletronException {
-        Game game = gameService.createGame(SESSION_ID, PLAYER_CONTROLLER_TYPE_OPEN, PLAYER_CONTROLLER_TYPE_OPEN);
+        Game game = gameService.createGame(SESSION_ID, PLAYER_CONTROLLER_TYPE_OPEN, null,
+                PLAYER_CONTROLLER_TYPE_OPEN, null);
         PlayerController mockPlayerController2 = mock(PlayerController.class);
-        when(mockPlayerControllerFactory.getPlayerController(PlayerControllerType.KEYBOARD, session.getClientWebSocket(), game.getPlayerTwo())).thenReturn(mockPlayerController2);
+        when(mockPlayerControllerFactory.getPlayerController(any(), any())).thenReturn(mockPlayerController2);
         session.setPlayerController(mockPlayerController2);
 
         gameService.joinGame(game.getId(), SESSION_ID);
@@ -119,13 +122,15 @@ public class GameServiceImplTest {
     @Test
     public void testJoinDifferentGamesSuccessful() throws BattletronException {
         PlayerController mockPlayerController2 = mock(PlayerController.class);
-        when(mockPlayerControllerFactory.getPlayerController(any(), any(), any())).thenReturn(new SimplePlayerAi(null))
+        when(mockPlayerControllerFactory.getPlayerController(any(), any())).thenReturn(new SimplePlayerAi(null))
                 .thenReturn(null)
                 .thenReturn(new SimplePlayerAi(null))
                 .thenReturn(null);
 
-        Game game1 = gameService.createGame(SESSION_ID, PLAYER_CONTROLLER_TYPE_OPEN, PLAYER_CONTROLLER_TYPE_OPEN);
-        Game game2 = gameService.createGame(SESSION_ID, PLAYER_CONTROLLER_TYPE_OPEN, PLAYER_CONTROLLER_TYPE_OPEN);
+        Game game1 = gameService.createGame(SESSION_ID, PLAYER_CONTROLLER_TYPE_OPEN, null,
+                PLAYER_CONTROLLER_TYPE_OPEN, null);
+        Game game2 = gameService.createGame(SESSION_ID, PLAYER_CONTROLLER_TYPE_OPEN, null,
+                PLAYER_CONTROLLER_TYPE_OPEN, null);
 
 
         gameService.joinGame(game1.getId(), SESSION_ID);

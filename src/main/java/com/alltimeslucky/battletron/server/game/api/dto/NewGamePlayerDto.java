@@ -1,7 +1,5 @@
 package com.alltimeslucky.battletron.server.game.api.dto;
 
-import java.util.Map;
-
 public class NewGamePlayerDto {
 
     private String playerType;

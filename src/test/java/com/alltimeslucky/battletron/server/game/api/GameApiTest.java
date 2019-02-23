@@ -84,13 +84,16 @@ public class GameApiTest {
         newGameDto.setSessionId("1");
         NewGamePlayerDto playerOne = new NewGamePlayerDto();
         playerOne.setPlayerType("playerOneType");
+        playerOne.setAiRemoteHost("playerOneAiRemoteHost");
         newGameDto.setPlayerOne(playerOne);
 
         NewGamePlayerDto playerTwo = new NewGamePlayerDto();
         playerTwo.setPlayerType("playerTwoType");
+        playerTwo.setAiRemoteHost("playerTwoAiRemoteHost");
         newGameDto.setPlayerTwo(playerTwo);
 
-        when(mockGameService.createGame("1", "playerOneType", "playerTwoType")).thenReturn(mockGame);
+        when(mockGameService.createGame("1", "playerOneType", "playerOneAiRemoteHost",
+                "playerTwoType", "playerTwoAiRemoteHost")).thenReturn(mockGame);
 
         GameDto gameDto = gameApi.createGame(newGameDto);
 
