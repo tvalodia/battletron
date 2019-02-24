@@ -38,6 +38,7 @@ public class GameServiceImplTest {
     private static final String SESSION_ID = "SESSION_ID";
     private static final String PLAYER_CONTROLLER_TYPE_OPEN = PlayerControllerType.OPEN.toString();
     private static final String PLAYER_CONTROLLER_TYPE_AI_SIMPLE = PlayerControllerType.AI_SIMPLE.toString();
+    private static final String PLAYER_CONTROLLER_AI_REMOTE_ADDRESS = "AI Remote Address";
 
     private GameService gameService;
     private GameControllerRepository gameControllerRepository;
