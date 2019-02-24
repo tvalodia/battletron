@@ -1,5 +1,6 @@
-package com.alltimeslucky.battletron.player.controller;
+package com.alltimeslucky.battletron.player.controller.settings;
 
+import com.alltimeslucky.battletron.player.controller.PlayerControllerType;
 import com.alltimeslucky.battletron.server.websocket.ClientWebSocket;
 
 public class PlayerControllerSettings {

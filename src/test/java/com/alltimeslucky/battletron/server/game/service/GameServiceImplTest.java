@@ -11,6 +11,8 @@ import com.alltimeslucky.battletron.player.controller.PlayerController;
 import com.alltimeslucky.battletron.player.controller.PlayerControllerFactory;
 import com.alltimeslucky.battletron.player.controller.PlayerControllerType;
 import com.alltimeslucky.battletron.player.controller.SimplePlayerAi;
+import com.alltimeslucky.battletron.player.controller.settings.PlayerControllerSettings;
+import com.alltimeslucky.battletron.player.controller.settings.PlayerControllerSettingsFactory;
 import com.alltimeslucky.battletron.player.model.PlayerFactory;
 import com.alltimeslucky.battletron.server.game.service.validation.GameServiceInputValidator;
 import com.alltimeslucky.battletron.server.session.Session;
@@ -26,7 +28,6 @@ import org.mockito.MockitoAnnotations;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
@@ -37,8 +38,6 @@ public class GameServiceImplTest {
 
     private static final String SESSION_ID = "SESSION_ID";
     private static final String PLAYER_CONTROLLER_TYPE_OPEN = PlayerControllerType.OPEN.toString();
-    private static final String PLAYER_CONTROLLER_TYPE_AI_SIMPLE = PlayerControllerType.AI_SIMPLE.toString();
-    private static final String PLAYER_CONTROLLER_AI_REMOTE_ADDRESS = "AI Remote Address";
 
     private GameService gameService;
     private GameControllerRepository gameControllerRepository;
@@ -65,9 +64,10 @@ public class GameServiceImplTest {
         ClientWebSocket mockClientWebSocket = mock(ClientWebSocket.class);
         session.setClientWebSocket(mockClientWebSocket);
         sessionRepository.add(SESSION_ID, session);
+        PlayerControllerSettingsFactory playerControllerSettingsFactory = new PlayerControllerSettingsFactory();
 
         gameService = new GameServiceImpl(gameControllerRepository, sessionRepository, mockClientWebSocketController,
-                mockPlayerControllerFactory, gameControllerFactory, gameFactory, gameServiceInputValidator);
+                mockPlayerControllerFactory, gameControllerFactory, gameFactory, gameServiceInputValidator, playerControllerSettingsFactory);
     }
 
 
@@ -122,7 +122,6 @@ public class GameServiceImplTest {
 
     @Test
     public void testJoinDifferentGamesSuccessful() throws BattletronException {
-        PlayerController mockPlayerController2 = mock(PlayerController.class);
         when(mockPlayerControllerFactory.getPlayerController(any(), any())).thenReturn(new SimplePlayerAi(null))
                 .thenReturn(null)
                 .thenReturn(new SimplePlayerAi(null))

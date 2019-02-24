@@ -9,8 +9,9 @@ import com.alltimeslucky.battletron.game.model.Game;
 import com.alltimeslucky.battletron.game.model.GameFactory;
 import com.alltimeslucky.battletron.player.controller.PlayerController;
 import com.alltimeslucky.battletron.player.controller.PlayerControllerFactory;
-import com.alltimeslucky.battletron.player.controller.PlayerControllerSettings;
+import com.alltimeslucky.battletron.player.controller.settings.PlayerControllerSettings;
 import com.alltimeslucky.battletron.player.controller.PlayerControllerType;
+import com.alltimeslucky.battletron.player.controller.settings.PlayerControllerSettingsFactory;
 import com.alltimeslucky.battletron.player.model.Player;
 import com.alltimeslucky.battletron.server.game.service.validation.GameServiceInputValidator;
 import com.alltimeslucky.battletron.server.session.Session;
@@ -37,6 +38,7 @@ public class GameServiceImpl implements GameService {
     private GameControllerFactory gameControllerFactory;
     private GameFactory gameFactory;
     private GameServiceInputValidator inputValidator;
+    private PlayerControllerSettingsFactory playerControllerSettingsFactory;
 
     /**
      * Constructor.
@@ -44,7 +46,8 @@ public class GameServiceImpl implements GameService {
     @Inject
     public GameServiceImpl(GameControllerRepository gameControllerRepository, SessionRepository sessionRepository,
                            ClientWebSocketController clientWebSocketController, PlayerControllerFactory playerControllerFactory,
-                           GameControllerFactory gameControllerFactory, GameFactory gameFactory, GameServiceInputValidator inputValidator) {
+                           GameControllerFactory gameControllerFactory, GameFactory gameFactory, GameServiceInputValidator inputValidator,
+                           PlayerControllerSettingsFactory playerControllerSettingsFactory) {
         this.gameControllerRepository = gameControllerRepository;
         this.sessionRepository = sessionRepository;
         this.clientWebSocketController = clientWebSocketController;
@@ -52,6 +55,7 @@ public class GameServiceImpl implements GameService {
         this.gameControllerFactory = gameControllerFactory;
         this.gameFactory = gameFactory;
         this.inputValidator = inputValidator;
+        this.playerControllerSettingsFactory = playerControllerSettingsFactory;
     }
 
     @Override
@@ -98,14 +102,14 @@ public class GameServiceImpl implements GameService {
         Game game = gameFactory.get();
 
         ClientWebSocket clientWebSocket = session.getClientWebSocket();
-        PlayerControllerSettings playerOneControllerSettings = new PlayerControllerSettings(PlayerControllerType.valueOf(playerOneType));
+        PlayerControllerSettings playerOneControllerSettings = playerControllerSettingsFactory.get(PlayerControllerType.valueOf(playerOneType));
         playerOneControllerSettings.setClientWebSocket(clientWebSocket);
         playerOneControllerSettings.setAiRemoteHost(playerOneAiRemoteHost);
 
         PlayerController playerOneController = playerControllerFactory.getPlayerController(playerOneControllerSettings, game.getPlayerOne());
 
 
-        PlayerControllerSettings playerTwoControllerSettings = new PlayerControllerSettings(PlayerControllerType.valueOf(playerTwoType));
+        PlayerControllerSettings playerTwoControllerSettings = playerControllerSettingsFactory.get(PlayerControllerType.valueOf(playerTwoType));
         playerOneControllerSettings.setClientWebSocket(clientWebSocket);
         playerTwoControllerSettings.setAiRemoteHost(playerTwoAiRemoteHost);
         PlayerController playerTwoController = playerControllerFactory.getPlayerController(playerTwoControllerSettings, game.getPlayerTwo());
@@ -160,7 +164,7 @@ public class GameServiceImpl implements GameService {
             player  = gameController.getGame().getPlayerTwo();
         }
 
-        PlayerControllerSettings playerControllerSettings = new PlayerControllerSettings(PlayerControllerType.KEYBOARD);
+        PlayerControllerSettings playerControllerSettings = playerControllerSettingsFactory.get(PlayerControllerType.KEYBOARD);
         playerControllerSettings.setClientWebSocket(session.getClientWebSocket());
         PlayerController playerController = playerControllerFactory.getPlayerController(playerControllerSettings, player);
         clientWebSocketController.registerForUpdates(sessionId, gameController.getGameId());

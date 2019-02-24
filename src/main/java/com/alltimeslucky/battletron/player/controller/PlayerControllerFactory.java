@@ -1,6 +1,7 @@
 package com.alltimeslucky.battletron.player.controller;
 
 import com.alltimeslucky.battletron.player.controller.remote.RemoteAiPlayerController;
+import com.alltimeslucky.battletron.player.controller.settings.PlayerControllerSettings;
 import com.alltimeslucky.battletron.player.model.Player;
 
 public class PlayerControllerFactory {
