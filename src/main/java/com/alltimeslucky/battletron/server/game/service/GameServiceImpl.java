@@ -9,8 +9,8 @@ import com.alltimeslucky.battletron.game.model.Game;
 import com.alltimeslucky.battletron.game.model.GameFactory;
 import com.alltimeslucky.battletron.player.controller.PlayerController;
 import com.alltimeslucky.battletron.player.controller.PlayerControllerFactory;
-import com.alltimeslucky.battletron.player.controller.settings.PlayerControllerSettings;
 import com.alltimeslucky.battletron.player.controller.PlayerControllerType;
+import com.alltimeslucky.battletron.player.controller.settings.PlayerControllerSettings;
 import com.alltimeslucky.battletron.player.controller.settings.PlayerControllerSettingsFactory;
 import com.alltimeslucky.battletron.player.model.Player;
 import com.alltimeslucky.battletron.server.game.service.validation.GameServiceInputValidator;
@@ -102,17 +102,21 @@ public class GameServiceImpl implements GameService {
         Game game = gameFactory.get();
 
         ClientWebSocket clientWebSocket = session.getClientWebSocket();
-        PlayerControllerSettings playerOneControllerSettings = playerControllerSettingsFactory.get(PlayerControllerType.valueOf(playerOneType));
+        PlayerControllerSettings playerOneControllerSettings =
+                playerControllerSettingsFactory.get(PlayerControllerType.valueOf(playerOneType));
         playerOneControllerSettings.setClientWebSocket(clientWebSocket);
         playerOneControllerSettings.setAiRemoteHost(playerOneAiRemoteHost);
 
-        PlayerController playerOneController = playerControllerFactory.getPlayerController(playerOneControllerSettings, game.getPlayerOne());
+        PlayerController playerOneController =
+                playerControllerFactory.getPlayerController(playerOneControllerSettings, game.getPlayerOne());
 
 
-        PlayerControllerSettings playerTwoControllerSettings = playerControllerSettingsFactory.get(PlayerControllerType.valueOf(playerTwoType));
+        PlayerControllerSettings playerTwoControllerSettings =
+                playerControllerSettingsFactory.get(PlayerControllerType.valueOf(playerTwoType));
         playerOneControllerSettings.setClientWebSocket(clientWebSocket);
         playerTwoControllerSettings.setAiRemoteHost(playerTwoAiRemoteHost);
-        PlayerController playerTwoController = playerControllerFactory.getPlayerController(playerTwoControllerSettings, game.getPlayerTwo());
+        PlayerController playerTwoController =
+                playerControllerFactory.getPlayerController(playerTwoControllerSettings, game.getPlayerTwo());
 
         GameController gameController = gameControllerFactory.get(game, playerOneController, playerTwoController);
         gameControllerRepository.add(gameController.getGameId(), gameController);

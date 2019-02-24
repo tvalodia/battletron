@@ -6,24 +6,28 @@ import com.alltimeslucky.battletron.player.controller.remote.api.RemoteAiApi;
 import com.alltimeslucky.battletron.player.controller.remote.api.RemoteAiGameDto;
 import com.alltimeslucky.battletron.player.model.Direction;
 import com.alltimeslucky.battletron.player.model.Player;
-import com.alltimeslucky.battletron.server.game.api.dto.GameDto;
 
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
 
 import org.glassfish.jersey.client.ClientProperties;
-import org.glassfish.jersey.client.JerseyClientBuilder;
 import org.glassfish.jersey.client.proxy.WebResourceFactory;
 
+/**
+ * Fetches a Direction for the Player by making a REST call.
+ */
 public class RemoteAiPlayerController implements PlayerController {
 
-    private String url;
     private Player player;
-    RemoteAiApi directionResource;
+    private RemoteAiApi directionResource;
 
+    /**
+     * Constructor.
+     * @param url The URL of the remote server.
+     * @param player The player which to control.
+     */
     public RemoteAiPlayerController(String url, Player player) {
 
-        this.url = url;
         this.player = player;
 
         // create a new JAX-RS 2.0 target pointing to the root of the web api
