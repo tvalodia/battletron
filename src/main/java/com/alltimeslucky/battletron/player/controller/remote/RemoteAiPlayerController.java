@@ -3,6 +3,7 @@ package com.alltimeslucky.battletron.player.controller.remote;
 import com.alltimeslucky.battletron.game.model.Game;
 import com.alltimeslucky.battletron.player.controller.PlayerController;
 import com.alltimeslucky.battletron.player.controller.remote.api.RemoteAiApi;
+import com.alltimeslucky.battletron.player.controller.remote.api.RemoteAiGameDto;
 import com.alltimeslucky.battletron.player.model.Direction;
 import com.alltimeslucky.battletron.player.model.Player;
 import com.alltimeslucky.battletron.server.game.api.dto.GameDto;
@@ -38,7 +39,7 @@ public class RemoteAiPlayerController implements PlayerController {
     @Override
     public void execute(Game game) {
         try {
-            player.setDirection(Direction.valueOf(directionResource.getDirection(new GameDto(game))));
+            player.setDirection(Direction.valueOf(directionResource.getDirection(new RemoteAiGameDto(game, player))));
         } catch (Exception e) {
             e.printStackTrace();
         }
