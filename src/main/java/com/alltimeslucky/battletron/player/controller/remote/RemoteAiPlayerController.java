@@ -35,7 +35,7 @@ public class RemoteAiPlayerController implements PlayerController {
         t.property(ClientProperties.CONNECT_TIMEOUT, 5000);
         t.property(ClientProperties.READ_TIMEOUT, 2000);
 
-        // create a new client proxy for the BooksResource
+        // create a new client proxy for the RemoteAi resource
         directionResource = WebResourceFactory.newResource(RemoteAiApi.class, t);
 
     }
