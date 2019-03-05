@@ -94,7 +94,7 @@ public class GameServiceImpl implements GameService {
     public Game createGame(String sessionId, String playerOneType, String playerOneAiRemoteHost,
                                              String playerTwoType, String playerTwoAiRemoteHost) throws BattletronException {
 
-        inputValidator.validateCreateGameInput(sessionId, playerOneType, playerTwoType);
+        inputValidator.validateCreateGameInput(sessionId, playerOneType, playerOneAiRemoteHost, playerTwoType, playerTwoAiRemoteHost);
         Session session = sessionRepository.get(sessionId);
 
         killGamesStartedWithSession(session);

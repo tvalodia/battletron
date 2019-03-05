@@ -60,13 +60,13 @@ public class GameServiceInputValidatorTest {
     public void testValidateCreateGameInputSuccessful() throws BattletronException {
         sessionRepository.add("abc", new Session("abc"));
 
-        validator.validateCreateGameInput("abc", "KEYBOARD", "KEYBOARD");
+        validator.validateCreateGameInput("abc", "KEYBOARD", null,"KEYBOARD", null);
     }
 
     @Test
     public void testValidateCreateGameInputWithEmptySessionId() {
         try {
-            validator.validateCreateGameInput("", "KEYBOARD", "KEYBOARD");
+            validator.validateCreateGameInput("", "KEYBOARD", null, "KEYBOARD", null);
             fail("Exception was not thrown");
         } catch (BattletronException exception) {
             assertEquals(ExceptionCode.VALIDATION, exception.getCode());
@@ -81,7 +81,7 @@ public class GameServiceInputValidatorTest {
         sessionRepository.add("abc", new Session("abc"));
 
         try {
-            validator.validateCreateGameInput("abc", null, "KEYBOARD");
+            validator.validateCreateGameInput("abc", null, null, "KEYBOARD", null);
             fail("Exception was not thrown");
         } catch (BattletronException exception) {
             assertEquals(ExceptionCode.VALIDATION, exception.getCode());
@@ -96,7 +96,7 @@ public class GameServiceInputValidatorTest {
         sessionRepository.add("def", new Session("abc"));
 
         try {
-            validator.validateCreateGameInput("def", "KEYBOARD", null);
+            validator.validateCreateGameInput("def", "KEYBOARD", null, null, null);
             fail("Exception was not thrown");
         } catch (BattletronException exception) {
             assertEquals(ExceptionCode.VALIDATION, exception.getCode());
@@ -111,7 +111,7 @@ public class GameServiceInputValidatorTest {
         sessionRepository.add("abc", new Session("abc"));
 
         try {
-            validator.validateCreateGameInput(null, null, null);
+            validator.validateCreateGameInput(null, null, null, null, null);
             fail("Exception was not thrown");
         } catch (BattletronException exception) {
             assertEquals(ExceptionCode.VALIDATION, exception.getCode());
@@ -128,7 +128,7 @@ public class GameServiceInputValidatorTest {
     @Test
     public void testValidateCreateGameInputWithInvalidSessionId() {
         try {
-            validator.validateCreateGameInput("abc", "KEYBOARD", "KEYBOARD");
+            validator.validateCreateGameInput("abc", "KEYBOARD", null, "KEYBOARD", null);
             fail("Exception was not thrown");
         } catch (BattletronException exception) {
             assertEquals(ExceptionCode.VALIDATION, exception.getCode());
@@ -140,7 +140,7 @@ public class GameServiceInputValidatorTest {
     @Test
     public void testValidateCreateGameInputWithAllInvalidValues() {
         try {
-            validator.validateCreateGameInput("abc", "def", "ghi");
+            validator.validateCreateGameInput("abc", "def", null,"ghi", null);
             fail("Exception was not thrown");
         } catch (BattletronException exception) {
             assertEquals(ExceptionCode.VALIDATION, exception.getCode());

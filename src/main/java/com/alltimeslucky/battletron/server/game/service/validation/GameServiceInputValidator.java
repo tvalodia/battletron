@@ -7,15 +7,19 @@ import com.alltimeslucky.battletron.game.controller.GameControllerRepository;
 import com.alltimeslucky.battletron.player.controller.PlayerControllerType;
 import com.alltimeslucky.battletron.server.session.Session;
 import com.alltimeslucky.battletron.server.session.SessionRepository;
-import com.alltimeslucky.battletron.server.websocket.ClientWebSocket;
 
 import javax.inject.Inject;
+
+import org.apache.commons.validator.routines.UrlValidator;
 
 public class GameServiceInputValidator {
 
     private static final String SESSION_ID = "Session ID";
     private static final String PLAYER_ONE_CONTROLLER_TYPE = "Player One Type";
     private static final String PLAYER_TWO_CONTROLLER_TYPE = "Player Two Type";
+    private static final String PLAYER_ONE_REMOTE_AI_HOST = "Player One Remote AI Host";
+    private static final String PLAYER_TWO_REMOTE_AI_HOST = "Player Two Remote AI Host";
+
 
     private GameControllerRepository gameControllerRepository;
     private SessionRepository sessionRepository;
@@ -32,17 +36,20 @@ public class GameServiceInputValidator {
      *
      * @param sessionId               The id of the web socket session
      * @param playerOneControllerType The type of controller for player one
-     * @param playerTwoControllerType The type of controller for player one
+     * @param playerOneRemoteAiHost  The URL of the remote ai for player one
+     * @param playerTwoControllerType The type of controller for player two
+     * @param playerTwoRemoteAiHost  The URL of the remote ai for player two
      * @throws BattletronException Thrown when the any of the input values do not pass validation
      */
-    public void validateCreateGameInput(String sessionId, String playerOneControllerType, String playerTwoControllerType)
-            throws BattletronException {
+    public void validateCreateGameInput(String sessionId, String playerOneControllerType, String playerOneRemoteAiHost,
+                                        String playerTwoControllerType, String playerTwoRemoteAiHost) throws BattletronException {
 
-        confirmPresence(sessionId, playerOneControllerType, playerTwoControllerType);
-        confirmValid(sessionId, playerOneControllerType, playerTwoControllerType);
+        checkMandatoryValues(sessionId, playerOneControllerType, playerOneRemoteAiHost, playerTwoControllerType, playerTwoRemoteAiHost);
+        confirmValid(sessionId, playerOneControllerType, playerOneRemoteAiHost, playerTwoControllerType, playerTwoRemoteAiHost);
     }
 
-    private void confirmPresence(String sessionId, String playerOneControllerType, String playerTwoControllerType)
+    private void checkMandatoryValues(String sessionId, String playerOneControllerType, String playerOneRemoteAiHost,
+                                      String playerTwoControllerType, String playerTwoRemoteAiHost)
             throws BattletronException {
 
         BattletronException validationException = new BattletronException(ExceptionCode.VALIDATION);
@@ -62,9 +69,24 @@ public class GameServiceInputValidator {
         if (validationException.exceptionCount() > 0) {
             throw validationException;
         }
+
+        if (playerOneControllerType.equals(PlayerControllerType.AI_REMOTE.toString())
+                && (playerOneRemoteAiHost == null || playerOneRemoteAiHost.isEmpty())) {
+            validationException.add(new BattletronException(ExceptionCode.MISSING_VALUE, PLAYER_ONE_REMOTE_AI_HOST));
+        }
+
+        if (playerTwoControllerType.equals(PlayerControllerType.AI_REMOTE.toString())
+                && (playerTwoRemoteAiHost == null || playerTwoRemoteAiHost.isEmpty())) {
+            validationException.add(new BattletronException(ExceptionCode.MISSING_VALUE, PLAYER_TWO_REMOTE_AI_HOST));
+        }
+
+        if (validationException.exceptionCount() > 0) {
+            throw validationException;
+        }
     }
 
-    private void confirmValid(String sessionId, String playerOneControllerType, String playerTwoControllerType)
+    private void confirmValid(String sessionId, String playerOneControllerType, String playerOneRemoteAiHost,
+                              String playerTwoControllerType, String playerTwoRemoteAiHost)
             throws BattletronException {
 
         BattletronException validationException = new BattletronException(ExceptionCode.VALIDATION);
@@ -84,6 +106,21 @@ public class GameServiceInputValidator {
         } catch (IllegalArgumentException e) {
             validationException.add(new BattletronException(ExceptionCode.INVALID_VALUE, PLAYER_TWO_CONTROLLER_TYPE));
         }
+
+        if (validationException.exceptionCount() > 0) {
+            throw validationException;
+        }
+
+        String[] schemes = {"http","https"}; // DEFAULT schemes = "http", "https", "ftp"
+        UrlValidator urlValidator = new UrlValidator(schemes);
+        if (playerOneControllerType.equals(PlayerControllerType.AI_REMOTE.toString()) && !urlValidator.isValid(playerOneRemoteAiHost)) {
+            validationException.add(new BattletronException(ExceptionCode.INVALID_VALUE, PLAYER_ONE_REMOTE_AI_HOST));
+        }
+
+        if (playerTwoControllerType.equals(PlayerControllerType.AI_REMOTE.toString()) && !urlValidator.isValid(playerTwoRemoteAiHost)) {
+            validationException.add(new BattletronException(ExceptionCode.INVALID_VALUE, PLAYER_TWO_REMOTE_AI_HOST));
+        }
+
 
         if (validationException.exceptionCount() > 0) {
             throw validationException;
