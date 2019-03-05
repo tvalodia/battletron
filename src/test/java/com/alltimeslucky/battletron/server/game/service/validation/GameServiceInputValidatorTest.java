@@ -302,4 +302,16 @@ public class GameServiceInputValidatorTest {
         }
     }
 
+    @Test
+    public void testValidateCreateGameWithPlayerOneRemoteAiSuccessful() throws BattletronException {
+        sessionRepository.add("abc", new Session("abc"));
+        validator.validateCreateGameInput("abc", "AI_REMOTE", "http://localhost:5000", "KEYBOARD", null);
+    }
+
+    @Test
+    public void testValidateCreateGameWithPlayerTwoRemoteAiSuccessful() throws BattletronException {
+        sessionRepository.add("abc", new Session("abc"));
+        validator.validateCreateGameInput("abc", "KEYBOARD", null,"AI_REMOTE", "http://localhost:5000");
+    }
+
 }

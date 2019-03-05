@@ -112,7 +112,7 @@ public class GameServiceInputValidator {
         }
 
         String[] schemes = {"http","https"}; // DEFAULT schemes = "http", "https", "ftp"
-        UrlValidator urlValidator = new UrlValidator(schemes);
+        UrlValidator urlValidator = new UrlValidator(schemes, UrlValidator.ALLOW_LOCAL_URLS);
         if (playerOneControllerType.equals(PlayerControllerType.AI_REMOTE.toString()) && !urlValidator.isValid(playerOneRemoteAiHost)) {
             validationException.add(new BattletronException(ExceptionCode.INVALID_VALUE, PLAYER_ONE_REMOTE_AI_HOST));
         }
