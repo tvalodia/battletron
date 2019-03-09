@@ -11,8 +11,12 @@ import com.alltimeslucky.battletron.server.session.SessionRepository;
 import javax.inject.Inject;
 
 import org.apache.commons.validator.routines.UrlValidator;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class GameServiceInputValidator {
+
+    private static final Logger LOG = LogManager.getLogger();
 
     private static final String SESSION_ID = "Session ID";
     private static final String PLAYER_ONE_CONTROLLER_TYPE = "Player One Type";
@@ -67,6 +71,7 @@ public class GameServiceInputValidator {
         }
 
         if (validationException.exceptionCount() > 0) {
+            LOG.error(validationException);
             throw validationException;
         }
 
@@ -81,6 +86,7 @@ public class GameServiceInputValidator {
         }
 
         if (validationException.exceptionCount() > 0) {
+            LOG.error(validationException);
             throw validationException;
         }
     }
@@ -108,6 +114,7 @@ public class GameServiceInputValidator {
         }
 
         if (validationException.exceptionCount() > 0) {
+            LOG.error(validationException);
             throw validationException;
         }
 
@@ -123,6 +130,7 @@ public class GameServiceInputValidator {
 
 
         if (validationException.exceptionCount() > 0) {
+            LOG.error(validationException);
             throw validationException;
         }
     }
@@ -145,6 +153,7 @@ public class GameServiceInputValidator {
         }
 
         if (validationException.exceptionCount() > 0) {
+            LOG.error(validationException);
             throw validationException;
         }
 
@@ -153,6 +162,7 @@ public class GameServiceInputValidator {
         }
 
         if (validationException.exceptionCount() > 0) {
+            LOG.error(validationException);
             throw validationException;
         }
 
@@ -176,6 +186,7 @@ public class GameServiceInputValidator {
         }
 
         if (validationException.exceptionCount() > 0) {
+            LOG.error(validationException);
             throw validationException;
         }
 
@@ -184,6 +195,7 @@ public class GameServiceInputValidator {
         }
 
         if (validationException.exceptionCount() > 0) {
+            LOG.error(validationException);
             throw validationException;
         }
 
@@ -208,6 +220,7 @@ public class GameServiceInputValidator {
     public void validateGameId(long id) throws BattletronException {
 
         if (!gameControllerRepository.contains(id)) {
+            LOG.error("Invalid game id: " + id);
             throw new BattletronException(ExceptionCode.NOT_FOUND);
         }
     }
