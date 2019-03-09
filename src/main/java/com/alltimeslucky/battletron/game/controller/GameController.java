@@ -1,14 +1,21 @@
 package com.alltimeslucky.battletron.game.controller;
 
+import com.alltimeslucky.battletron.exception.BattletronException;
+import com.alltimeslucky.battletron.exception.ExceptionCode;
 import com.alltimeslucky.battletron.game.model.Game;
 import com.alltimeslucky.battletron.game.model.GameStatus;
 import com.alltimeslucky.battletron.player.controller.PlayerController;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * This class manages and executes the game loop; controls the flow of the game and notifies observers at every game tick.
  * With each tick, the engine will ask players for a direction input and update the game state accordingly.
  */
 public class GameController extends Thread {
+
+    private static final Logger LOG = LogManager.getLogger();
 
     private static final int TICK_INTERVAL_MILLIS = 50;
     private long lastTickTime;
@@ -48,19 +55,24 @@ public class GameController extends Thread {
             try {
                 pauseIfRequired();
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                LOG.error(ExceptionCode.UNABLE_TO_PAUSE);
             }
 
             long currentTime = System.currentTimeMillis();
             if (currentTime - lastTickTime >= TICK_INTERVAL_MILLIS) {
 
-                //Execute the player controllers
-                if (playerOneController != null) {
-                    playerOneController.execute(game);
-                }
+                try {
+                    //Execute the player controllers
+                    if (playerOneController != null) {
+                        playerOneController.execute(game);
+                    }
 
-                if (playerTwoController != null) {
-                    playerTwoController.execute(game);
+                    if (playerTwoController != null) {
+                        playerTwoController.execute(game);
+                    }
+                } catch (BattletronException e) {
+                    LOG.error(e);
+                    this.kill();
                 }
 
                 //update the playing field
@@ -70,7 +82,7 @@ public class GameController extends Thread {
                     break;
                 }
 
-                lastTickTime = currentTime;//+ currentTime - lastTickTime - TICK_INTERVAL_MILLIS;
+                lastTickTime = currentTime;
             }
         }
 

@@ -1,5 +1,6 @@
 package com.alltimeslucky.battletron.player.controller.remote;
 
+import com.alltimeslucky.battletron.exception.BattletronException;
 import com.alltimeslucky.battletron.game.model.Game;
 import com.alltimeslucky.battletron.player.controller.PlayerController;
 import com.alltimeslucky.battletron.player.controller.remote.api.RemoteAiApi;
@@ -10,6 +11,8 @@ import com.alltimeslucky.battletron.player.model.Player;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.glassfish.jersey.client.ClientProperties;
 import org.glassfish.jersey.client.proxy.WebResourceFactory;
 
@@ -18,12 +21,15 @@ import org.glassfish.jersey.client.proxy.WebResourceFactory;
  */
 public class RemoteAiPlayerController implements PlayerController {
 
+    private static final Logger LOG = LogManager.getLogger();
+
     private Player player;
     private RemoteAiApi directionResource;
 
     /**
      * Constructor.
-     * @param url The URL of the remote server.
+     *
+     * @param url    The URL of the remote server.
      * @param player The player which to control.
      */
     public RemoteAiPlayerController(String url, Player player) {
@@ -41,11 +47,12 @@ public class RemoteAiPlayerController implements PlayerController {
     }
 
     @Override
-    public void execute(Game game) {
+    public void execute(Game game) throws BattletronException {
         try {
             player.setDirection(Direction.valueOf(directionResource.getDirection(new RemoteAiGameDto(game, player))));
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error(e);
+            throw new RemoteAiConnectionException(e);
         }
     }
 }

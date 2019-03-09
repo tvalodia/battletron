@@ -21,6 +21,20 @@ public class BattletronException extends Exception {
         super(string);
     }
 
+    /**
+     * Constructor.
+     * @param code The specific ExceptionCode
+     * @param cause The cause of this Exception
+     */
+    public BattletronException(ExceptionCode code, Throwable cause) {
+        super(code.getMessage(), cause);
+        this.code = code;
+    }
+
+    /**
+     * Constructor.
+     * @param code The specific ExceptionCode
+     */
     public BattletronException(ExceptionCode code) {
         super(code.getMessage());
         this.code = code;
