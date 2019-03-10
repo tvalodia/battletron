@@ -22,7 +22,7 @@ public class GameDto {
     //Keeps track of players trails
     private int[][] playingField;
     //The winner of the current game is there is one.
-    private Player winner;
+    private PlayerDto winner;
 
     /**
      * Non-parameterised constructor for serialisation.
@@ -42,7 +42,7 @@ public class GameDto {
         setTickCount(game.getTickCount());
         setPlayingField(game.getPlayingField());
         setGameStatus(game.getGameStatus());
-        setWinner(game.getWinner());
+        setWinner(new PlayerDto(game.getWinner()));
     }
 
     public int getWidth() {
@@ -101,11 +101,11 @@ public class GameDto {
         this.playingField = playingField;
     }
 
-    public Player getWinner() {
+    public PlayerDto getWinner() {
         return winner;
     }
 
-    public void setWinner(Player winner) {
+    public void setWinner(PlayerDto winner) {
         this.winner = winner;
     }
 
