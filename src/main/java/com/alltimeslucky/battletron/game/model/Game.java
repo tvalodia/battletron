@@ -3,6 +3,7 @@ package com.alltimeslucky.battletron.game.model;
 import com.alltimeslucky.battletron.player.model.Player;
 
 import java.util.Collections;
+import java.util.GregorianCalendar;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -22,14 +23,12 @@ public class Game {
     private int tickCount;
     private final Player playerOne;
     private final Player playerTwo;
-
     //Keeps track of players trails
     private int[][] playingField;
-
     //The winner of the current game is there is one.
     private Player winner;
-
     private final List<GameListener> gameListeners;
+    private long createdDate;
 
     /**
      * Constructor.
@@ -54,6 +53,7 @@ public class Game {
         this.winner = null;
         this.gameListeners = Collections.synchronizedList(new LinkedList<>());
         this.gameStatus = GameStatus.WAITING_FOR_READY;
+        this.createdDate = GregorianCalendar.getInstance().getTimeInMillis();
     }
 
     /**
@@ -184,6 +184,14 @@ public class Game {
 
     public void stop() {
         setGameStatus(GameStatus.STOPPED);
+    }
+
+    public void timeout() {
+        setGameStatus(GameStatus.TIMED_OUT);
+    }
+
+    public long getCreatedDate() {
+        return createdDate;
     }
 
     /* public void deregisterListener(GameListener listener) {

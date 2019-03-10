@@ -110,10 +110,9 @@ public class GameServiceImpl implements GameService {
         PlayerController playerOneController =
                 playerControllerFactory.getPlayerController(playerOneControllerSettings, game.getPlayerOne());
 
-
         PlayerControllerSettings playerTwoControllerSettings =
                 playerControllerSettingsFactory.get(PlayerControllerType.valueOf(playerTwoType));
-        playerOneControllerSettings.setClientWebSocket(clientWebSocket);
+        playerTwoControllerSettings.setClientWebSocket(clientWebSocket);
         playerTwoControllerSettings.setAiRemoteHost(playerTwoAiRemoteHost);
         PlayerController playerTwoController =
                 playerControllerFactory.getPlayerController(playerTwoControllerSettings, game.getPlayerTwo());

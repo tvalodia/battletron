@@ -16,6 +16,8 @@ export class StatusPipe implements PipeTransform {
       return "IN PROGRESS";
     } else if (value == "STOPPED") {
       return "STOPPED";
+    } else if (value == "TIMED_OUT") {
+      return "TIMED OUT";
     } else return "UNKNOWN";
   }
 

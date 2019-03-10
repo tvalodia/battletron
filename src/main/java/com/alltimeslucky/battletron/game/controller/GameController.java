@@ -18,6 +18,7 @@ public class GameController extends Thread {
     private static final Logger LOG = LogManager.getLogger();
 
     private static final int TICK_INTERVAL_MILLIS = 50;
+    private static final long TIMEOUT = 1000 * 60 * 5;
     private long lastTickTime;
     private PlayerController playerOneController;
     private PlayerController playerTwoController;
@@ -60,6 +61,12 @@ public class GameController extends Thread {
 
             long currentTime = System.currentTimeMillis();
             if (currentTime - lastTickTime >= TICK_INTERVAL_MILLIS) {
+
+                if (game.getGameStatus().equals(GameStatus.WAITING_FOR_READY) && currentTime - game.getCreatedDate() > TIMEOUT) {
+                    game.timeout();
+                    LOG.warn("Game Engine stopped - waited too long for STARTED state");
+                    return;
+                }
 
                 try {
                     //Execute the player controllers
