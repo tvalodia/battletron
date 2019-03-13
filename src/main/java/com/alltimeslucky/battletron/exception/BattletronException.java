@@ -71,4 +71,16 @@ public class BattletronException extends Exception {
     public List<BattletronException> getExceptions() {
         return exceptions;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append(code).append(" - ").append(getMessage()).append(" - ").append(field).append(System.lineSeparator());
+
+        for (BattletronException cause : exceptions) {
+            builder.append(cause).append(System.lineSeparator());
+        }
+
+        return builder.toString();
+    }
 }
