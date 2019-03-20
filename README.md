@@ -15,7 +15,7 @@ The server is an embedded instance of Jetty with a REST API for managing games. 
 Each game is run in its own thread. Game state updates are sent to the Angular clients over web sockets.
 
 ## Client
-The client is an Angular application hosted by the server. Game state updates are received over web sockets.
+The client is an Angular application hosted by the server. Game state updates are received over web sockets and drawn to the game view.
 
 ## Remote AIs
 Games can be configured to fetch player inputs from a remote server. The URL of each remote AI is specified in the "host" field on the "New Game" screen.
