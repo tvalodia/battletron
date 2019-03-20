@@ -1,4 +1,6 @@
-package com.alltimeslucky.battletron.server.session;
+package com.alltimeslucky.battletron.server.session.repository;
+
+import com.alltimeslucky.battletron.server.session.service.Session;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

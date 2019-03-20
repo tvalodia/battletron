@@ -2,10 +2,12 @@ package com.alltimeslucky.battletron.server.game.api;
 
 import com.alltimeslucky.battletron.exception.BattletronException;
 import com.alltimeslucky.battletron.game.model.Game;
+import com.alltimeslucky.battletron.player.controller.PlayerControllerType;
 import com.alltimeslucky.battletron.server.game.api.dto.GameCommandDto;
 import com.alltimeslucky.battletron.server.game.api.dto.GameDto;
 import com.alltimeslucky.battletron.server.game.api.dto.JoinGameDto;
 import com.alltimeslucky.battletron.server.game.api.dto.NewGameDto;
+import com.alltimeslucky.battletron.server.game.api.dto.NewTrainingGameDto;
 import com.alltimeslucky.battletron.server.game.api.dto.SpectateGameDto;
 import com.alltimeslucky.battletron.server.game.service.GameService;
 
@@ -106,6 +108,23 @@ public class GameApi {
     public GameDto createGame(NewGameDto dto) throws BattletronException {
         Game game = gameService.createGame(dto.getSessionId(), dto.getPlayerOne().getPlayerType(), dto.getPlayerOne().getAiRemoteHost(),
                 dto.getPlayerTwo().getPlayerType(), dto.getPlayerTwo().getAiRemoteHost());
+        GameDto gameDto = new GameDto(game);
+        gameDto.setPlayingField(null);
+        LOG.debug("Response: " + gameDto);
+        return gameDto;
+    }
+
+
+    /**
+     * Starts a new AI training game.
+     *
+     * @return A GameDto object.
+     */
+    @POST
+    @Path("/training")
+    @Produces(MediaType.APPLICATION_JSON)
+    public GameDto createTrainingGame(NewTrainingGameDto dto) throws BattletronException {
+        Game game = gameService.createTrainingGame(dto.getAiRemoteHost());
         GameDto gameDto = new GameDto(game);
         gameDto.setPlayingField(null);
         LOG.debug("Response: " + gameDto);

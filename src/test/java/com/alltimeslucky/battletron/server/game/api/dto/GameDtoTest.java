@@ -40,7 +40,7 @@ public class GameDtoTest {
         assertEquals(0, gameDto.getTickCount());
         assertEquals(Direction.UP, gameDto.getPlayerOne().getDirection());
         assertEquals(Direction.DOWN, gameDto.getPlayerTwo().getDirection());
-        assertSame(player2, gameDto.getWinner());
+        assertEquals(player2.getId(), gameDto.getWinner().getId());
         assertNull(gameDto.getPlayingField());
     }
 }

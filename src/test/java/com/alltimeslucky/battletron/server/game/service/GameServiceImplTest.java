@@ -11,12 +11,11 @@ import com.alltimeslucky.battletron.player.controller.PlayerController;
 import com.alltimeslucky.battletron.player.controller.PlayerControllerFactory;
 import com.alltimeslucky.battletron.player.controller.PlayerControllerType;
 import com.alltimeslucky.battletron.player.controller.SimplePlayerAi;
-import com.alltimeslucky.battletron.player.controller.settings.PlayerControllerSettings;
 import com.alltimeslucky.battletron.player.controller.settings.PlayerControllerSettingsFactory;
 import com.alltimeslucky.battletron.player.model.PlayerFactory;
 import com.alltimeslucky.battletron.server.game.service.validation.GameServiceInputValidator;
-import com.alltimeslucky.battletron.server.session.Session;
-import com.alltimeslucky.battletron.server.session.SessionRepository;
+import com.alltimeslucky.battletron.server.session.service.Session;
+import com.alltimeslucky.battletron.server.session.repository.SessionRepository;
 import com.alltimeslucky.battletron.server.websocket.ClientWebSocket;
 import com.alltimeslucky.battletron.server.websocket.ClientWebSocketController;
 

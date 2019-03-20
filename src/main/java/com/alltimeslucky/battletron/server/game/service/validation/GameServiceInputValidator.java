@@ -5,8 +5,8 @@ import com.alltimeslucky.battletron.exception.ExceptionCode;
 import com.alltimeslucky.battletron.game.controller.GameController;
 import com.alltimeslucky.battletron.game.controller.GameControllerRepository;
 import com.alltimeslucky.battletron.player.controller.PlayerControllerType;
-import com.alltimeslucky.battletron.server.session.Session;
-import com.alltimeslucky.battletron.server.session.SessionRepository;
+import com.alltimeslucky.battletron.server.session.repository.SessionRepository;
+import com.alltimeslucky.battletron.server.session.service.Session;
 
 import javax.inject.Inject;
 
@@ -23,6 +23,7 @@ public class GameServiceInputValidator {
     private static final String PLAYER_TWO_CONTROLLER_TYPE = "Player Two Type";
     private static final String PLAYER_ONE_REMOTE_AI_HOST = "Player One Remote AI Host";
     private static final String PLAYER_TWO_REMOTE_AI_HOST = "Player Two Remote AI Host";
+    private static final String REMOTE_AI_HOST = "Remote AI Host";
 
 
     private GameControllerRepository gameControllerRepository;
@@ -222,6 +223,17 @@ public class GameServiceInputValidator {
         if (!gameControllerRepository.contains(id)) {
             LOG.error("Invalid game id: " + id);
             throw new BattletronException(ExceptionCode.NOT_FOUND);
+        }
+    }
+
+    /**
+     * Validates the value of aiRemoteHost.
+     * @param aiRemoteHost The aiRemoteHost value to validate.
+     * @throws BattletronException Thrown when the aiRemoteHost is invalid.
+     */
+    public void validateAiRemoteHost(String aiRemoteHost) throws BattletronException {
+        if (aiRemoteHost == null || aiRemoteHost.isEmpty()) {
+            throw new BattletronException(ExceptionCode.MISSING_VALUE, REMOTE_AI_HOST);
         }
     }
 }

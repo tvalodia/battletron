@@ -37,10 +37,18 @@ public interface GameService {
      * @param playerOneAiRemoteHost The remote address of the AI player if required.
      * @param playerTwoType The type pf player for player 2
      * @param playerTwoAiRemoteHost The remote address of the AI player if required.
-     * @return A new GameController
+     * @return A new Game
      */
     Game createGame(String sessionId, String playerOneType, String playerOneAiRemoteHost,
                     String playerTwoType, String playerTwoAiRemoteHost) throws BattletronException;
+
+    /**
+     * Creates a game used for training remote AIs. The PlayerControllerTypes for both players are AI_REMOTE.
+     * No Session objects are used.
+     * @param aiRemoteHost The host address of the training server.
+     * @return A new Game
+     */
+    Game createTrainingGame(String aiRemoteHost) throws BattletronException;
 
     /**
      * Start spectating a game.
@@ -87,4 +95,5 @@ public interface GameService {
      * @throws Exception Thrown when the gameId is invalid
      */
     void stopGame(long gameId) throws Exception;
+
 }

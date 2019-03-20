@@ -1,4 +1,4 @@
-package com.alltimeslucky.battletron.server.session;
+package com.alltimeslucky.battletron.server.session.service;
 
 import com.alltimeslucky.battletron.player.controller.PlayerController;
 import com.alltimeslucky.battletron.server.websocket.ClientWebSocket;
@@ -9,6 +9,10 @@ public class Session {
     private PlayerController playerController;
     private Long gameId;
     private ClientWebSocket clientWebSocket;
+
+    public String getId() {
+        return id;
+    }
 
     public Session(String id) {
         this.id = id;
@@ -37,4 +41,5 @@ public class Session {
     public void setClientWebSocket(ClientWebSocket clientWebSocket) {
         this.clientWebSocket = clientWebSocket;
     }
+
 }

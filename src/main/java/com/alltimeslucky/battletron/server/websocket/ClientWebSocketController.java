@@ -2,7 +2,7 @@ package com.alltimeslucky.battletron.server.websocket;
 
 import com.alltimeslucky.battletron.game.model.Game;
 import com.alltimeslucky.battletron.game.model.GameListener;
-import com.alltimeslucky.battletron.server.session.SessionRepository;
+import com.alltimeslucky.battletron.server.session.repository.SessionRepository;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

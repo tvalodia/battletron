@@ -14,8 +14,8 @@ import com.alltimeslucky.battletron.player.controller.settings.PlayerControllerS
 import com.alltimeslucky.battletron.player.controller.settings.PlayerControllerSettingsFactory;
 import com.alltimeslucky.battletron.player.model.Player;
 import com.alltimeslucky.battletron.server.game.service.validation.GameServiceInputValidator;
-import com.alltimeslucky.battletron.server.session.Session;
-import com.alltimeslucky.battletron.server.session.SessionRepository;
+import com.alltimeslucky.battletron.server.session.repository.SessionRepository;
+import com.alltimeslucky.battletron.server.session.service.Session;
 import com.alltimeslucky.battletron.server.websocket.ClientWebSocket;
 import com.alltimeslucky.battletron.server.websocket.ClientWebSocketController;
 
@@ -123,6 +123,33 @@ public class GameServiceImpl implements GameService {
         game.registerListener(clientWebSocketController);
         //gameController.getGame().registerListener(new PrintGameListener());
         session.setGameId(gameController.getGame().getId());
+
+        gameController.start();
+
+        return gameController.getGame();
+    }
+
+    @Override
+    public Game createTrainingGame(String aiRemoteHost) throws BattletronException {
+
+        inputValidator.validateAiRemoteHost(aiRemoteHost);
+
+        Game game = gameFactory.get();
+
+        PlayerControllerSettings playerOneControllerSettings =
+                playerControllerSettingsFactory.get(PlayerControllerType.AI_REMOTE);
+        playerOneControllerSettings.setAiRemoteHost(aiRemoteHost);
+        PlayerController playerOneController =
+                playerControllerFactory.getPlayerController(playerOneControllerSettings, game.getPlayerOne());
+
+        PlayerControllerSettings playerTwoControllerSettings =
+                playerControllerSettingsFactory.get(PlayerControllerType.AI_REMOTE);
+        playerTwoControllerSettings.setAiRemoteHost(aiRemoteHost);
+        PlayerController playerTwoController =
+                playerControllerFactory.getPlayerController(playerTwoControllerSettings, game.getPlayerTwo());
+
+        GameController gameController = gameControllerFactory.get(game, playerOneController, playerTwoController);
+        gameControllerRepository.add(gameController.getGameId(), gameController);
 
         gameController.start();
 

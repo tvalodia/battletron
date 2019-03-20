@@ -1,9 +1,8 @@
 package com.alltimeslucky.battletron.server.websocket;
 
-import com.alltimeslucky.battletron.server.game.service.GameService;
-import com.alltimeslucky.battletron.server.session.Session;
-import com.alltimeslucky.battletron.server.session.SessionFactory;
-import com.alltimeslucky.battletron.server.session.SessionRepository;
+import com.alltimeslucky.battletron.server.session.repository.SessionRepository;
+import com.alltimeslucky.battletron.server.session.service.Session;
+import com.alltimeslucky.battletron.server.session.service.SessionFactory;
 
 import javax.inject.Inject;
 

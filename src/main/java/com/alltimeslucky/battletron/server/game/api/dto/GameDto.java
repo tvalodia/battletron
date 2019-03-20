@@ -42,7 +42,9 @@ public class GameDto {
         setTickCount(game.getTickCount());
         setPlayingField(game.getPlayingField());
         setGameStatus(game.getGameStatus());
-        setWinner(new PlayerDto(game.getWinner()));
+        if (game.getWinner() != null) {
+            setWinner(new PlayerDto(game.getWinner()));
+        }
     }
 
     public int getWidth() {

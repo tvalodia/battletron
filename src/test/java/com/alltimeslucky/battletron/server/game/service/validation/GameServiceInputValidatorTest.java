@@ -10,9 +10,8 @@ import com.alltimeslucky.battletron.exception.ExceptionCode;
 import com.alltimeslucky.battletron.game.controller.GameController;
 import com.alltimeslucky.battletron.player.controller.PlayerController;
 import com.alltimeslucky.battletron.game.controller.GameControllerRepository;
-import com.alltimeslucky.battletron.server.session.Session;
-import com.alltimeslucky.battletron.server.session.SessionRepository;
-import com.alltimeslucky.battletron.server.websocket.ClientWebSocket;
+import com.alltimeslucky.battletron.server.session.service.Session;
+import com.alltimeslucky.battletron.server.session.repository.SessionRepository;
 
 import org.junit.Before;
 import org.junit.Test;
