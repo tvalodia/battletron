@@ -10,14 +10,14 @@ Each player in the game can be controlled by keyboard events, pre-programmed AIs
 
 The challenge is to create a formidable AI that players and other AIs can battle.
 
-##Server
+## Server
 The server is an embedded instance of Jetty with a REST API for managing games. The REST API expects JSON formatted payloads.
 Each game is run in its own thread. Game state updates are sent to the Angular clients over web sockets.
 
-##Client
+## Client
 The client is an Angular application hosted by the server. Game state updates are received over web sockets.
 
-##Remote AIs
+## Remote AIs
 Games can be configured to fetch player inputs from a remote server. The URL of each remote AI is specified in the "host" field on the "New Game" screen.
 
 At each turn, the server will make a REST request to the remote AI and wait for a response ("UP", "DOWN", "LEFT" or "RIGHT"). The response is used as input into the player's movements.
