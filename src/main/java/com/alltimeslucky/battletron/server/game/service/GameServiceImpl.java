@@ -18,6 +18,7 @@ import com.alltimeslucky.battletron.server.session.repository.SessionRepository;
 import com.alltimeslucky.battletron.server.session.service.Session;
 import com.alltimeslucky.battletron.server.websocket.ClientWebSocket;
 import com.alltimeslucky.battletron.server.websocket.ClientWebSocketController;
+import com.alltimeslucky.battletron.trainer.api.TrainerGameListenerFactory;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -39,6 +40,7 @@ public class GameServiceImpl implements GameService {
     private GameFactory gameFactory;
     private GameServiceInputValidator inputValidator;
     private PlayerControllerSettingsFactory playerControllerSettingsFactory;
+    private TrainerGameListenerFactory trainerGameListenerFactory;
 
     /**
      * Constructor.
@@ -47,7 +49,7 @@ public class GameServiceImpl implements GameService {
     public GameServiceImpl(GameControllerRepository gameControllerRepository, SessionRepository sessionRepository,
                            ClientWebSocketController clientWebSocketController, PlayerControllerFactory playerControllerFactory,
                            GameControllerFactory gameControllerFactory, GameFactory gameFactory, GameServiceInputValidator inputValidator,
-                           PlayerControllerSettingsFactory playerControllerSettingsFactory) {
+                           PlayerControllerSettingsFactory playerControllerSettingsFactory, TrainerGameListenerFactory trainerGameListenerFactory) {
         this.gameControllerRepository = gameControllerRepository;
         this.sessionRepository = sessionRepository;
         this.clientWebSocketController = clientWebSocketController;
@@ -56,6 +58,7 @@ public class GameServiceImpl implements GameService {
         this.gameFactory = gameFactory;
         this.inputValidator = inputValidator;
         this.playerControllerSettingsFactory = playerControllerSettingsFactory;
+        this.trainerGameListenerFactory = trainerGameListenerFactory;
     }
 
     @Override
@@ -149,8 +152,10 @@ public class GameServiceImpl implements GameService {
                 playerControllerFactory.getPlayerController(playerTwoControllerSettings, game.getPlayerTwo());
 
         GameController gameController = gameControllerFactory.get(game, playerOneController, playerTwoController);
+        gameController.setTickIntervalMillis(0);
         gameControllerRepository.add(gameController.getGameId(), gameController);
 
+        game.registerListener(trainerGameListenerFactory.get(aiRemoteHost));
         gameController.start();
 
         return gameController.getGame();

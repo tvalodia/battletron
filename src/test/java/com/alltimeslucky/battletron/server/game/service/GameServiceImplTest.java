@@ -18,6 +18,7 @@ import com.alltimeslucky.battletron.server.session.service.Session;
 import com.alltimeslucky.battletron.server.session.repository.SessionRepository;
 import com.alltimeslucky.battletron.server.websocket.ClientWebSocket;
 import com.alltimeslucky.battletron.server.websocket.ClientWebSocketController;
+import com.alltimeslucky.battletron.trainer.api.TrainerGameListenerFactory;
 
 import org.junit.After;
 import org.junit.Before;
@@ -64,9 +65,11 @@ public class GameServiceImplTest {
         session.setClientWebSocket(mockClientWebSocket);
         sessionRepository.add(SESSION_ID, session);
         PlayerControllerSettingsFactory playerControllerSettingsFactory = new PlayerControllerSettingsFactory();
-
+        TrainerGameListenerFactory mockTrainerGameListenerFactory = mock(TrainerGameListenerFactory.class);
+//        when(mockTrainerGameListenerFactory.get(any())).then
         gameService = new GameServiceImpl(gameControllerRepository, sessionRepository, mockClientWebSocketController,
-                mockPlayerControllerFactory, gameControllerFactory, gameFactory, gameServiceInputValidator, playerControllerSettingsFactory);
+                mockPlayerControllerFactory, gameControllerFactory, gameFactory, gameServiceInputValidator, playerControllerSettingsFactory,
+                mockTrainerGameListenerFactory);
     }
 
 

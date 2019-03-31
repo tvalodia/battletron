@@ -14,6 +14,7 @@ export interface Game {
   playerTwo: Player;
   playingField: number[][];
   winner: Player;
+  createdDate: number;
 }
 
 export interface Player {

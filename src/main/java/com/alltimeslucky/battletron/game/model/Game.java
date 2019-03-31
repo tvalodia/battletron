@@ -1,5 +1,6 @@
 package com.alltimeslucky.battletron.game.model;
 
+import com.alltimeslucky.battletron.exception.BattletronException;
 import com.alltimeslucky.battletron.player.model.Player;
 
 import java.util.Collections;
@@ -7,10 +8,15 @@ import java.util.GregorianCalendar;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 /**
  * This class depicts the state of a game.
  */
 public class Game {
+
+    private static final Logger LOG = LogManager.getLogger();
 
     //The unique identifier of this instance of a gamestate
     private long id;
@@ -125,7 +131,14 @@ public class Game {
         //send an update to the observers. This loop is synchronised to allow for new spectators to be added to the
         // list by another thread without modifying the list while the iterator is reading the list.
         synchronized (gameListeners) {
-            gameListeners.forEach(gameStateListener -> gameStateListener.onGameStateUpdate(this));
+            gameListeners.forEach(gameStateListener -> {
+                try {
+                    gameStateListener.onGameStateUpdate(this);
+                } catch (BattletronException e) {
+                    LOG.error("An error occurred when sending a game state update.", e);
+                    this.stop();
+                }
+            });
         }
 
     }
@@ -184,6 +197,7 @@ public class Game {
 
     public void stop() {
         setGameStatus(GameStatus.STOPPED);
+        LOG.error(String.format("Game %d stopped", id));
     }
 
     public void timeout() {

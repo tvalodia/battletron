@@ -17,13 +17,14 @@ public class GameController extends Thread {
 
     private static final Logger LOG = LogManager.getLogger();
 
-    private static final int TICK_INTERVAL_MILLIS = 50;
+    private static final int DEFAULT_TICK_INTERVAL_MILLIS = 50;
     private static final long TIMEOUT = 1000 * 60 * 5;
     private long lastTickTime;
     private PlayerController playerOneController;
     private PlayerController playerTwoController;
     private Game game;
     private volatile boolean pauseThreadFlag;
+    private int tickIntervalMillis;
 
     /**
      * Constructor. Initialises the game engine.
@@ -37,6 +38,7 @@ public class GameController extends Thread {
         this.playerTwoController = playerTwoController;
         this.lastTickTime = 0;
         this.game = game;
+        this.tickIntervalMillis = DEFAULT_TICK_INTERVAL_MILLIS;
     }
 
     /**
@@ -44,12 +46,12 @@ public class GameController extends Thread {
      */
     @Override
     public void run() {
-        System.out.println("Game Engine started.");
+        LOG.info(String.format("Game engine %d started", getGameId()));
 
         while (true) {
             if (interrupted()) {
-                System.out.println("Game Engine killed.");
                 game.stop();
+                LOG.info(String.format("Game engine %d killed", getGameId()));
                 return;
             }
 
@@ -60,11 +62,11 @@ public class GameController extends Thread {
             }
 
             long currentTime = System.currentTimeMillis();
-            if (currentTime - lastTickTime >= TICK_INTERVAL_MILLIS) {
+            if (currentTime - lastTickTime >= tickIntervalMillis) {
 
                 if (game.getGameStatus().equals(GameStatus.WAITING_FOR_READY) && currentTime - game.getCreatedDate() > TIMEOUT) {
                     game.timeout();
-                    LOG.warn("Game Engine stopped - waited too long for STARTED state");
+                    LOG.warn(String.format("Game engine %d stopped - waited too long for STARTED state", getGameId()));
                     return;
                 }
 
@@ -93,7 +95,7 @@ public class GameController extends Thread {
             }
         }
 
-        System.out.println("Game Engine stopped.");
+        LOG.info(String.format("Game engine %d stopped", getGameId()));
     }
 
     /**
@@ -187,5 +189,9 @@ public class GameController extends Thread {
 
     public boolean isJoinable() {
         return (playerOneController == null || playerTwoController == null) && game.getGameStatus() == GameStatus.WAITING_FOR_READY;
+    }
+
+    public void setTickIntervalMillis(int tickIntervalMillis) {
+        this.tickIntervalMillis = tickIntervalMillis;
     }
 }

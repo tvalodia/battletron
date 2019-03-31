@@ -23,6 +23,7 @@ public class GameDto {
     private int[][] playingField;
     //The winner of the current game is there is one.
     private PlayerDto winner;
+    private long createdDate;
 
     /**
      * Non-parameterised constructor for serialisation.
@@ -42,6 +43,7 @@ public class GameDto {
         setTickCount(game.getTickCount());
         setPlayingField(game.getPlayingField());
         setGameStatus(game.getGameStatus());
+        setCreatedDate(game.getCreatedDate());
         if (game.getWinner() != null) {
             setWinner(new PlayerDto(game.getWinner()));
         }
@@ -132,5 +134,13 @@ public class GameDto {
                 + ", playingField=" + Arrays.toString(playingField)
                 + ", winner=" + winner
                 + '}';
+    }
+
+    public long getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(long createdDate) {
+        this.createdDate = createdDate;
     }
 }

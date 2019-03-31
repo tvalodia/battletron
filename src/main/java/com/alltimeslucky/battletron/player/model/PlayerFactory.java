@@ -1,9 +1,5 @@
 package com.alltimeslucky.battletron.player.model;
 
-import com.alltimeslucky.battletron.game.model.Game;
-
-import java.util.GregorianCalendar;
-
 public class PlayerFactory {
 
     public Player getPlayerOne() {
