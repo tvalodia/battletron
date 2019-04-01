@@ -233,6 +233,7 @@ public class GameServiceImpl implements GameService {
         }
     }
 
+
     @Override
     public void deleteGame(long gameId) throws BattletronException {
         inputValidator.validateGameId(gameId);
@@ -240,6 +241,7 @@ public class GameServiceImpl implements GameService {
         GameController gameController = gameControllerRepository.get(gameId);
         gameController.kill();
         gameControllerRepository.delete(gameId);
+        LOG.info(String.format("Game %d deleted", gameId));
 
     }
 

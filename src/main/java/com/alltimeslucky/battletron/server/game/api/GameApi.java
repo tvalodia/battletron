@@ -16,6 +16,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -187,6 +188,17 @@ public class GameApi {
         } else if (command.getCommandString().toLowerCase().equals("kill")) {
             gameService.deleteGame(gameEngineId);
         }
+    }
+
+    /**
+     * Deletes a game from the system.
+     * @param id The ID of the game to delete.
+     * @throws BattletronException Thrown if an error occurs.
+     */
+    @DELETE
+    @Path("{id}")
+    public void deleteGame(@PathParam("id") long id) throws BattletronException {
+        gameService.deleteGame(id);
     }
 
 }

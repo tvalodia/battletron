@@ -86,7 +86,7 @@ public interface GameService {
      * @param gameId The id of the game to delete
      * @throws Exception Thrown when the gameId is invalid
      */
-    void deleteGame(long gameId) throws Exception;
+    void deleteGame(long gameId) throws BattletronException;
 
     /**
      * Stops the specified game.
