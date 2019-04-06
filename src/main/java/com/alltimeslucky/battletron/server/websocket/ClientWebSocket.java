@@ -2,25 +2,23 @@ package com.alltimeslucky.battletron.server.websocket;
 
 import com.alltimeslucky.battletron.game.model.Game;
 import com.alltimeslucky.battletron.game.model.GameStatus;
-import com.alltimeslucky.battletron.player.controller.PlayerController;
 import com.alltimeslucky.battletron.player.model.Direction;
 import com.alltimeslucky.battletron.server.game.api.dto.GameDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
 
-import java.util.UUID;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.eclipse.jetty.websocket.api.Session;
-import org.eclipse.jetty.websocket.api.WebSocketAdapter;
+import org.springframework.web.socket.CloseStatus;
+import org.springframework.web.socket.TextMessage;
+import org.springframework.web.socket.WebSocketSession;
 
 /**
  * This class represents a connection to the web browser. The player will send direction updates over this connection.
  * This connection will also be used to send Game updates to the browser.
  */
-public class ClientWebSocket extends WebSocketAdapter {
+public class ClientWebSocket {
 
     private static final Logger LOG = LogManager.getLogger();
 
@@ -29,34 +27,25 @@ public class ClientWebSocket extends WebSocketAdapter {
     private Direction wasdKeysDirection;
     private ObjectMapper objectMapper;
     private String sessionId = "";
-    private ClientWebSocketListener listener;
     private boolean ignoreInput;
+
+    private WebSocketSession webSocketSession;
 
     /**
      * Constructor.
+     * @param webSocketSession The WebSocketSession used for socket communication
      */
-    public ClientWebSocket() {
-        objectMapper = new ObjectMapper();
-        ignoreInput = true;
+    public ClientWebSocket(WebSocketSession webSocketSession) {
+        this.webSocketSession = webSocketSession;
+        this.objectMapper = new ObjectMapper();
+        this.ignoreInput = true;
     }
 
-    @Override
-    public void onWebSocketConnect(Session session) {
-        super.onWebSocketConnect(session);
-        LOG.debug("New WebSocket connection: " + getSession());
-        sessionId = UUID.randomUUID().toString();
-        try {
-            session.getRemote().sendString("id=" + sessionId);
-            listener.onConnect(this);
-        } catch (IOException e) {
-            LOG.error(e.getMessage());
-            getSession().close(-1, "IO Error");
-        }
-    }
-
-    @Override
+    /**
+     * Called when a new text message is received from the client.
+     * @param message The message received by the client.
+     */
     public void onWebSocketText(String message) {
-        super.onWebSocketText(message);
         LOG.debug("Message from player (" + sessionId + "): " + message);
 
         if (ignoreInput) {
@@ -93,26 +82,12 @@ public class ClientWebSocket extends WebSocketAdapter {
 
     }
 
-    @Override
-    public void onWebSocketClose(int statusCode, String reason) {
-        super.onWebSocketClose(statusCode, reason);
-        LOG.info("Socket Closed: [" + statusCode + "] " + reason);
-        listener.onDisconnect(this);
-    }
-
-    @Override
-    public void onWebSocketError(Throwable cause) {
-        super.onWebSocketError(cause);
-        LOG.error(cause);
-        listener.onDisconnect(this);
-    }
-
     /**
      * Sends the specified Game to the client browser. Clears the player direction values when it detects that the game has ended.
      *
      * @param game The instance of Game to send.
      */
-    public void sendGameState(Game game) {
+    public void sendGameState(Game game) throws IOException {
         if (game.getGameStatus().equals(GameStatus.COMPLETED_WINNER) || game.getGameStatus().equals(GameStatus.COMPLETED_DRAW)) {
             wasdKeysDirection = null;
             arrowKeysDirection = null;
@@ -123,10 +98,10 @@ public class ClientWebSocket extends WebSocketAdapter {
         }
 
         try {
-            getSession().getRemote().sendString(objectMapper.writeValueAsString(new GameDto(game)));
+            webSocketSession.sendMessage(new TextMessage(objectMapper.writeValueAsString(new GameDto(game))));
         } catch (IOException e) {
             LOG.error(e.getMessage());
-            getSession().close(-1, "IO Error");
+            webSocketSession.close(CloseStatus.SERVER_ERROR);
         }
     }
 
@@ -140,10 +115,6 @@ public class ClientWebSocket extends WebSocketAdapter {
 
     public Direction getWasdKeysDirection() {
         return wasdKeysDirection;
-    }
-
-    public void setListener(ClientWebSocketListener listener) {
-        this.listener = listener;
     }
 
     public String getSessionId() {

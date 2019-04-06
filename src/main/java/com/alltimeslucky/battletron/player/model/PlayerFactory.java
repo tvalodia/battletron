@@ -1,5 +1,8 @@
 package com.alltimeslucky.battletron.player.model;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class PlayerFactory {
 
     public Player getPlayerOne() {

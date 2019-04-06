@@ -23,11 +23,12 @@ import com.alltimeslucky.battletron.trainer.api.TrainerGameListenerFactory;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.inject.Inject;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class GameServiceImpl implements GameService {
 
     private static final Logger LOG = LogManager.getLogger();
@@ -45,11 +46,12 @@ public class GameServiceImpl implements GameService {
     /**
      * Constructor.
      */
-    @Inject
+    @Autowired
     public GameServiceImpl(GameControllerRepository gameControllerRepository, SessionRepository sessionRepository,
                            ClientWebSocketController clientWebSocketController, PlayerControllerFactory playerControllerFactory,
                            GameControllerFactory gameControllerFactory, GameFactory gameFactory, GameServiceInputValidator inputValidator,
-                           PlayerControllerSettingsFactory playerControllerSettingsFactory, TrainerGameListenerFactory trainerGameListenerFactory) {
+                           PlayerControllerSettingsFactory playerControllerSettingsFactory,
+                           TrainerGameListenerFactory trainerGameListenerFactory) {
         this.gameControllerRepository = gameControllerRepository;
         this.sessionRepository = sessionRepository;
         this.clientWebSocketController = clientWebSocketController;

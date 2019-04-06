@@ -8,12 +8,13 @@ import com.alltimeslucky.battletron.player.controller.PlayerControllerType;
 import com.alltimeslucky.battletron.server.session.repository.SessionRepository;
 import com.alltimeslucky.battletron.server.session.service.Session;
 
-import javax.inject.Inject;
-
 import org.apache.commons.validator.routines.UrlValidator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class GameServiceInputValidator {
 
     private static final Logger LOG = LogManager.getLogger();
@@ -29,7 +30,7 @@ public class GameServiceInputValidator {
     private GameControllerRepository gameControllerRepository;
     private SessionRepository sessionRepository;
 
-    @Inject
+    @Autowired
     public GameServiceInputValidator(GameControllerRepository gameControllerRepository,
                                      SessionRepository sessionRepository) {
         this.gameControllerRepository = gameControllerRepository;

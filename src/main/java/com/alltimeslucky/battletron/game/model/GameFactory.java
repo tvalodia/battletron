@@ -2,10 +2,10 @@ package com.alltimeslucky.battletron.game.model;
 
 import com.alltimeslucky.battletron.player.model.PlayerFactory;
 
-import java.util.GregorianCalendar;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-import javax.inject.Inject;
-
+@Component
 public class GameFactory {
 
     private static final int WIDTH = 100;
@@ -13,7 +13,11 @@ public class GameFactory {
     private PlayerFactory playerFactory;
     private long gameCount;
 
-    @Inject
+    /**
+     * Constructor.
+     * @param playerFactory The PlayerFactory used to create new Players for the games.
+     */
+    @Autowired
     public GameFactory(PlayerFactory playerFactory) {
 
         this.playerFactory = playerFactory;

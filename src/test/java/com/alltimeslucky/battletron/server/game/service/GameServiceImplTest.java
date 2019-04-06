@@ -66,7 +66,6 @@ public class GameServiceImplTest {
         sessionRepository.add(SESSION_ID, session);
         PlayerControllerSettingsFactory playerControllerSettingsFactory = new PlayerControllerSettingsFactory();
         TrainerGameListenerFactory mockTrainerGameListenerFactory = mock(TrainerGameListenerFactory.class);
-//        when(mockTrainerGameListenerFactory.get(any())).then
         gameService = new GameServiceImpl(gameControllerRepository, sessionRepository, mockClientWebSocketController,
                 mockPlayerControllerFactory, gameControllerFactory, gameFactory, gameServiceInputValidator, playerControllerSettingsFactory,
                 mockTrainerGameListenerFactory);

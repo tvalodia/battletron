@@ -2,7 +2,6 @@ package com.alltimeslucky.battletron.server.game.api;
 
 import com.alltimeslucky.battletron.exception.BattletronException;
 import com.alltimeslucky.battletron.game.model.Game;
-import com.alltimeslucky.battletron.player.controller.PlayerControllerType;
 import com.alltimeslucky.battletron.server.game.api.dto.GameCommandDto;
 import com.alltimeslucky.battletron.server.game.api.dto.GameDto;
 import com.alltimeslucky.battletron.server.game.api.dto.JoinGameDto;
@@ -14,7 +13,6 @@ import com.alltimeslucky.battletron.server.game.service.GameService;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -28,7 +26,10 @@ import javax.ws.rs.core.MediaType;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RestController;
 
+@RestController
 @Path("/game")
 public class GameApi {
 
@@ -40,7 +41,7 @@ public class GameApi {
      *
      * @param gameService The GameService instance that provides business logic
      */
-    @Inject
+    @Autowired
     public GameApi(GameService gameService) {
         this.gameService = gameService;
     }

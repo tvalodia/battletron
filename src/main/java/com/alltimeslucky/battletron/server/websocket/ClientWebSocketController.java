@@ -4,21 +4,25 @@ import com.alltimeslucky.battletron.game.model.Game;
 import com.alltimeslucky.battletron.game.model.GameListener;
 import com.alltimeslucky.battletron.server.session.repository.SessionRepository;
 
+import java.io.IOException;
+
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import javax.inject.Inject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * This class listens for Game updates and routes them to the
  * mapped sockets.
  */
+@Component
 public class ClientWebSocketController implements GameListener {
 
     private Map<String, Long> sessionGameMap;
     private final SessionRepository sessionRepository;
 
-    @Inject
+    @Autowired
     public ClientWebSocketController(SessionRepository sessionRepository) {
         sessionGameMap = new ConcurrentHashMap<>();
         this.sessionRepository = sessionRepository;
@@ -29,7 +33,11 @@ public class ClientWebSocketController implements GameListener {
     public void onGameStateUpdate(Game game) {
         sessionGameMap.forEach((sessionId, gameId) -> {
             if (game.getId() == gameId) {
-                sessionRepository.get(sessionId).getClientWebSocket().sendGameState(game);
+                try {
+                    sessionRepository.get(sessionId).getClientWebSocket().sendGameState(game);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
         );

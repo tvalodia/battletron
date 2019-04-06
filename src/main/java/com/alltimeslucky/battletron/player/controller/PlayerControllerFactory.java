@@ -4,6 +4,9 @@ import com.alltimeslucky.battletron.player.controller.remote.RemoteAiPlayerContr
 import com.alltimeslucky.battletron.player.controller.settings.PlayerControllerSettings;
 import com.alltimeslucky.battletron.player.model.Player;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class PlayerControllerFactory {
 
     /**
