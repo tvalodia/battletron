@@ -2,12 +2,11 @@ package com.alltimeslucky.battletron.server.game.service.validation;
 
 import com.alltimeslucky.battletron.exception.BattletronException;
 import com.alltimeslucky.battletron.exception.ExceptionCode;
-import com.alltimeslucky.battletron.game.controller.GameController;
-import com.alltimeslucky.battletron.game.controller.GameControllerRepository;
 import com.alltimeslucky.battletron.player.controller.PlayerControllerType;
 import com.alltimeslucky.battletron.server.session.repository.SessionRepository;
 import com.alltimeslucky.battletron.server.session.service.Session;
-
+import com.alltimeslucky.battletron.gamecontroller.GameControllerRepository;
+import com.alltimeslucky.battletron.gamecontroller.GameController;
 import org.apache.commons.validator.routines.UrlValidator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

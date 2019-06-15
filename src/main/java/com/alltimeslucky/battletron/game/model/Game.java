@@ -1,6 +1,7 @@
 package com.alltimeslucky.battletron.game.model;
 
 import com.alltimeslucky.battletron.exception.BattletronException;
+import com.alltimeslucky.battletron.player.model.Direction;
 import com.alltimeslucky.battletron.player.model.Player;
 
 import java.util.Collections;
@@ -206,6 +207,11 @@ public class Game {
 
     public long getCreatedDate() {
         return createdDate;
+    }
+
+    public void setPlayerDirections(Direction playerOneDirection, Direction playerTwoDirection) {
+        playerOne.setDirection(playerOneDirection);
+        playerTwo.setDirection(playerTwoDirection);
     }
 
     /* public void deregisterListener(GameListener listener) {

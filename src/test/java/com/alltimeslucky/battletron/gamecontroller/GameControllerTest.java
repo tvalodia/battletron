@@ -1,4 +1,4 @@
-package com.alltimeslucky.battletron.game.controller;
+package com.alltimeslucky.battletron.gamecontroller;
 
 import static org.junit.Assert.assertEquals;
 

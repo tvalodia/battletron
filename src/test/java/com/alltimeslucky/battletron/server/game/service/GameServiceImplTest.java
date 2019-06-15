@@ -1,9 +1,9 @@
 package com.alltimeslucky.battletron.server.game.service;
 
 import com.alltimeslucky.battletron.exception.BattletronException;
-import com.alltimeslucky.battletron.game.controller.GameController;
-import com.alltimeslucky.battletron.game.controller.GameControllerFactory;
-import com.alltimeslucky.battletron.game.controller.GameControllerRepository;
+import com.alltimeslucky.battletron.gamecontroller.GameController;
+import com.alltimeslucky.battletron.gamecontroller.GameControllerFactory;
+import com.alltimeslucky.battletron.gamecontroller.GameControllerRepository;
 import com.alltimeslucky.battletron.game.model.Game;
 import com.alltimeslucky.battletron.game.model.GameFactory;
 import com.alltimeslucky.battletron.game.model.GameStatus;
@@ -18,7 +18,6 @@ import com.alltimeslucky.battletron.server.session.service.Session;
 import com.alltimeslucky.battletron.server.session.repository.SessionRepository;
 import com.alltimeslucky.battletron.server.websocket.ClientWebSocket;
 import com.alltimeslucky.battletron.server.websocket.ClientWebSocketController;
-import com.alltimeslucky.battletron.trainer.api.TrainerGameListenerFactory;
 
 import org.junit.After;
 import org.junit.Before;
@@ -65,10 +64,8 @@ public class GameServiceImplTest {
         session.setClientWebSocket(mockClientWebSocket);
         sessionRepository.add(SESSION_ID, session);
         PlayerControllerSettingsFactory playerControllerSettingsFactory = new PlayerControllerSettingsFactory();
-        TrainerGameListenerFactory mockTrainerGameListenerFactory = mock(TrainerGameListenerFactory.class);
-        gameService = new GameServiceImpl(gameControllerRepository, sessionRepository, mockClientWebSocketController,
-                mockPlayerControllerFactory, gameControllerFactory, gameFactory, gameServiceInputValidator, playerControllerSettingsFactory,
-                mockTrainerGameListenerFactory);
+         gameService = new GameServiceImpl(gameControllerRepository, sessionRepository, mockClientWebSocketController,
+                mockPlayerControllerFactory, gameControllerFactory, gameFactory, gameServiceInputValidator, playerControllerSettingsFactory);
     }
 
 
